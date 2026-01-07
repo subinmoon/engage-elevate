@@ -4,7 +4,6 @@ interface QuickAction {
   id: string;
   icon: React.ReactNode;
   label: string;
-  bgColor: string;
   iconColor: string;
 }
 
@@ -13,29 +12,25 @@ const actions: QuickAction[] = [
     id: "summary",
     icon: <MessageSquare className="w-4 h-4" />,
     label: "문서/회의 요약",
-    bgColor: "bg-lavender-light",
     iconColor: "text-primary",
   },
   {
     id: "brainstorm",
     icon: <Sparkles className="w-4 h-4" />,
     label: "브레인스토밍",
-    bgColor: "bg-peach",
-    iconColor: "text-peach-dark",
+    iconColor: "text-amber-500",
   },
   {
     id: "tone",
     icon: <BarChart3 className="w-4 h-4" />,
     label: "글 다듬기",
-    bgColor: "bg-lavender-light",
-    iconColor: "text-primary",
+    iconColor: "text-emerald-500",
   },
   {
     id: "email",
     icon: <Zap className="w-4 h-4" />,
     label: "메일 초안 생성",
-    bgColor: "bg-mint",
-    iconColor: "text-mint-dark",
+    iconColor: "text-rose-500",
   },
 ];
 
@@ -47,9 +42,9 @@ const QuickActions = () => {
         {actions.map((action) => (
           <button
             key={action.id}
-            className={`${action.bgColor} rounded-xl py-3 px-4 flex items-center gap-3 transition-all duration-200 hover:shadow-soft hover:scale-[1.02] active:scale-[0.98]`}
+            className="bg-lavender-light rounded-xl py-3 px-4 flex items-center gap-3 transition-all duration-200 hover:shadow-soft hover:scale-[1.02] active:scale-[0.98]"
           >
-            <div className={`${action.iconColor} p-2 bg-white/70 rounded-lg`}>
+            <div className={`${action.iconColor} p-2 bg-white/80 rounded-lg`}>
               {action.icon}
             </div>
             <span className="text-sm font-medium text-foreground text-left">

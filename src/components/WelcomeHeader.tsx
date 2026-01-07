@@ -9,7 +9,7 @@ const WelcomeHeader = ({ userName = "사용자" }: WelcomeHeaderProps) => {
     <div className="flex items-center gap-4 mb-6">
       <img src={logoIcon} alt="Logo" className="w-12 h-12" />
       <h1 className="text-2xl font-bold text-foreground">
-        <span className="text-gradient-name">{userName}</span>님, 오늘 하루도 화이팅!
+        <span className="text-gradient-name">{userName}</span>님, 오늘은 무엇이 궁금하세요?
       </h1>
     </div>
   );
