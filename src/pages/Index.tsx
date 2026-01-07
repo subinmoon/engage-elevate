@@ -5,6 +5,7 @@ import WelcomeHeader from "@/components/WelcomeHeader";
 import RecentInterests from "@/components/RecentInterests";
 import HRHelper from "@/components/HRHelper";
 import QuickActions from "@/components/QuickActions";
+import ChatbotServices from "@/components/ChatbotServices";
 import ChatInput from "@/components/ChatInput";
 
 const Index = () => {
@@ -36,6 +37,11 @@ const Index = () => {
             <div className="lg:col-span-2">
               <HRHelper />
             </div>
+          </div>
+
+          {/* Chatbot Services - New section */}
+          <div className="mb-4">
+            <ChatbotServices />
           </div>
           
           {/* Chat Input */}
