@@ -13,7 +13,7 @@ const ChatInput = () => {
   const [selectedType, setSelectedType] = useState("default");
 
   return (
-    <div className="bg-card rounded-2xl shadow-soft border-2 border-primary/30">
+    <div className="bg-primary/10 rounded-2xl shadow-soft border-2 border-primary/30">
       <div className="p-4 pb-2">
         <input
           type="text"
