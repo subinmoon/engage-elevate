@@ -2,120 +2,101 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
-    --background: 250 30% 98%;
-    --foreground: 240 15% 15%;
+    --background: 240 20% 98%;
+    --foreground: 240 10% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 240 15% 15%;
+    --card-foreground: 240 10% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 240 15% 15%;
+    --popover-foreground: 240 10% 15%;
 
-    --primary: 262 83% 58%;
+    --primary: 262 60% 55%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 262 60% 96%;
-    --secondary-foreground: 262 70% 45%;
+    --secondary: 262 40% 95%;
+    --secondary-foreground: 262 60% 45%;
 
-    --muted: 250 20% 94%;
-    --muted-foreground: 240 8% 50%;
+    --muted: 240 10% 94%;
+    --muted-foreground: 240 5% 50%;
 
-    --accent: 180 70% 45%;
+    --accent: 170 60% 45%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 250 20% 90%;
-    --input: 250 20% 90%;
-    --ring: 262 83% 58%;
+    --border: 240 10% 90%;
+    --input: 240 10% 90%;
+    --ring: 262 60% 55%;
 
-    --radius: 1rem;
+    --radius: 0.75rem;
 
-    /* Rich gradient tokens */
-    --lavender: 262 83% 58%;
-    --lavender-light: 270 100% 97%;
-    --lavender-dark: 262 70% 48%;
-    --violet: 280 85% 55%;
-    --mint: 168 80% 92%;
-    --mint-dark: 168 70% 38%;
-    --peach: 25 100% 94%;
-    --peach-dark: 25 90% 55%;
-    --coral: 12 90% 65%;
-    --sky: 200 95% 92%;
-    --sky-dark: 200 80% 50%;
-
-    /* Gradient definitions */
-    --gradient-hero: linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(280 85% 55%) 50%, hsl(320 80% 60%) 100%);
-    --gradient-mint: linear-gradient(135deg, hsl(168 80% 92%) 0%, hsl(180 70% 88%) 100%);
-    --gradient-warm: linear-gradient(135deg, hsl(25 100% 94%) 0%, hsl(340 80% 94%) 100%);
-    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.6) 100%);
+    --lavender: 262 60% 55%;
+    --lavender-light: 262 80% 95%;
+    --lavender-dark: 262 50% 45%;
+    --mint: 168 60% 90%;
+    --mint-dark: 168 60% 38%;
+    --peach: 25 90% 92%;
+    --peach-dark: 25 80% 55%;
 
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 262 83% 58%;
+    --sidebar-primary: 262 60% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 262 60% 96%;
-    --sidebar-accent-foreground: 262 70% 45%;
-    --sidebar-border: 250 20% 92%;
-    --sidebar-ring: 262 83% 58%;
+    --sidebar-accent: 262 40% 95%;
+    --sidebar-accent-foreground: 262 60% 45%;
+    --sidebar-border: 240 10% 92%;
+    --sidebar-ring: 262 60% 55%;
   }
 
   .dark {
-    --background: 250 25% 8%;
+    --background: 240 15% 10%;
     --foreground: 0 0% 95%;
 
-    --card: 250 25% 12%;
+    --card: 240 15% 13%;
     --card-foreground: 0 0% 95%;
 
-    --popover: 250 25% 12%;
+    --popover: 240 15% 13%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 262 83% 65%;
+    --primary: 262 60% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 262 40% 18%;
-    --secondary-foreground: 262 70% 80%;
+    --secondary: 262 30% 20%;
+    --secondary-foreground: 262 60% 80%;
 
-    --muted: 250 20% 18%;
-    --muted-foreground: 250 10% 60%;
+    --muted: 240 10% 20%;
+    --muted-foreground: 240 5% 60%;
 
-    --accent: 180 70% 45%;
+    --accent: 170 60% 45%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 250 20% 18%;
-    --input: 250 20% 18%;
-    --ring: 262 83% 65%;
+    --border: 240 10% 20%;
+    --input: 240 10% 20%;
+    --ring: 262 60% 60%;
 
-    --lavender: 262 83% 65%;
-    --lavender-light: 262 40% 18%;
-    --lavender-dark: 262 70% 75%;
-    --violet: 280 85% 65%;
-    --mint: 168 40% 18%;
-    --mint-dark: 168 70% 55%;
-    --peach: 25 40% 18%;
-    --peach-dark: 25 90% 70%;
-    --coral: 12 90% 70%;
-    --sky: 200 40% 18%;
-    --sky-dark: 200 80% 60%;
+    --lavender: 262 60% 60%;
+    --lavender-light: 262 30% 20%;
+    --lavender-dark: 262 50% 70%;
+    --mint: 168 30% 20%;
+    --mint-dark: 168 60% 55%;
+    --peach: 25 30% 20%;
+    --peach-dark: 25 80% 70%;
 
-    --sidebar-background: 250 25% 8%;
-    --sidebar-foreground: 250 10% 95%;
-    --sidebar-primary: 262 83% 65%;
+    --sidebar-background: 240 15% 10%;
+    --sidebar-foreground: 240 5% 95%;
+    --sidebar-primary: 262 60% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 262 40% 18%;
-    --sidebar-accent-foreground: 262 70% 80%;
-    --sidebar-border: 250 20% 18%;
-    --sidebar-ring: 262 83% 65%;
+    --sidebar-accent: 262 30% 20%;
+    --sidebar-accent-foreground: 262 60% 80%;
+    --sidebar-border: 240 10% 20%;
+    --sidebar-ring: 262 60% 60%;
   }
 }
 
@@ -126,12 +107,5 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  }
-}
-
-@layer utilities {
-  .animate-pulse-slow {
-    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 }
