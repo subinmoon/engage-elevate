@@ -10,6 +10,11 @@ const Index = () => {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
         <WelcomeHeader userName="은선" />
         
+        {/* Quick Actions - Now at top */}
+        <div className="mb-4">
+          <QuickActions />
+        </div>
+        
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
           <div className="lg:col-span-3">
@@ -18,11 +23,6 @@ const Index = () => {
           <div className="lg:col-span-2">
             <HRHelper />
           </div>
-        </div>
-        
-        {/* Quick Actions */}
-        <div className="mb-4">
-          <QuickActions />
         </div>
         
         {/* Chat Input */}
