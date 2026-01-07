@@ -1,3 +1,5 @@
+import { ChevronRight } from "lucide-react";
+
 const helpItems = [
   "결재 목록 조회",
   "회의실 예약 조회",
@@ -9,15 +11,16 @@ const helpItems = [
 
 const HRHelper = () => {
   return (
-    <div className="bg-card rounded-2xl p-6 shadow-soft">
-      <h2 className="text-lg font-bold text-foreground mb-5">HR 도우미</h2>
-      <div className="space-y-3">
+    <div className="bg-card rounded-3xl p-7 shadow-card h-full border border-border/50">
+      <h2 className="text-xl font-bold text-foreground mb-6">HR 도우미</h2>
+      <div className="space-y-1">
         {helpItems.map((item, index) => (
           <button
             key={index}
-            className="w-full text-left text-foreground hover:text-primary transition-colors duration-200 py-1 text-sm font-medium"
+            className="w-full flex items-center justify-between text-left text-foreground hover:text-primary hover:bg-lavender-light/50 transition-all duration-200 py-3 px-4 rounded-xl text-sm font-medium group"
           >
-            {item}
+            <span>{item}</span>
+            <ChevronRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 text-primary" />
           </button>
         ))}
       </div>

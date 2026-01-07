@@ -6,14 +6,15 @@ interface WelcomeHeaderProps {
 
 const WelcomeHeader = ({ userName = "사용자" }: WelcomeHeaderProps) => {
   return (
-    <div className="flex items-center gap-4 mb-8">
-      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-lavender-dark flex items-center justify-center shadow-card">
-        <MessageSquare className="w-7 h-7 text-primary-foreground" />
+    <div className="flex items-center gap-5 mb-10">
+      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary via-lavender-dark to-primary flex items-center justify-center shadow-card animate-pulse-slow">
+        <MessageSquare className="w-8 h-8 text-primary-foreground" />
       </div>
       <div>
-        <h1 className="text-2xl font-bold text-foreground">
+        <h1 className="text-3xl font-bold text-foreground tracking-tight">
           {userName}님, 오늘 하루도 화이팅!
         </h1>
+        <p className="text-muted-foreground mt-1">무엇을 도와드릴까요?</p>
       </div>
     </div>
   );
