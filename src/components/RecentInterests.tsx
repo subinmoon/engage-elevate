@@ -22,7 +22,7 @@ const interests: InterestItem[] = [
 
 const RecentInterests = () => {
   return (
-    <div className="bg-white rounded-2xl p-5 h-full">
+    <div className="bg-white rounded-2xl p-5 h-full shadow-soft">
       <div className="flex items-center gap-2 mb-4">
         <div className="w-8 h-8 rounded-lg bg-lavender-light flex items-center justify-center">
           <Star className="w-4 h-4 text-primary" />
@@ -33,7 +33,7 @@ const RecentInterests = () => {
         {interests.map((item) => (
           <div 
             key={item.id} 
-            className="bg-white rounded-xl p-4 transition-shadow hover:shadow-soft"
+            className="bg-blue-light rounded-xl p-4 transition-shadow hover:shadow-md"
           >
             <div className="flex items-center justify-between gap-3">
               <div className="flex-1 min-w-0">

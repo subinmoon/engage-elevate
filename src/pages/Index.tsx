@@ -24,7 +24,7 @@ const Index = () => {
           <WelcomeHeader userName="은선" />
           
           {/* Chat Input - Top priority */}
-          <div className="mb-4">
+          <div className="mb-6">
             <ChatInput />
           </div>
           
