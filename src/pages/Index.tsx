@@ -7,11 +7,11 @@ import ChatInput from "@/components/ChatInput";
 const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-lavender-light/20">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
         <WelcomeHeader userName="은선" />
         
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
           {/* Recent Interests - Takes 3 columns */}
           <div className="lg:col-span-3">
             <RecentInterests />
@@ -23,14 +23,12 @@ const Index = () => {
         </div>
         
         {/* Quick Actions */}
-        <div className="mb-8">
+        <div className="mb-4">
           <QuickActions />
         </div>
         
-        {/* Chat Input - Fixed at bottom on mobile, inline on desktop */}
-        <div className="sticky bottom-4 lg:static">
-          <ChatInput />
-        </div>
+        {/* Chat Input */}
+        <ChatInput />
       </div>
     </div>
   );
