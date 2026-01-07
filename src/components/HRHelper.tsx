@@ -12,7 +12,10 @@ const helpItems = [
 const HRHelper = () => {
   return (
     <div className="bg-card rounded-2xl p-5 shadow-soft h-full border border-border">
-      <h2 className="text-base font-bold text-foreground mb-4">HR 도우미</h2>
+      <h2 className="text-base font-bold text-foreground mb-4 flex items-center gap-2">
+        <span>👔</span>
+        HR 도우미
+      </h2>
       <div className="space-y-1">
         {helpItems.map((item, index) => {
           const Icon = item.icon;
