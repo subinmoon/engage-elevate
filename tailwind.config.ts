@@ -57,6 +57,24 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        lavender: {
+          DEFAULT: "hsl(var(--lavender))",
+          light: "hsl(var(--lavender-light))",
+          dark: "hsl(var(--lavender-dark))",
+        },
+        mint: {
+          DEFAULT: "hsl(var(--mint))",
+          dark: "hsl(var(--mint-dark))",
+        },
+        peach: {
+          DEFAULT: "hsl(var(--peach))",
+          dark: "hsl(var(--peach-dark))",
+        },
+      },
+      boxShadow: {
+        'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
+        'card': '0 4px 20px -4px rgba(138, 99, 210, 0.12)',
+        'hover': '0 8px 30px -4px rgba(138, 99, 210, 0.18)',
       },
       borderRadius: {
         lg: "var(--radius)",

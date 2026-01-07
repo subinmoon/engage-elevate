@@ -1,0 +1,56 @@
+import { Clock, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+interface InterestItem {
+  id: string;
+  title: string;
+  description: string;
+}
+
+const interests: InterestItem[] = [
+  {
+    id: "1",
+    title: "복지카드 발급",
+    description: "복지카드 발급 방법에 대한 궁금증이 다 해결되었나요?",
+  },
+  {
+    id: "2",
+    title: "출장 신청 방법",
+    description: "출장 신청은 잘 되었나요? 더 궁금한게 있으신가요?",
+  },
+];
+
+const RecentInterests = () => {
+  return (
+    <div className="bg-mint/50 rounded-2xl p-6 flex-1">
+      <div className="flex items-center gap-2 mb-5">
+        <div className="w-8 h-8 rounded-lg bg-mint-dark/20 flex items-center justify-center">
+          <Clock className="w-4 h-4 text-mint-dark" />
+        </div>
+        <h2 className="text-lg font-semibold text-foreground">최근 관심사</h2>
+      </div>
+      <div className="space-y-4">
+        {interests.map((item) => (
+          <div key={item.id} className="group">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <h3 className="font-semibold text-foreground mb-1">{item.title}</h3>
+                <p className="text-sm text-muted-foreground">{item.description}</p>
+              </div>
+              <Button
+                variant="secondary"
+                size="sm"
+                className="ml-4 bg-primary hover:bg-lavender-dark text-primary-foreground gap-1 rounded-full px-4"
+              >
+                질문하기
+                <ArrowRight className="w-3 h-3" />
+              </Button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default RecentInterests;
