@@ -2,8 +2,15 @@ import { useState } from "react";
 import { Plus, Globe, ChevronDown, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+const responseTypes = [
+  { id: "concise", label: "간결" },
+  { id: "detailed", label: "상세" },
+  { id: "default", label: "기본" },
+];
+
 const ChatInput = () => {
   const [message, setMessage] = useState("");
+  const [selectedType, setSelectedType] = useState("default");
 
   return (
     <div className="bg-card rounded-2xl shadow-soft border border-border">
@@ -17,7 +24,7 @@ const ChatInput = () => {
         />
       </div>
       <div className="flex items-center justify-between px-4 pb-4 pt-2">
-        <div className="flex items-center gap-1 flex-wrap">
+        <div className="flex items-center gap-1.5 flex-wrap">
           <Button
             variant="ghost"
             size="sm"
@@ -42,12 +49,23 @@ const ChatInput = () => {
             Azure gpt 4o-2024-11-20
             <ChevronDown className="w-3 h-3" />
           </Button>
-          <Button
-            size="sm"
-            className="rounded-full bg-foreground text-background hover:bg-foreground/90 h-8 px-3 text-xs font-medium"
-          >
-            답변 유형 선택 (간결, 상세, 기본)
-          </Button>
+          
+          {/* Response Type Buttons */}
+          <div className="flex items-center bg-muted rounded-full p-0.5">
+            {responseTypes.map((type) => (
+              <button
+                key={type.id}
+                onClick={() => setSelectedType(type.id)}
+                className={`px-3 h-7 rounded-full text-xs font-medium transition-all duration-200 ${
+                  selectedType === type.id
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {type.label}
+              </button>
+            ))}
+          </div>
         </div>
         <Button
           size="icon"
