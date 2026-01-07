@@ -1,4 +1,4 @@
-import { Clock, ArrowRight } from "lucide-react";
+import { Star, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface InterestItem {
@@ -22,10 +22,10 @@ const interests: InterestItem[] = [
 
 const RecentInterests = () => {
   return (
-    <div className="bg-lavender-light rounded-2xl p-5 h-full">
+    <div className="bg-white rounded-2xl p-5 h-full">
       <div className="flex items-center gap-2 mb-4">
-        <div className="w-8 h-8 rounded-lg bg-white/80 flex items-center justify-center">
-          <Clock className="w-4 h-4 text-primary" />
+        <div className="w-8 h-8 rounded-lg bg-lavender-light flex items-center justify-center">
+          <Star className="w-4 h-4 text-primary" />
         </div>
         <h2 className="text-base font-bold text-foreground">최근 관심사</h2>
       </div>
