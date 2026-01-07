@@ -11,7 +11,7 @@ const Index = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
-    <div className="min-h-screen bg-muted flex">
+    <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
       <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(false)} />
       
@@ -19,7 +19,7 @@ const Index = () => {
       {!sidebarOpen && <SidebarTrigger onClick={() => setSidebarOpen(true)} />}
 
       {/* Main Content */}
-      <main className="flex-1 min-h-screen bg-muted">
+      <main className="flex-1 min-h-screen bg-background">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
           <WelcomeHeader userName="은선" />
           
