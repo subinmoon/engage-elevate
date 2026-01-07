@@ -22,28 +22,30 @@ const interests: InterestItem[] = [
 
 const RecentInterests = () => {
   return (
-    <div className="bg-mint/50 rounded-2xl p-6 flex-1">
-      <div className="flex items-center gap-2 mb-5">
-        <div className="w-8 h-8 rounded-lg bg-mint-dark/20 flex items-center justify-center">
-          <Clock className="w-4 h-4 text-mint-dark" />
+    <div className="bg-gradient-to-br from-mint/60 to-mint/30 rounded-3xl p-7 h-full border border-mint-dark/10">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 rounded-xl bg-white/80 backdrop-blur flex items-center justify-center shadow-sm">
+          <Clock className="w-5 h-5 text-mint-dark" />
         </div>
-        <h2 className="text-lg font-semibold text-foreground">최근 관심사</h2>
+        <h2 className="text-xl font-bold text-foreground">최근 관심사</h2>
       </div>
-      <div className="space-y-4">
+      <div className="space-y-5">
         {interests.map((item) => (
-          <div key={item.id} className="group">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <h3 className="font-semibold text-foreground mb-1">{item.title}</h3>
-                <p className="text-sm text-muted-foreground">{item.description}</p>
+          <div 
+            key={item.id} 
+            className="bg-white/70 backdrop-blur-sm rounded-2xl p-5 transition-all duration-300 hover:bg-white hover:shadow-soft group"
+          >
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex-1 min-w-0">
+                <h3 className="font-bold text-foreground text-lg mb-1">{item.title}</h3>
+                <p className="text-sm text-muted-foreground truncate">{item.description}</p>
               </div>
               <Button
-                variant="secondary"
                 size="sm"
-                className="ml-4 bg-primary hover:bg-lavender-dark text-primary-foreground gap-1 rounded-full px-4"
+                className="shrink-0 bg-primary hover:bg-lavender-dark text-primary-foreground gap-1.5 rounded-full px-5 shadow-sm transition-all duration-300 group-hover:shadow-card"
               >
                 질문하기
-                <ArrowRight className="w-3 h-3" />
+                <ArrowRight className="w-4 h-4" />
               </Button>
             </div>
           </div>
