@@ -8,7 +8,12 @@ const responseTypes = [
   { id: "default", label: "기본" },
 ];
 
-const ChatInput = () => {
+interface ChatInputProps {
+  onSendMessage?: (message: string) => void;
+  disabled?: boolean;
+}
+
+const ChatInput = ({ onSendMessage, disabled }: ChatInputProps) => {
   const [message, setMessage] = useState("");
   const [selectedType, setSelectedType] = useState("default");
 
@@ -70,11 +75,17 @@ const ChatInput = () => {
         <Button
           size="icon"
           className={`rounded-full h-10 w-10 transition-colors ${
-            message.trim() 
+            message.trim() && !disabled
               ? "bg-primary hover:bg-lavender-dark text-primary-foreground" 
               : "bg-muted text-muted-foreground"
           }`}
-          disabled={!message.trim()}
+          disabled={!message.trim() || disabled}
+          onClick={() => {
+            if (message.trim() && onSendMessage) {
+              onSendMessage(message.trim());
+              setMessage("");
+            }
+          }}
         >
           <Send className="w-4 h-4" />
         </Button>
