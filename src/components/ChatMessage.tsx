@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { Copy, Check, ThumbsUp, ThumbsDown, MessageSquare } from "lucide-react";
+import { Copy, Check, ThumbsUp, ThumbsDown, MessageSquare, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -11,9 +11,11 @@ interface ChatMessageProps {
   role: "user" | "assistant";
   content: string;
   timestamp: Date;
+  onRegenerate?: () => void;
+  isLastAssistant?: boolean;
 }
 
-const ChatMessage = ({ role, content, timestamp }: ChatMessageProps) => {
+const ChatMessage = ({ role, content, timestamp, onRegenerate, isLastAssistant }: ChatMessageProps) => {
   const isUser = role === "user";
   const [copied, setCopied] = useState(false);
   const [feedback, setFeedback] = useState<"like" | "dislike" | null>(null);
@@ -81,6 +83,17 @@ const ChatMessage = ({ role, content, timestamp }: ChatMessageProps) => {
           {/* Feedback buttons only for assistant */}
           {!isUser && (
             <>
+              {isLastAssistant && onRegenerate && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 rounded-full hover:bg-muted"
+                  onClick={onRegenerate}
+                  title="답변 재생성"
+                >
+                  <RotateCcw className="w-3.5 h-3.5 text-muted-foreground" />
+                </Button>
+              )}
               <Button
                 variant="ghost"
                 size="icon"
