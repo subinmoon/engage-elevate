@@ -12,6 +12,7 @@ interface Message {
   id: string;
   role: "user" | "assistant";
   content: string;
+  timestamp: Date;
 }
 
 export interface ChatSession {
@@ -35,6 +36,7 @@ const Index = () => {
       id: Date.now().toString(),
       role: "user",
       content,
+      timestamp: new Date(),
     };
     
     const newMessages = [...messages, userMessage];
@@ -72,6 +74,7 @@ const Index = () => {
         id: (Date.now() + 1).toString(),
         role: "assistant",
         content: `"${content}"에 대해 답변드리겠습니다.\n\n이것은 UI 데모용 응답입니다. 실제 AI 연동 시 더 풍부한 응답을 제공할 수 있습니다.`,
+        timestamp: new Date(),
       };
       const updatedMessages = [...newMessages, assistantMessage];
       setMessages(updatedMessages);

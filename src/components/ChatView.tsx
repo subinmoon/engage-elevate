@@ -9,6 +9,7 @@ interface Message {
   id: string;
   role: "user" | "assistant";
   content: string;
+  timestamp: Date;
 }
 
 interface ChatViewProps {
@@ -143,6 +144,7 @@ const ChatView = ({ messages, onSendMessage, onBack, isLoading, title, onTitleCh
             key={message.id}
             role={message.role}
             content={message.content}
+            timestamp={message.timestamp}
           />
         ))}
         {isLoading && (
