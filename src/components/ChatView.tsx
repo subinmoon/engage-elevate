@@ -1,7 +1,8 @@
 import { useState, useMemo } from "react";
-import { ArrowLeft, Pencil, Check, X } from "lucide-react";
+import { ArrowLeft, Pencil, Check, X, FolderArchive } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 import ChatMessage from "@/components/ChatMessage";
 import ChatInput from "@/components/ChatInput";
 
@@ -19,6 +20,8 @@ interface ChatViewProps {
   isLoading?: boolean;
   title: string;
   onTitleChange: (title: string) => void;
+  onRegenerate?: () => void;
+  onArchive?: () => void;
 }
 
 const suggestionsMap: Record<string, string[]> = {
@@ -45,7 +48,7 @@ const suggestionsMap: Record<string, string[]> = {
   ],
 };
 
-const ChatView = ({ messages, onSendMessage, onBack, isLoading, title, onTitleChange }: ChatViewProps) => {
+const ChatView = ({ messages, onSendMessage, onBack, isLoading, title, onTitleChange, onRegenerate, onArchive }: ChatViewProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(title);
 
@@ -61,7 +64,18 @@ const ChatView = ({ messages, onSendMessage, onBack, isLoading, title, onTitleCh
     setIsEditing(false);
   };
 
-  // Get suggestions based on conversation context
+  const handleArchive = () => {
+    onArchive?.();
+    toast.success("대화가 아카이브에 추가되었습니다");
+  };
+
+  // Find the last assistant message index
+  const lastAssistantIndex = useMemo(() => {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].role === "assistant") return i;
+    }
+    return -1;
+  }, [messages]);
   const suggestions = useMemo(() => {
     if (messages.length === 0) return suggestionsMap.default;
     
@@ -135,16 +149,29 @@ const ChatView = ({ messages, onSendMessage, onBack, isLoading, title, onTitleCh
             </Button>
           </div>
         )}
+        
+        {/* Archive button */}
+        <Button
+          variant="ghost"
+          size="sm"
+          className="ml-auto rounded-full gap-1.5 text-muted-foreground hover:text-foreground"
+          onClick={handleArchive}
+        >
+          <FolderArchive className="w-4 h-4" />
+          <span className="text-xs">아카이브</span>
+        </Button>
       </div>
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto pb-4 space-y-2">
-        {messages.map((message) => (
+        {messages.map((message, index) => (
           <ChatMessage
             key={message.id}
             role={message.role}
             content={message.content}
             timestamp={message.timestamp}
+            isLastAssistant={index === lastAssistantIndex}
+            onRegenerate={onRegenerate}
           />
         ))}
         {isLoading && (

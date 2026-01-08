@@ -102,6 +102,46 @@ const Index = () => {
     ));
   };
 
+  const handleRegenerate = () => {
+    if (messages.length < 2) return;
+    
+    // Remove last assistant message
+    const newMessages = messages.slice(0, -1);
+    setMessages(newMessages);
+    setIsLoading(true);
+
+    // Get the last user message
+    const lastUserMessage = newMessages[newMessages.length - 1];
+
+    // Mock regenerated response
+    setTimeout(() => {
+      const assistantMessage = {
+        id: Date.now().toString(),
+        role: "assistant" as const,
+        content: `"${lastUserMessage.content}"에 대해 다시 답변드리겠습니다.\n\n이것은 재생성된 UI 데모용 응답입니다. 실제 AI 연동 시 다른 응답을 제공할 수 있습니다.`,
+        timestamp: new Date(),
+      };
+      const updatedMessages = [...newMessages, assistantMessage];
+      setMessages(updatedMessages);
+      setIsLoading(false);
+
+      setChatHistory(prev => prev.map(chat => 
+        chat.id === currentChatId 
+          ? { ...chat, messages: updatedMessages }
+          : chat
+      ));
+    }, 1500);
+  };
+
+  const handleArchive = () => {
+    // Move current chat to archived state (could add archived flag)
+    setChatHistory(prev => prev.map(chat => 
+      chat.id === currentChatId 
+        ? { ...chat, archived: true }
+        : chat
+    ));
+  };
+
   const handleSelectChat = (chatId: string) => {
     const chat = chatHistory.find(c => c.id === chatId);
     if (chat) {
@@ -145,6 +185,8 @@ const Index = () => {
               isLoading={isLoading}
               title={chatTitle}
               onTitleChange={handleTitleChange}
+              onRegenerate={handleRegenerate}
+              onArchive={handleArchive}
             />
           ) : (
             <>
