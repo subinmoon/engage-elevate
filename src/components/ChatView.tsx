@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { ArrowLeft, Pencil, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,30 @@ interface ChatViewProps {
   onTitleChange: (title: string) => void;
 }
 
+const suggestionsMap: Record<string, string[]> = {
+  default: [
+    "더 자세히 설명해줘",
+    "예시를 들어줄 수 있어?",
+    "다른 방법은 없을까?",
+    "요약해줘",
+  ],
+  복지: [
+    "신청 절차가 어떻게 돼?",
+    "필요한 서류는 뭐야?",
+    "담당 부서 연락처 알려줘",
+  ],
+  출장: [
+    "출장비 정산은 어떻게 해?",
+    "숙박비 한도가 얼마야?",
+    "출장 승인 절차 알려줘",
+  ],
+  회의: [
+    "회의록 양식 보여줘",
+    "참석자 목록 정리해줘",
+    "다음 회의 일정 잡아줘",
+  ],
+};
+
 const ChatView = ({ messages, onSendMessage, onBack, isLoading, title, onTitleChange }: ChatViewProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(title);
@@ -35,6 +59,25 @@ const ChatView = ({ messages, onSendMessage, onBack, isLoading, title, onTitleCh
     setEditTitle(title);
     setIsEditing(false);
   };
+
+  // Get suggestions based on conversation context
+  const suggestions = useMemo(() => {
+    if (messages.length === 0) return suggestionsMap.default;
+    
+    const lastContent = messages[messages.length - 1]?.content.toLowerCase() || "";
+    
+    if (lastContent.includes("복지") || lastContent.includes("카드")) {
+      return suggestionsMap.복지;
+    }
+    if (lastContent.includes("출장")) {
+      return suggestionsMap.출장;
+    }
+    if (lastContent.includes("회의")) {
+      return suggestionsMap.회의;
+    }
+    
+    return suggestionsMap.default;
+  }, [messages]);
 
   return (
     <div className="flex flex-col h-full min-h-[calc(100vh-48px)]">
@@ -117,6 +160,21 @@ const ChatView = ({ messages, onSendMessage, onBack, isLoading, title, onTitleCh
           </div>
         )}
       </div>
+
+      {/* Suggestions */}
+      {!isLoading && messages.length > 0 && (
+        <div className="flex flex-wrap gap-2 pt-4">
+          {suggestions.map((suggestion, index) => (
+            <button
+              key={index}
+              onClick={() => onSendMessage(suggestion)}
+              className="px-3 py-1.5 text-sm bg-muted hover:bg-primary/10 text-muted-foreground hover:text-primary rounded-full transition-colors border border-border hover:border-primary/30"
+            >
+              {suggestion}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Input */}
       <div className="mt-auto pt-4">
