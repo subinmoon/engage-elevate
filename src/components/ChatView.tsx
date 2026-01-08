@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { ArrowLeft, Pencil, Check, X, FolderArchive } from "lucide-react";
+import { ArrowLeft, Pencil, Check, X, FolderArchive, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -66,7 +66,34 @@ const ChatView = ({ messages, onSendMessage, onBack, isLoading, title, onTitleCh
 
   const handleArchive = () => {
     onArchive?.();
-    toast.success("대화가 아카이브에 추가되었습니다");
+    toast.success("대화가 아카이브에 저장되었습니다");
+  };
+
+  const handleShare = async () => {
+    // Create shareable text
+    const chatText = messages.map(m => 
+      `[${m.role === "user" ? "나" : "AI"}] ${m.content}`
+    ).join("\n\n");
+    
+    // Try native share first, fallback to clipboard
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: title,
+          text: chatText,
+        });
+        toast.success("공유되었습니다");
+      } catch (e) {
+        // User cancelled or error
+        if ((e as Error).name !== "AbortError") {
+          await navigator.clipboard.writeText(chatText);
+          toast.success("대화 내용이 클립보드에 복사되었습니다");
+        }
+      }
+    } else {
+      await navigator.clipboard.writeText(chatText);
+      toast.success("대화 내용이 클립보드에 복사되었습니다");
+    }
   };
 
   // Find the last assistant message index
@@ -150,11 +177,22 @@ const ChatView = ({ messages, onSendMessage, onBack, isLoading, title, onTitleCh
           </div>
         )}
         
-        {/* Archive button */}
+        {/* Share button */}
         <Button
           variant="ghost"
           size="sm"
           className="ml-auto rounded-full gap-1.5 text-muted-foreground hover:text-foreground"
+          onClick={handleShare}
+        >
+          <Share2 className="w-4 h-4" />
+          <span className="text-xs">공유</span>
+        </Button>
+        
+        {/* Archive button */}
+        <Button
+          variant="ghost"
+          size="sm"
+          className="rounded-full gap-1.5 text-muted-foreground hover:text-foreground"
           onClick={handleArchive}
         >
           <FolderArchive className="w-4 h-4" />

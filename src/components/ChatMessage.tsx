@@ -64,7 +64,7 @@ const ChatMessage = ({ role, content, timestamp, onRegenerate, isLastAssistant }
         
         {/* Actions for all messages */}
         <div className={cn(
-          "flex items-center gap-1 mt-1 opacity-0 group-hover:opacity-100 transition-opacity",
+          "flex items-center gap-1 mt-1",
           isUser ? "justify-end" : "justify-start"
         )}>
           <Button
