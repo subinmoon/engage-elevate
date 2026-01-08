@@ -7,10 +7,23 @@ import {
   History,
   ChevronDown,
   ChevronRight,
-  PanelLeftClose
+  PanelLeftClose,
+  MoreHorizontal,
+  Pencil,
+  Share2,
+  Pin,
+  Trash2
 } from "lucide-react";
 import logoIcon from "@/assets/logo-icon.png";
 import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 import type { ChatSession } from "@/pages/Index";
 
 interface SidebarProps {
@@ -20,6 +33,11 @@ interface SidebarProps {
   currentChatId?: string | null;
   onSelectChat?: (chatId: string) => void;
   onNewChat?: () => void;
+  onRenameChat?: (chatId: string, newTitle: string) => void;
+  onShareChat?: (chatId: string) => void;
+  onPinChat?: (chatId: string) => void;
+  onArchiveChat?: (chatId: string) => void;
+  onDeleteChat?: (chatId: string) => void;
 }
 
 const defaultChatHistory = [
@@ -40,14 +58,61 @@ const Sidebar = ({
   chatHistory = [], 
   currentChatId,
   onSelectChat,
-  onNewChat
+  onNewChat,
+  onRenameChat,
+  onShareChat,
+  onPinChat,
+  onArchiveChat,
+  onDeleteChat
 }: SidebarProps) => {
   const [historyOpen, setHistoryOpen] = useState(true);
   const [chatbotOpen, setChatbotOpen] = useState(true);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState("");
 
   const displayHistory = chatHistory.length > 0 
-    ? chatHistory 
-    : defaultChatHistory.map((title, i) => ({ id: `default-${i}`, title, messages: [], createdAt: new Date() }));
+    ? chatHistory.filter(c => !c.archived)
+    : defaultChatHistory.map((title, i) => ({ id: `default-${i}`, title, messages: [], createdAt: new Date(), pinned: false, archived: false }));
+
+  // Sort: pinned first
+  const sortedHistory = [...displayHistory].sort((a, b) => {
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
+    return 0;
+  });
+
+  const handleStartEdit = (id: string, title: string) => {
+    setEditingId(id);
+    setEditTitle(title);
+  };
+
+  const handleSaveEdit = (id: string) => {
+    if (editTitle.trim()) {
+      onRenameChat?.(id, editTitle.trim());
+      toast.success("대화 이름이 변경되었습니다");
+    }
+    setEditingId(null);
+  };
+
+  const handleShare = (id: string) => {
+    onShareChat?.(id);
+    toast.success("대화가 공유되었습니다");
+  };
+
+  const handlePin = (id: string) => {
+    onPinChat?.(id);
+    toast.success("채팅 고정 상태가 변경되었습니다");
+  };
+
+  const handleArchive = (id: string) => {
+    onArchiveChat?.(id);
+    toast.success("대화가 아카이브에 저장되었습니다");
+  };
+
+  const handleDelete = (id: string) => {
+    onDeleteChat?.(id);
+    toast.success("대화가 삭제되었습니다");
+  };
 
   return (
     <aside 
@@ -99,19 +164,69 @@ const Sidebar = ({
             </button>
             {historyOpen && (
               <div className="ml-4 mt-1 space-y-0.5 max-h-48 overflow-y-auto">
-                {displayHistory.map((item) => (
-                  <button 
-                    key={item.id}
-                    onClick={() => onSelectChat?.(item.id)}
-                    className={cn(
-                      "w-full text-left px-3 py-2 text-sm hover:bg-muted rounded-lg transition-colors truncate",
-                      currentChatId === item.id 
-                        ? "bg-primary/10 text-primary font-medium" 
-                        : "text-muted-foreground hover:text-foreground"
+                {sortedHistory.map((item) => (
+                  <div key={item.id} className="group flex items-center gap-1">
+                    {editingId === item.id ? (
+                      <Input
+                        value={editTitle}
+                        onChange={(e) => setEditTitle(e.target.value)}
+                        onBlur={() => handleSaveEdit(item.id)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") handleSaveEdit(item.id);
+                          if (e.key === "Escape") setEditingId(null);
+                        }}
+                        className="h-7 text-sm flex-1"
+                        autoFocus
+                      />
+                    ) : (
+                      <>
+                        <button 
+                          onClick={() => onSelectChat?.(item.id)}
+                          className={cn(
+                            "flex-1 text-left px-3 py-2 text-sm hover:bg-muted rounded-lg transition-colors truncate flex items-center gap-1.5",
+                            currentChatId === item.id 
+                              ? "bg-primary/10 text-primary font-medium" 
+                              : "text-muted-foreground hover:text-foreground"
+                          )}
+                        >
+                          {item.pinned && <Pin className="w-3 h-3 text-primary shrink-0" />}
+                          <span className="truncate">{item.title}</span>
+                        </button>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <button className="p-1 opacity-0 group-hover:opacity-100 hover:bg-muted rounded transition-all">
+                              <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
+                            </button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-40">
+                            <DropdownMenuItem onClick={() => handleStartEdit(item.id, item.title)}>
+                              <Pencil className="w-4 h-4 mr-2" />
+                              이름변경
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleShare(item.id)}>
+                              <Share2 className="w-4 h-4 mr-2" />
+                              공유
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handlePin(item.id)}>
+                              <Pin className="w-4 h-4 mr-2" />
+                              {item.pinned ? "고정 해제" : "채팅 고정"}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleArchive(item.id)}>
+                              <FolderArchive className="w-4 h-4 mr-2" />
+                              아카이브 저장
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              onClick={() => handleDelete(item.id)}
+                              className="text-destructive focus:text-destructive"
+                            >
+                              <Trash2 className="w-4 h-4 mr-2" />
+                              삭제
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </>
                     )}
-                  >
-                    {item.title}
-                  </button>
+                  </div>
                 ))}
               </div>
             )}
