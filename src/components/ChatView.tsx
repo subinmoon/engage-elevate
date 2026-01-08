@@ -1,5 +1,7 @@
-import { ArrowLeft } from "lucide-react";
+import { useState } from "react";
+import { ArrowLeft, Pencil, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import ChatMessage from "@/components/ChatMessage";
 import ChatInput from "@/components/ChatInput";
 
@@ -14,9 +16,26 @@ interface ChatViewProps {
   onSendMessage: (message: string) => void;
   onBack: () => void;
   isLoading?: boolean;
+  title: string;
+  onTitleChange: (title: string) => void;
 }
 
-const ChatView = ({ messages, onSendMessage, onBack, isLoading }: ChatViewProps) => {
+const ChatView = ({ messages, onSendMessage, onBack, isLoading, title, onTitleChange }: ChatViewProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState(title);
+
+  const handleSaveTitle = () => {
+    if (editTitle.trim()) {
+      onTitleChange(editTitle.trim());
+    }
+    setIsEditing(false);
+  };
+
+  const handleCancelEdit = () => {
+    setEditTitle(title);
+    setIsEditing(false);
+  };
+
   return (
     <div className="flex flex-col h-full min-h-[calc(100vh-48px)]">
       {/* Header */}
@@ -29,7 +48,49 @@ const ChatView = ({ messages, onSendMessage, onBack, isLoading }: ChatViewProps)
         >
           <ArrowLeft className="w-5 h-5" />
         </Button>
-        <h2 className="text-lg font-semibold text-foreground">AI 대화</h2>
+        
+        {isEditing ? (
+          <div className="flex items-center gap-2 flex-1">
+            <Input
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
+              className="h-8 text-lg font-semibold max-w-xs"
+              autoFocus
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSaveTitle();
+                if (e.key === "Escape") handleCancelEdit();
+              }}
+            />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 rounded-full hover:bg-green-100"
+              onClick={handleSaveTitle}
+            >
+              <Check className="w-4 h-4 text-green-600" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 rounded-full hover:bg-red-100"
+              onClick={handleCancelEdit}
+            >
+              <X className="w-4 h-4 text-red-600" />
+            </Button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2 group">
+            <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-muted"
+              onClick={() => setIsEditing(true)}
+            >
+              <Pencil className="w-3.5 h-3.5 text-muted-foreground" />
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Messages */}
@@ -48,9 +109,9 @@ const ChatView = ({ messages, onSendMessage, onBack, isLoading }: ChatViewProps)
             </div>
             <div className="bg-muted rounded-2xl px-4 py-3">
               <div className="flex gap-1">
-                <span className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                <span className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                <span className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                <span className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                <span className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                <span className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
               </div>
             </div>
           </div>
