@@ -32,6 +32,7 @@ const Index = () => {
   const [chatTitle, setChatTitle] = useState("새 대화");
   const [chatHistory, setChatHistory] = useState<ChatSession[]>([]);
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
+  const [prefillMessage, setPrefillMessage] = useState("");
 
   const handleSendMessage = (content: string) => {
     const userMessage: Message = {
@@ -253,7 +254,7 @@ const Index = () => {
               
               {/* Quick Actions */}
               <div className="mb-4">
-                <QuickActions />
+                <QuickActions onSelectAction={(template) => setPrefillMessage(template)} />
               </div>
               
               {/* Main Content Grid */}
@@ -267,7 +268,14 @@ const Index = () => {
               </div>
               
               {/* Chat Input - Bottom */}
-              <ChatInput onSendMessage={handleSendMessage} />
+              <ChatInput 
+                onSendMessage={(msg) => {
+                  handleSendMessage(msg);
+                  setPrefillMessage("");
+                }} 
+                initialMessage={prefillMessage}
+                onMessageChange={() => setPrefillMessage("")}
+              />
             </>
           )}
         </div>

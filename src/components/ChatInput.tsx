@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Globe, ChevronDown, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -11,21 +11,44 @@ const responseTypes = [
 interface ChatInputProps {
   onSendMessage?: (message: string) => void;
   disabled?: boolean;
+  initialMessage?: string;
+  onMessageChange?: (message: string) => void;
 }
 
-const ChatInput = ({ onSendMessage, disabled }: ChatInputProps) => {
-  const [message, setMessage] = useState("");
+const ChatInput = ({ onSendMessage, disabled, initialMessage, onMessageChange }: ChatInputProps) => {
+  const [message, setMessage] = useState(initialMessage || "");
   const [selectedType, setSelectedType] = useState("default");
+
+  // Sync with initialMessage when it changes externally
+  useEffect(() => {
+    if (initialMessage) {
+      setMessage(initialMessage);
+    }
+  }, [initialMessage]);
+
+  const handleMessageChange = (value: string) => {
+    setMessage(value);
+    onMessageChange?.(value);
+  };
 
   return (
     <div className="bg-primary/10 rounded-3xl shadow-soft border-2 border-primary/30">
       <div className="p-4 pb-2">
-        <input
-          type="text"
+        <textarea
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={(e) => handleMessageChange(e.target.value)}
           placeholder="무엇이든 물어보세요..."
-          className="w-full bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-base"
+          className="w-full bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-base resize-none min-h-[24px] max-h-[200px]"
+          rows={message.split('\n').length > 5 ? 5 : message.split('\n').length || 1}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              if (message.trim() && onSendMessage) {
+                onSendMessage(message.trim());
+                setMessage("");
+              }
+            }
+          }}
         />
       </div>
       <div className="flex items-center justify-between px-4 pb-4 pt-2">
