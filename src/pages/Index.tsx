@@ -20,6 +20,8 @@ export interface ChatSession {
   title: string;
   messages: Message[];
   createdAt: Date;
+  archived?: boolean;
+  pinned?: boolean;
 }
 
 const Index = () => {
@@ -133,13 +135,62 @@ const Index = () => {
     }, 1500);
   };
 
-  const handleArchive = () => {
-    // Move current chat to archived state (could add archived flag)
+  const handleArchive = (chatId?: string) => {
+    const targetId = chatId || currentChatId;
     setChatHistory(prev => prev.map(chat => 
-      chat.id === currentChatId 
+      chat.id === targetId 
         ? { ...chat, archived: true }
         : chat
     ));
+  };
+
+  const handlePin = (chatId?: string) => {
+    const targetId = chatId || currentChatId;
+    setChatHistory(prev => prev.map(chat => 
+      chat.id === targetId 
+        ? { ...chat, pinned: !chat.pinned }
+        : chat
+    ));
+  };
+
+  const handleDelete = (chatId?: string) => {
+    const targetId = chatId || currentChatId;
+    setChatHistory(prev => prev.filter(chat => chat.id !== targetId));
+    if (targetId === currentChatId) {
+      handleNewChat();
+    }
+  };
+
+  const handleRenameChat = (chatId: string, newTitle: string) => {
+    setChatHistory(prev => prev.map(chat => 
+      chat.id === chatId 
+        ? { ...chat, title: newTitle }
+        : chat
+    ));
+    if (chatId === currentChatId) {
+      setChatTitle(newTitle);
+    }
+  };
+
+  const handleShareChat = async (chatId: string) => {
+    const chat = chatHistory.find(c => c.id === chatId);
+    if (!chat) return;
+    
+    const chatText = chat.messages.map(m => 
+      `[${m.role === "user" ? "나" : "AI"}] ${m.content}`
+    ).join("\n\n");
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: chat.title, text: chatText });
+      } catch (e) {
+        if ((e as Error).name !== "AbortError") {
+          await navigator.clipboard.writeText(chatText);
+        }
+      }
+    } else {
+      await navigator.clipboard.writeText(chatText);
+    }
   };
 
   const handleSelectChat = (chatId: string) => {
@@ -169,6 +220,11 @@ const Index = () => {
         currentChatId={currentChatId}
         onSelectChat={handleSelectChat}
         onNewChat={handleNewChat}
+        onRenameChat={handleRenameChat}
+        onShareChat={handleShareChat}
+        onPinChat={handlePin}
+        onArchiveChat={handleArchive}
+        onDeleteChat={handleDelete}
       />
       
       {/* Sidebar Trigger when closed */}
@@ -186,7 +242,10 @@ const Index = () => {
               title={chatTitle}
               onTitleChange={handleTitleChange}
               onRegenerate={handleRegenerate}
-              onArchive={handleArchive}
+              onArchive={() => handleArchive()}
+              onPin={() => handlePin()}
+              onDelete={() => handleDelete()}
+              isPinned={chatHistory.find(c => c.id === currentChatId)?.pinned}
             />
           ) : (
             <>

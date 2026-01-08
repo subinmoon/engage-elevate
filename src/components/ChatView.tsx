@@ -1,7 +1,13 @@
 import { useState, useMemo } from "react";
-import { ArrowLeft, Pencil, Check, X, FolderArchive, Share2 } from "lucide-react";
+import { ArrowLeft, Pencil, Check, X, FolderArchive, Share2, Pin, Trash2, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import ChatMessage from "@/components/ChatMessage";
 import ChatInput from "@/components/ChatInput";
@@ -22,6 +28,9 @@ interface ChatViewProps {
   onTitleChange: (title: string) => void;
   onRegenerate?: () => void;
   onArchive?: () => void;
+  onPin?: () => void;
+  onDelete?: () => void;
+  isPinned?: boolean;
 }
 
 const suggestionsMap: Record<string, string[]> = {
@@ -48,7 +57,7 @@ const suggestionsMap: Record<string, string[]> = {
   ],
 };
 
-const ChatView = ({ messages, onSendMessage, onBack, isLoading, title, onTitleChange, onRegenerate, onArchive }: ChatViewProps) => {
+const ChatView = ({ messages, onSendMessage, onBack, isLoading, title, onTitleChange, onRegenerate, onArchive, onPin, onDelete, isPinned }: ChatViewProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(title);
 
@@ -67,6 +76,16 @@ const ChatView = ({ messages, onSendMessage, onBack, isLoading, title, onTitleCh
   const handleArchive = () => {
     onArchive?.();
     toast.success("대화가 아카이브에 저장되었습니다");
+  };
+
+  const handlePin = () => {
+    onPin?.();
+    toast.success(isPinned ? "채팅 고정이 해제되었습니다" : "채팅이 고정되었습니다");
+  };
+
+  const handleDelete = () => {
+    onDelete?.();
+    toast.success("대화가 삭제되었습니다");
   };
 
   const handleShare = async () => {
@@ -177,27 +196,39 @@ const ChatView = ({ messages, onSendMessage, onBack, isLoading, title, onTitleCh
           </div>
         )}
         
-        {/* Share button */}
-        <Button
-          variant="ghost"
-          size="sm"
-          className="ml-auto rounded-full gap-1.5 text-muted-foreground hover:text-foreground"
-          onClick={handleShare}
-        >
-          <Share2 className="w-4 h-4" />
-          <span className="text-xs">공유</span>
-        </Button>
-        
-        {/* Archive button */}
-        <Button
-          variant="ghost"
-          size="sm"
-          className="rounded-full gap-1.5 text-muted-foreground hover:text-foreground"
-          onClick={handleArchive}
-        >
-          <FolderArchive className="w-4 h-4" />
-          <span className="text-xs">아카이브</span>
-        </Button>
+        {/* Actions dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="ml-auto rounded-full text-muted-foreground hover:text-foreground"
+            >
+              <MoreHorizontal className="w-4 h-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-40">
+            <DropdownMenuItem onClick={handleShare}>
+              <Share2 className="w-4 h-4 mr-2" />
+              공유
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handlePin}>
+              <Pin className="w-4 h-4 mr-2" />
+              {isPinned ? "고정 해제" : "채팅 고정"}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleArchive}>
+              <FolderArchive className="w-4 h-4 mr-2" />
+              아카이브 저장
+            </DropdownMenuItem>
+            <DropdownMenuItem 
+              onClick={handleDelete}
+              className="text-destructive focus:text-destructive"
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              삭제
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {/* Messages */}
