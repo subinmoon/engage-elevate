@@ -10,13 +10,19 @@ import {
   PanelLeftClose
 } from "lucide-react";
 import logoIcon from "@/assets/logo-icon.png";
+import { cn } from "@/lib/utils";
+import type { ChatSession } from "@/pages/Index";
 
 interface SidebarProps {
   isOpen: boolean;
   onToggle: () => void;
+  chatHistory?: ChatSession[];
+  currentChatId?: string | null;
+  onSelectChat?: (chatId: string) => void;
+  onNewChat?: () => void;
 }
 
-const chatHistory = [
+const defaultChatHistory = [
   "인사 관련 요청",
   "AI UI 만족도 질문",
   "GD 의미 또는 정의",
@@ -28,9 +34,20 @@ const chatHistory = [
   "가능한 능력 목록",
 ];
 
-const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
+const Sidebar = ({ 
+  isOpen, 
+  onToggle, 
+  chatHistory = [], 
+  currentChatId,
+  onSelectChat,
+  onNewChat
+}: SidebarProps) => {
   const [historyOpen, setHistoryOpen] = useState(true);
   const [chatbotOpen, setChatbotOpen] = useState(true);
+
+  const displayHistory = chatHistory.length > 0 
+    ? chatHistory 
+    : defaultChatHistory.map((title, i) => ({ id: `default-${i}`, title, messages: [], createdAt: new Date() }));
 
   return (
     <aside 
@@ -56,7 +73,10 @@ const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
         {/* Navigation */}
         <nav className="p-3 flex-1 overflow-y-auto">
           {/* New Chat */}
-          <button className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted rounded-xl transition-colors">
+          <button 
+            onClick={onNewChat}
+            className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted rounded-xl transition-colors"
+          >
             <MessageSquarePlus className="w-4 h-4" />
             새 채팅
           </button>
@@ -79,12 +99,18 @@ const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
             </button>
             {historyOpen && (
               <div className="ml-4 mt-1 space-y-0.5 max-h-48 overflow-y-auto">
-                {chatHistory.map((item, index) => (
+                {displayHistory.map((item) => (
                   <button 
-                    key={index}
-                    className="w-full text-left px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors truncate"
+                    key={item.id}
+                    onClick={() => onSelectChat?.(item.id)}
+                    className={cn(
+                      "w-full text-left px-3 py-2 text-sm hover:bg-muted rounded-lg transition-colors truncate",
+                      currentChatId === item.id 
+                        ? "bg-primary/10 text-primary font-medium" 
+                        : "text-muted-foreground hover:text-foreground"
+                    )}
                   >
-                    {item}
+                    {item.title}
                   </button>
                 ))}
               </div>

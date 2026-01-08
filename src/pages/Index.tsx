@@ -14,11 +14,21 @@ interface Message {
   content: string;
 }
 
+export interface ChatSession {
+  id: string;
+  title: string;
+  messages: Message[];
+  createdAt: Date;
+}
+
 const Index = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isChatMode, setIsChatMode] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [chatTitle, setChatTitle] = useState("새 대화");
+  const [chatHistory, setChatHistory] = useState<ChatSession[]>([]);
+  const [currentChatId, setCurrentChatId] = useState<string | null>(null);
 
   const handleSendMessage = (content: string) => {
     const userMessage: Message = {
@@ -27,7 +37,32 @@ const Index = () => {
       content,
     };
     
-    setMessages((prev) => [...prev, userMessage]);
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
+    
+    // First message sets the title
+    if (messages.length === 0) {
+      const newTitle = content.length > 20 ? content.slice(0, 20) + "..." : content;
+      setChatTitle(newTitle);
+      
+      // Create new chat session
+      const newChatId = Date.now().toString();
+      setCurrentChatId(newChatId);
+      setChatHistory(prev => [{
+        id: newChatId,
+        title: newTitle,
+        messages: newMessages,
+        createdAt: new Date(),
+      }, ...prev]);
+    } else {
+      // Update existing chat session
+      setChatHistory(prev => prev.map(chat => 
+        chat.id === currentChatId 
+          ? { ...chat, messages: newMessages, title: chatTitle }
+          : chat
+      ));
+    }
+    
     setIsChatMode(true);
     setIsLoading(true);
 
@@ -38,8 +73,16 @@ const Index = () => {
         role: "assistant",
         content: `"${content}"에 대해 답변드리겠습니다.\n\n이것은 UI 데모용 응답입니다. 실제 AI 연동 시 더 풍부한 응답을 제공할 수 있습니다.`,
       };
-      setMessages((prev) => [...prev, assistantMessage]);
+      const updatedMessages = [...newMessages, assistantMessage];
+      setMessages(updatedMessages);
       setIsLoading(false);
+      
+      // Update chat history with assistant response
+      setChatHistory(prev => prev.map(chat => 
+        chat.id === currentChatId 
+          ? { ...chat, messages: updatedMessages }
+          : chat
+      ));
     }, 1500);
   };
 
@@ -47,10 +90,43 @@ const Index = () => {
     setIsChatMode(false);
   };
 
+  const handleTitleChange = (newTitle: string) => {
+    setChatTitle(newTitle);
+    setChatHistory(prev => prev.map(chat => 
+      chat.id === currentChatId 
+        ? { ...chat, title: newTitle }
+        : chat
+    ));
+  };
+
+  const handleSelectChat = (chatId: string) => {
+    const chat = chatHistory.find(c => c.id === chatId);
+    if (chat) {
+      setCurrentChatId(chatId);
+      setMessages(chat.messages);
+      setChatTitle(chat.title);
+      setIsChatMode(true);
+    }
+  };
+
+  const handleNewChat = () => {
+    setCurrentChatId(null);
+    setMessages([]);
+    setChatTitle("새 대화");
+    setIsChatMode(false);
+  };
+
   return (
     <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
-      <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(false)} />
+      <Sidebar 
+        isOpen={sidebarOpen} 
+        onToggle={() => setSidebarOpen(false)}
+        chatHistory={chatHistory}
+        currentChatId={currentChatId}
+        onSelectChat={handleSelectChat}
+        onNewChat={handleNewChat}
+      />
       
       {/* Sidebar Trigger when closed */}
       {!sidebarOpen && <SidebarTrigger onClick={() => setSidebarOpen(true)} />}
@@ -64,6 +140,8 @@ const Index = () => {
               onSendMessage={handleSendMessage}
               onBack={handleBack}
               isLoading={isLoading}
+              title={chatTitle}
+              onTitleChange={handleTitleChange}
             />
           ) : (
             <>
