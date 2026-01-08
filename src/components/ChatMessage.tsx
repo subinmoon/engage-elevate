@@ -3,14 +3,17 @@ import { cn } from "@/lib/utils";
 import { Copy, Check, ThumbsUp, ThumbsDown, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { format } from "date-fns";
+import { ko } from "date-fns/locale";
 import logoIcon from "@/assets/logo-icon.png";
 
 interface ChatMessageProps {
   role: "user" | "assistant";
   content: string;
+  timestamp: Date;
 }
 
-const ChatMessage = ({ role, content }: ChatMessageProps) => {
+const ChatMessage = ({ role, content, timestamp }: ChatMessageProps) => {
   const isUser = role === "user";
   const [copied, setCopied] = useState(false);
   const [feedback, setFeedback] = useState<"like" | "dislike" | null>(null);
@@ -31,6 +34,8 @@ const ChatMessage = ({ role, content }: ChatMessageProps) => {
     toast.info("피드백 전달 기능이 준비 중입니다");
   };
 
+  const formattedTime = format(timestamp, "a h:mm", { locale: ko });
+
   return (
     <div className={cn("flex gap-3 mb-4 group", isUser && "justify-end")}>
       {!isUser && (
@@ -39,15 +44,20 @@ const ChatMessage = ({ role, content }: ChatMessageProps) => {
         </div>
       )}
       <div className="flex flex-col">
-        <div
-          className={cn(
-            "max-w-[80%] rounded-2xl px-4 py-3",
-            isUser
-              ? "bg-primary text-primary-foreground"
-              : "bg-muted text-foreground"
-          )}
-        >
-          <p className="text-sm leading-relaxed whitespace-pre-wrap">{content}</p>
+        <div className={cn("flex items-end gap-2", isUser && "flex-row-reverse")}>
+          <div
+            className={cn(
+              "max-w-[80%] rounded-2xl px-4 py-3",
+              isUser
+                ? "bg-primary text-primary-foreground"
+                : "bg-muted text-foreground"
+            )}
+          >
+            <p className="text-sm leading-relaxed whitespace-pre-wrap">{content}</p>
+          </div>
+          <span className="text-[10px] text-muted-foreground mb-1 flex-shrink-0">
+            {formattedTime}
+          </span>
         </div>
         
         {/* Actions for all messages */}
