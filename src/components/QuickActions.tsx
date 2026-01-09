@@ -52,7 +52,7 @@ const QuickActions = ({ onSelectAction }: QuickActionsProps) => {
   return (
     <div className="bg-card rounded-2xl p-5 shadow-soft border border-border">
       <h2 className="text-base font-bold text-foreground mb-4 flex items-center gap-2">
-        <img src={iconQuickStart} alt="Quick Start" className="w-6 h-6 object-contain" />
+        <img src={iconQuickStart} alt="Quick Start" className="w-5 h-5 object-contain" />
         빠른 시작
       </h2>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -65,7 +65,7 @@ const QuickActions = ({ onSelectAction }: QuickActionsProps) => {
             <img 
               src={action.icon} 
               alt={action.label} 
-              className="w-11 h-11 object-contain rounded-xl"
+              className="w-8 h-8 object-contain rounded-xl"
             />
             <span className="text-sm font-medium text-foreground text-left">
               {action.label}

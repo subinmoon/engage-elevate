@@ -20,7 +20,7 @@ const HRHelper = () => {
   return (
     <div className="bg-card rounded-2xl p-5 shadow-soft h-full border border-border">
       <h2 className="text-base font-bold text-foreground mb-4 flex items-center gap-2">
-        <img src={iconHR} alt="HR" className="w-6 h-6 object-contain" />
+        <img src={iconHR} alt="HR" className="w-5 h-5 object-contain" />
         HR 도우미
       </h2>
       <div className="space-y-1">
@@ -33,7 +33,7 @@ const HRHelper = () => {
               <img 
                 src={item.icon} 
                 alt={item.label} 
-                className="w-9 h-9 object-contain rounded-xl"
+                className="w-7 h-7 object-contain rounded-xl"
               />
               <span className="flex-1">{item.label}</span>
               <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity text-primary" />
