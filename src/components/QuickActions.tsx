@@ -2,6 +2,7 @@ import iconDocumentSummary from "@/assets/icons/icon-document-summary.png";
 import iconBrainstorm from "@/assets/icons/icon-brainstorm.png";
 import iconEditText from "@/assets/icons/icon-edit-text.png";
 import iconEmail from "@/assets/icons/icon-email.png";
+import iconQuickStart from "@/assets/icons/icon-quick-start.png";
 
 interface QuickAction {
   id: string;
@@ -51,7 +52,7 @@ const QuickActions = ({ onSelectAction }: QuickActionsProps) => {
   return (
     <div className="bg-card rounded-2xl p-5 shadow-soft border border-border">
       <h2 className="text-base font-bold text-foreground mb-4 flex items-center gap-2">
-        <span>⚡</span>
+        <img src={iconQuickStart} alt="Quick Start" className="w-6 h-6 object-contain" />
         빠른 시작
       </h2>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -59,12 +60,12 @@ const QuickActions = ({ onSelectAction }: QuickActionsProps) => {
           <button
             key={action.id}
             onClick={() => handleActionClick(action)}
-            className="bg-blue-light rounded-xl py-3 px-4 flex items-center gap-3 transition-all duration-200 hover:shadow-soft hover:scale-[1.02] active:scale-[0.98]"
+            className="bg-blue-light rounded-2xl py-3 px-4 flex items-center gap-3 transition-all duration-200 hover:shadow-soft hover:scale-[1.02] active:scale-[0.98]"
           >
             <img 
               src={action.icon} 
               alt={action.label} 
-              className="w-10 h-10 object-contain"
+              className="w-11 h-11 object-contain rounded-xl"
             />
             <span className="text-sm font-medium text-foreground text-left">
               {action.label}
