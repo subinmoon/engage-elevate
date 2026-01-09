@@ -1,6 +1,5 @@
-import { ArrowRight } from "lucide-react";
+import { Star, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import iconInterests from "@/assets/icons/icon-interests.png";
 
 interface InterestItem {
   id: string;
@@ -25,8 +24,8 @@ const RecentInterests = () => {
   return (
     <div className="bg-white rounded-2xl p-5 h-full shadow-soft">
       <div className="flex items-center gap-2 mb-4">
-        <div className="w-6 h-6 bg-white rounded-lg flex items-center justify-center">
-          <img src={iconInterests} alt="Interests" className="w-5 h-5 object-contain" />
+        <div className="w-8 h-8 rounded-lg bg-lavender-light flex items-center justify-center">
+          <Star className="w-4 h-4 text-primary" />
         </div>
         <h2 className="text-base font-bold text-foreground">최근 관심사</h2>
       </div>
@@ -34,7 +33,7 @@ const RecentInterests = () => {
         {interests.map((item) => (
           <div 
             key={item.id} 
-            className="bg-blue-light rounded-2xl p-4 transition-shadow hover:shadow-md"
+            className="bg-blue-light rounded-xl p-4 transition-shadow hover:shadow-md"
           >
             <div className="flex items-center justify-between gap-3">
               <div className="flex-1 min-w-0">
