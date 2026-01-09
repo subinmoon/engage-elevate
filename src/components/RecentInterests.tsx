@@ -25,7 +25,9 @@ const RecentInterests = () => {
   return (
     <div className="bg-white rounded-2xl p-5 h-full shadow-soft">
       <div className="flex items-center gap-2 mb-4">
-        <img src={iconInterests} alt="Interests" className="w-5 h-5 object-contain" />
+        <div className="w-6 h-6 bg-white rounded-lg flex items-center justify-center">
+          <img src={iconInterests} alt="Interests" className="w-5 h-5 object-contain" />
+        </div>
         <h2 className="text-base font-bold text-foreground">최근 관심사</h2>
       </div>
       <div className="space-y-3">
