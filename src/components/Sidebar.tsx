@@ -1,10 +1,5 @@
 import { useState } from "react";
 import { 
-  MessageSquarePlus, 
-  Search, 
-  Sparkles, 
-  FolderArchive, 
-  History,
   ChevronDown,
   ChevronRight,
   PanelLeftClose,
@@ -12,9 +7,15 @@ import {
   Pencil,
   Share2,
   Pin,
-  Trash2
+  Trash2,
+  FolderArchive
 } from "lucide-react";
 import logoIcon from "@/assets/logo-icon.png";
+import iconNewChat from "@/assets/icons/icon-new-chat.png";
+import iconSearch from "@/assets/icons/icon-search.png";
+import iconHistory from "@/assets/icons/icon-history.png";
+import iconArchive from "@/assets/icons/icon-archive.png";
+import iconChatbot from "@/assets/icons/icon-chatbot.png";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -142,13 +143,13 @@ const Sidebar = ({
             onClick={onNewChat}
             className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted rounded-xl transition-colors"
           >
-            <MessageSquarePlus className="w-4 h-4" />
+            <img src={iconNewChat} alt="새 채팅" className="w-5 h-5 object-contain" />
             새 채팅
           </button>
 
           {/* Search */}
           <button className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted rounded-xl transition-colors">
-            <Search className="w-4 h-4" />
+            <img src={iconSearch} alt="검색" className="w-5 h-5 object-contain" />
             채팅 검색
           </button>
 
@@ -158,7 +159,7 @@ const Sidebar = ({
               onClick={() => setHistoryOpen(!historyOpen)}
               className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted rounded-xl transition-colors"
             >
-              <History className="w-4 h-4" />
+              <img src={iconHistory} alt="히스토리" className="w-5 h-5 object-contain" />
               채팅 히스토리
               {historyOpen ? <ChevronDown className="w-3 h-3 ml-auto" /> : <ChevronRight className="w-3 h-3 ml-auto" />}
             </button>
@@ -234,7 +235,7 @@ const Sidebar = ({
 
           {/* Archive - After history */}
           <button className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted rounded-xl transition-colors mt-2">
-            <FolderArchive className="w-4 h-4" />
+            <img src={iconArchive} alt="아카이브" className="w-5 h-5 object-contain" />
             채팅 아카이브
           </button>
 
@@ -244,7 +245,7 @@ const Sidebar = ({
               onClick={() => setChatbotOpen(!chatbotOpen)}
               className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted rounded-xl transition-colors"
             >
-              <Sparkles className="w-4 h-4" />
+              <img src={iconChatbot} alt="챗봇" className="w-5 h-5 object-contain" />
               챗봇 서비스
               {chatbotOpen ? <ChevronDown className="w-3 h-3 ml-auto" /> : <ChevronRight className="w-3 h-3 ml-auto" />}
             </button>
