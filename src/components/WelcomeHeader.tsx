@@ -4,7 +4,7 @@ interface WelcomeHeaderProps {
   userName?: string;
 }
 
-const WelcomeHeader = ({ userName = "사용자" }: WelcomeHeaderProps) => {
+const WelcomeHeader = ({ userName = "현민" }: WelcomeHeaderProps) => {
   return (
     <div className="flex items-center gap-4 mb-6">
       <img src={logoIcon} alt="Logo" className="w-12 h-12" />
