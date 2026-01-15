@@ -250,7 +250,7 @@ const Index = () => {
             />
           ) : (
             <>
-              <WelcomeHeader userName="은선" />
+              <WelcomeHeader userName="현민" />
               
               {/* Quick Actions */}
               <div className="mb-4">
