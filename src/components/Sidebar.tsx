@@ -12,7 +12,11 @@ import {
   Pencil,
   Share2,
   Pin,
-  Trash2
+  Trash2,
+  Link,
+  FileText,
+  Building2,
+  Users
 } from "lucide-react";
 import logoIcon from "@/assets/logo-icon.png";
 import { cn } from "@/lib/utils";
@@ -133,6 +137,43 @@ const Sidebar = ({
           >
             <PanelLeftClose className="w-4 h-4 text-muted-foreground" />
           </button>
+        </div>
+
+        {/* 바로가기 */}
+        <div className="p-3 border-b border-border">
+          <div className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-muted-foreground">
+            <Link className="w-4 h-4" />
+            바로가기
+          </div>
+          <div className="grid grid-cols-3 gap-2 mt-1">
+            <a 
+              href="#" 
+              className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors"
+            >
+              <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+                <FileText className="w-4 h-4 text-blue-600" />
+              </div>
+              <span className="text-xs text-muted-foreground">그룹웨어</span>
+            </a>
+            <a 
+              href="#" 
+              className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors"
+            >
+              <div className="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
+                <Building2 className="w-4 h-4 text-green-600" />
+              </div>
+              <span className="text-xs text-muted-foreground">ERP</span>
+            </a>
+            <a 
+              href="#" 
+              className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors"
+            >
+              <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
+                <Users className="w-4 h-4 text-purple-600" />
+              </div>
+              <span className="text-xs text-muted-foreground">HR</span>
+            </a>
+          </div>
         </div>
 
         {/* Navigation */}
