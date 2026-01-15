@@ -14,7 +14,8 @@ import {
   Pin,
   Trash2,
   Link,
-  ExternalLink,
+  Home,
+  Heart,
   Star
 } from "lucide-react";
 import logoIcon from "@/assets/logo-icon.png";
@@ -141,53 +142,45 @@ const Sidebar = ({
 
         {/* 바로가기 */}
         <div className="p-3 border-b border-border">
-          <button 
-            onClick={() => setShortcutsOpen(!shortcutsOpen)}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted rounded-lg transition-colors"
-          >
+          <div className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-muted-foreground">
             <Link className="w-4 h-4" />
             바로가기
-            {shortcutsOpen ? <ChevronDown className="w-3 h-3 ml-auto" /> : <ChevronRight className="w-3 h-3 ml-auto" />}
+          </div>
+          
+          {/* AI 포탈로 이동 */}
+          <a 
+            href="#" 
+            className="flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-muted rounded-lg transition-colors mt-1"
+          >
+            <Home className="w-4 h-4 text-primary" />
+            <span>AI 포탈로 이동</span>
+          </a>
+          
+          {/* 즐겨찾기 - 접히는 섹션 */}
+          <button 
+            onClick={() => setShortcutsOpen(!shortcutsOpen)}
+            className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-muted rounded-lg transition-colors mt-1"
+          >
+            <Heart className="w-4 h-4 text-primary" />
+            <span className="flex-1 text-left">즐겨찾기</span>
+            {shortcutsOpen ? <ChevronDown className="w-3 h-3 text-muted-foreground" /> : <ChevronRight className="w-3 h-3 text-muted-foreground" />}
           </button>
+          
           {shortcutsOpen && (
-            <div className="mt-2 space-y-1">
-              {/* AI 포탈로 이동 */}
+            <div className="ml-4 mt-1 space-y-0.5 border-l border-border pl-3">
               <a 
                 href="#" 
-                className="flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-muted rounded-lg transition-colors group"
+                className="flex items-center justify-between gap-3 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
               >
-                <div className="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center">
-                  <ExternalLink className="w-3.5 h-3.5 text-primary" />
-                </div>
-                <span className="flex-1">AI 포탈로 이동하기</span>
-                <ExternalLink className="w-3 h-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-              </a>
-              
-              {/* 즐겨찾기 서비스들 */}
-              <div className="px-3 py-1.5 text-xs text-muted-foreground flex items-center gap-1.5">
-                <Star className="w-3 h-3" />
-                즐겨찾기
-              </div>
-              <a 
-                href="#" 
-                className="flex items-center gap-3 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
-              >
-                <span className="text-base">📊</span>
-                <span>이수시스템 사규 챗봇</span>
+                <span>전자결재</span>
+                <Star className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
               </a>
               <a 
                 href="#" 
-                className="flex items-center gap-3 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+                className="flex items-center justify-between gap-3 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
               >
-                <span className="text-base">💼</span>
-                <span>HR 도우미</span>
-              </a>
-              <a 
-                href="#" 
-                className="flex items-center gap-3 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
-              >
-                <span className="text-base">📝</span>
-                <span>보고서 작성 도우미</span>
+                <span>IT 헬프데스크</span>
+                <Star className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
               </a>
             </div>
           )}
