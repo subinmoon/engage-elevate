@@ -14,9 +14,8 @@ import {
   Pin,
   Trash2,
   Link,
-  FileText,
-  Building2,
-  Users
+  ExternalLink,
+  Star
 } from "lucide-react";
 import logoIcon from "@/assets/logo-icon.png";
 import { cn } from "@/lib/utils";
@@ -71,6 +70,7 @@ const Sidebar = ({
 }: SidebarProps) => {
   const [historyOpen, setHistoryOpen] = useState(true);
   const [chatbotOpen, setChatbotOpen] = useState(true);
+  const [shortcutsOpen, setShortcutsOpen] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState("");
 
@@ -141,39 +141,56 @@ const Sidebar = ({
 
         {/* 바로가기 */}
         <div className="p-3 border-b border-border">
-          <div className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-muted-foreground">
+          <button 
+            onClick={() => setShortcutsOpen(!shortcutsOpen)}
+            className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted rounded-lg transition-colors"
+          >
             <Link className="w-4 h-4" />
             바로가기
-          </div>
-          <div className="grid grid-cols-3 gap-2 mt-1">
-            <a 
-              href="#" 
-              className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors"
-            >
-              <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
-                <FileText className="w-4 h-4 text-blue-600" />
+            {shortcutsOpen ? <ChevronDown className="w-3 h-3 ml-auto" /> : <ChevronRight className="w-3 h-3 ml-auto" />}
+          </button>
+          {shortcutsOpen && (
+            <div className="mt-2 space-y-1">
+              {/* AI 포탈로 이동 */}
+              <a 
+                href="#" 
+                className="flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-muted rounded-lg transition-colors group"
+              >
+                <div className="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center">
+                  <ExternalLink className="w-3.5 h-3.5 text-primary" />
+                </div>
+                <span className="flex-1">AI 포탈로 이동하기</span>
+                <ExternalLink className="w-3 h-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              </a>
+              
+              {/* 즐겨찾기 서비스들 */}
+              <div className="px-3 py-1.5 text-xs text-muted-foreground flex items-center gap-1.5">
+                <Star className="w-3 h-3" />
+                즐겨찾기
               </div>
-              <span className="text-xs text-muted-foreground">그룹웨어</span>
-            </a>
-            <a 
-              href="#" 
-              className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors"
-            >
-              <div className="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
-                <Building2 className="w-4 h-4 text-green-600" />
-              </div>
-              <span className="text-xs text-muted-foreground">ERP</span>
-            </a>
-            <a 
-              href="#" 
-              className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors"
-            >
-              <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
-                <Users className="w-4 h-4 text-purple-600" />
-              </div>
-              <span className="text-xs text-muted-foreground">HR</span>
-            </a>
-          </div>
+              <a 
+                href="#" 
+                className="flex items-center gap-3 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+              >
+                <span className="text-base">📊</span>
+                <span>이수시스템 사규 챗봇</span>
+              </a>
+              <a 
+                href="#" 
+                className="flex items-center gap-3 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+              >
+                <span className="text-base">💼</span>
+                <span>HR 도우미</span>
+              </a>
+              <a 
+                href="#" 
+                className="flex items-center gap-3 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+              >
+                <span className="text-base">📝</span>
+                <span>보고서 작성 도우미</span>
+              </a>
+            </div>
+          )}
         </div>
 
         {/* Navigation */}
