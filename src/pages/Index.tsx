@@ -5,7 +5,6 @@ import WelcomeHeader from "@/components/WelcomeHeader";
 import UpcomingSchedule from "@/components/UpcomingSchedule";
 import RecentInterests from "@/components/RecentInterests";
 import HRHelper from "@/components/HRHelper";
-import QuickActions from "@/components/QuickActions";
 import ChatInput from "@/components/ChatInput";
 import ChatView from "@/components/ChatView";
 import { generateScheduleResponse } from "@/data/scheduleData";
@@ -260,10 +259,14 @@ const Index = () => {
             />
           ) : (
             <>
-              <div className="flex items-start justify-between gap-4 mb-2">
-                <WelcomeHeader userName="현민" />
+              {/* Header with Welcome & Quick Actions */}
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <WelcomeHeader 
+                  userName="현민" 
+                  onSelectAction={(template) => setPrefillMessage(template)}
+                />
                 {!scheduleExpanded && (
-                  <div className="flex-shrink-0 ml-auto">
+                  <div className="flex-shrink-0">
                     <UpcomingSchedule 
                       isExpanded={false} 
                       onToggle={() => setScheduleExpanded(true)} 
@@ -281,11 +284,6 @@ const Index = () => {
                   />
                 </div>
               )}
-              
-              {/* Quick Actions */}
-              <div className="mb-4">
-                <QuickActions onSelectAction={(template) => setPrefillMessage(template)} />
-              </div>
               
               {/* Main Content Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-6">
