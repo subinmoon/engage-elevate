@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Calendar, Plane, Palmtree, ChevronUp } from "lucide-react";
+import { Calendar, Plane, Palmtree, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -51,64 +51,55 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle }: UpcomingScheduleProp
     }
   };
 
-  // Collapsed state - show emoji button
-  if (!isExpanded) {
-    return (
+  return (
+    <>
+      {/* Trigger Button - always visible in header */}
       <button
         onClick={onToggle}
-        className="bg-card border border-border rounded-full p-3 shadow-sm hover:shadow-md transition-all cursor-pointer flex items-center gap-2"
+        className="bg-card/50 hover:bg-muted/50 rounded-full px-3 py-1.5 transition-all cursor-pointer flex items-center gap-2"
         title="일정 보기"
       >
-        <span className="text-xl">😊</span>
+        <span className="text-lg">😊</span>
         <span className="text-xs text-muted-foreground font-medium">
           {schedules.length}개 일정
         </span>
       </button>
-    );
-  }
 
-  // Expanded state - full width card layout
-  return (
-    <>
-      <div className="bg-card border border-border rounded-xl p-4 shadow-sm w-full">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-primary" />
-            <h3 className="text-base font-semibold text-foreground">다가오는 일정</h3>
-          </div>
-          <button
-            onClick={onToggle}
-            className="p-1.5 hover:bg-muted rounded-lg transition-colors"
-            title="접기"
-          >
-            <ChevronUp className="w-4 h-4 text-muted-foreground" />
-          </button>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {schedules.map((schedule, index) => (
-            <button
-              key={index}
-              onClick={() => setSelectedSchedule(schedule)}
-              className={`flex flex-col p-4 rounded-xl border transition-all text-left ${getBgColor(schedule.type)}`}
-            >
-              <div className="flex items-center gap-2 mb-2">
-                {getIcon(schedule.type)}
-                <span className="text-sm font-semibold text-foreground">
-                  {schedule.title}
+      {/* Schedule List Modal */}
+      <Dialog open={isExpanded} onOpenChange={() => onToggle?.()}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-primary" />
+              다가오는 일정
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 max-h-[60vh] overflow-y-auto">
+            {schedules.map((schedule, index) => (
+              <button
+                key={index}
+                onClick={() => setSelectedSchedule(schedule)}
+                className={`flex flex-col w-full p-4 rounded-xl border transition-all text-left ${getBgColor(schedule.type)}`}
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  {getIcon(schedule.type)}
+                  <span className="text-sm font-semibold text-foreground">
+                    {schedule.title}
+                  </span>
+                </div>
+                <span className="text-xs font-medium text-muted-foreground mb-1">
+                  📅 {schedule.date}
                 </span>
-              </div>
-              <span className="text-xs font-medium text-muted-foreground mb-1">
-                📅 {schedule.date}
-              </span>
-              {schedule.message && (
-                <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                  {schedule.message}
-                </p>
-              )}
-            </button>
-          ))}
-        </div>
-      </div>
+                {schedule.message && (
+                  <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                    {schedule.message}
+                  </p>
+                )}
+              </button>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Detail Dialog */}
       <Dialog open={!!selectedSchedule} onOpenChange={() => setSelectedSchedule(null)}>
