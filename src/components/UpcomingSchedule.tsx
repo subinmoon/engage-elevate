@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Calendar, Plane, Palmtree, ChevronDown, ChevronUp, X } from "lucide-react";
+import { Calendar, Plane, Palmtree, ChevronUp } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -19,8 +19,12 @@ interface ScheduleItem {
   };
 }
 
-const UpcomingSchedule = () => {
-  const [isOpen, setIsOpen] = useState(true);
+interface UpcomingScheduleProps {
+  isExpanded?: boolean;
+  onToggle?: () => void;
+}
+
+const UpcomingSchedule = ({ isExpanded = false, onToggle }: UpcomingScheduleProps) => {
   const [selectedSchedule, setSelectedSchedule] = useState<ScheduleItem | null>(null);
 
   const schedules: ScheduleItem[] = [
@@ -50,11 +54,11 @@ const UpcomingSchedule = () => {
   const getIcon = (type: ScheduleItem["type"]) => {
     switch (type) {
       case "vacation":
-        return <Palmtree className="w-4 h-4 text-green-500" />;
+        return <Palmtree className="w-5 h-5 text-green-500" />;
       case "business":
-        return <Plane className="w-4 h-4 text-blue-500" />;
+        return <Plane className="w-5 h-5 text-blue-500" />;
       default:
-        return <Calendar className="w-4 h-4 text-muted-foreground" />;
+        return <Calendar className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
@@ -69,11 +73,22 @@ const UpcomingSchedule = () => {
     }
   };
 
-  // Collapsed state - show emoji
-  if (!isOpen) {
+  const getBgColor = (type: ScheduleItem["type"]) => {
+    switch (type) {
+      case "vacation":
+        return "bg-green-50 border-green-200 hover:bg-green-100";
+      case "business":
+        return "bg-blue-50 border-blue-200 hover:bg-blue-100";
+      default:
+        return "bg-muted border-border hover:bg-muted/80";
+    }
+  };
+
+  // Collapsed state - show emoji button
+  if (!isExpanded) {
     return (
       <button
-        onClick={() => setIsOpen(true)}
+        onClick={onToggle}
         className="bg-card border border-border rounded-full p-3 shadow-sm hover:shadow-md transition-all cursor-pointer flex items-center gap-2"
         title="일정 보기"
       >
@@ -85,45 +100,44 @@ const UpcomingSchedule = () => {
     );
   }
 
+  // Expanded state - full width card layout
   return (
     <>
-      <div className="bg-card border border-border rounded-lg p-4 shadow-sm">
-        <div className="flex items-center justify-between mb-3">
+      <div className="bg-card border border-border rounded-xl p-4 shadow-sm w-full">
+        <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-primary" />
-            <h3 className="text-sm font-semibold text-foreground">다가오는 일정</h3>
+            <Calendar className="w-5 h-5 text-primary" />
+            <h3 className="text-base font-semibold text-foreground">다가오는 일정</h3>
           </div>
           <button
-            onClick={() => setIsOpen(false)}
-            className="p-1 hover:bg-muted rounded transition-colors"
+            onClick={onToggle}
+            className="p-1.5 hover:bg-muted rounded-lg transition-colors"
             title="접기"
           >
             <ChevronUp className="w-4 h-4 text-muted-foreground" />
           </button>
         </div>
-        <div className="space-y-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {schedules.map((schedule, index) => (
             <button
               key={index}
               onClick={() => setSelectedSchedule(schedule)}
-              className="w-full flex items-start gap-3 p-2 rounded-md hover:bg-muted/50 transition-colors text-left"
+              className={`flex flex-col p-4 rounded-xl border transition-all text-left ${getBgColor(schedule.type)}`}
             >
-              <div className="mt-0.5">{getIcon(schedule.type)}</div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-foreground">
-                    {schedule.title}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {schedule.date}
-                  </span>
-                </div>
-                {schedule.message && (
-                  <p className="text-xs text-muted-foreground mt-0.5 truncate">
-                    {schedule.message}
-                  </p>
-                )}
+              <div className="flex items-center gap-2 mb-2">
+                {getIcon(schedule.type)}
+                <span className="text-sm font-semibold text-foreground">
+                  {schedule.title}
+                </span>
               </div>
+              <span className="text-xs font-medium text-muted-foreground mb-1">
+                📅 {schedule.date}
+              </span>
+              {schedule.message && (
+                <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                  {schedule.message}
+                </p>
+              )}
             </button>
           ))}
         </div>

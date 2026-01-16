@@ -34,6 +34,7 @@ const Index = () => {
   const [chatHistory, setChatHistory] = useState<ChatSession[]>([]);
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [prefillMessage, setPrefillMessage] = useState("");
+  const [scheduleExpanded, setScheduleExpanded] = useState(false);
 
   const handleSendMessage = (content: string) => {
     const userMessage: Message = {
@@ -253,10 +254,25 @@ const Index = () => {
             <>
               <div className="flex items-start justify-between gap-4 mb-2">
                 <WelcomeHeader userName="현민" />
-                <div className="flex-shrink-0 ml-auto">
-                  <UpcomingSchedule />
-                </div>
+                {!scheduleExpanded && (
+                  <div className="flex-shrink-0 ml-auto">
+                    <UpcomingSchedule 
+                      isExpanded={false} 
+                      onToggle={() => setScheduleExpanded(true)} 
+                    />
+                  </div>
+                )}
               </div>
+
+              {/* Expanded Schedule - Full Width */}
+              {scheduleExpanded && (
+                <div className="mb-4">
+                  <UpcomingSchedule 
+                    isExpanded={true} 
+                    onToggle={() => setScheduleExpanded(false)} 
+                  />
+                </div>
+              )}
               
               {/* Quick Actions */}
               <div className="mb-4">
