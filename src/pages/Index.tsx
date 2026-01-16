@@ -9,6 +9,8 @@ import HRHelper from "@/components/HRHelper";
 import ChatInput from "@/components/ChatInput";
 import ChatView from "@/components/ChatView";
 import { generateScheduleResponse } from "@/data/scheduleData";
+import logoIcon from "@/assets/logo-icon.png";
+import { PanelLeftClose } from "lucide-react";
 
 interface Message {
   id: string;
@@ -222,31 +224,55 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
-      {/* Sidebar */}
-      <Sidebar 
-        isOpen={sidebarOpen} 
-        onToggle={() => setSidebarOpen(false)}
-        chatHistory={chatHistory}
-        currentChatId={currentChatId}
-        onSelectChat={handleSelectChat}
-        onNewChat={handleNewChat}
-        onRenameChat={handleRenameChat}
-        onShareChat={handleShareChat}
-        onPinChat={handlePin}
-        onArchiveChat={handleArchive}
-        onDeleteChat={handleDelete}
-      />
-      
-      {/* Sidebar Trigger when closed */}
-      {!sidebarOpen && <SidebarTrigger onClick={() => setSidebarOpen(true)} />}
-
-      {/* Main Content */}
-      <main className="flex-1 min-h-screen bg-background flex flex-col">
-        {/* Header Navigation */}
-        <HeaderNav />
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Top Header Area - spans full width */}
+      <div className="flex border-b border-border">
+        {/* Sidebar Header */}
+        <div className={`${sidebarOpen ? "w-64" : "w-0"} shrink-0 transition-all duration-300 overflow-hidden`}>
+          <div className="min-w-64 p-4 flex items-center justify-between bg-card border-r border-border">
+            <div className="flex items-center gap-2">
+              <img src={logoIcon} alt="Logo" className="w-8 h-8" />
+              <span className="font-bold text-foreground">pear link</span>
+            </div>
+            <button 
+              onClick={() => setSidebarOpen(false)}
+              className="p-1.5 hover:bg-muted rounded-lg transition-colors"
+            >
+              <PanelLeftClose className="w-4 h-4 text-muted-foreground" />
+            </button>
+          </div>
+        </div>
         
-        <div className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 py-6 w-full">
+        {/* Header Navigation - next to sidebar header */}
+        <div className="flex-1 bg-card">
+          <HeaderNav />
+        </div>
+      </div>
+      
+      {/* Main Area - Sidebar + Content */}
+      <div className="flex flex-1">
+        {/* Sidebar Body (without header) */}
+        <Sidebar 
+          isOpen={sidebarOpen} 
+          onToggle={() => setSidebarOpen(false)}
+          chatHistory={chatHistory}
+          currentChatId={currentChatId}
+          onSelectChat={handleSelectChat}
+          onNewChat={handleNewChat}
+          onRenameChat={handleRenameChat}
+          onShareChat={handleShareChat}
+          onPinChat={handlePin}
+          onArchiveChat={handleArchive}
+          onDeleteChat={handleDelete}
+          hideHeader
+        />
+        
+        {/* Sidebar Trigger when closed */}
+        {!sidebarOpen && <SidebarTrigger onClick={() => setSidebarOpen(true)} />}
+
+        {/* Main Content */}
+        <main className="flex-1 bg-background">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 w-full">
           {isChatMode ? (
             <ChatView
               messages={messages}
@@ -310,8 +336,9 @@ const Index = () => {
               />
             </>
           )}
-        </div>
-      </main>
+          </div>
+        </main>
+      </div>
     </div>
   );
 };

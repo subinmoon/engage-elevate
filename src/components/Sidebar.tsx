@@ -42,6 +42,7 @@ interface SidebarProps {
   onPinChat?: (chatId: string) => void;
   onArchiveChat?: (chatId: string) => void;
   onDeleteChat?: (chatId: string) => void;
+  hideHeader?: boolean;
 }
 
 const defaultChatHistory = [
@@ -67,7 +68,8 @@ const Sidebar = ({
   onShareChat,
   onPinChat,
   onArchiveChat,
-  onDeleteChat
+  onDeleteChat,
+  hideHeader = false
 }: SidebarProps) => {
   const [historyOpen, setHistoryOpen] = useState(true);
   const [chatbotOpen, setChatbotOpen] = useState(true);
@@ -127,20 +129,21 @@ const Sidebar = ({
       } bg-card border-r border-border flex flex-col transition-all duration-300 overflow-hidden shrink-0`}
     >
       <div className="min-w-64 flex flex-col h-full">
-        {/* Header */}
-        <div className="p-4 flex items-center justify-between border-b border-border">
-          <div className="flex items-center gap-2">
-            <img src={logoIcon} alt="Logo" className="w-8 h-8" />
-            <span className="font-bold text-foreground">pear link</span>
+        {/* Header - conditionally rendered */}
+        {!hideHeader && (
+          <div className="p-4 flex items-center justify-between border-b border-border">
+            <div className="flex items-center gap-2">
+              <img src={logoIcon} alt="Logo" className="w-8 h-8" />
+              <span className="font-bold text-foreground">pear link</span>
+            </div>
+            <button 
+              onClick={onToggle}
+              className="p-1.5 hover:bg-muted rounded-lg transition-colors"
+            >
+              <PanelLeftClose className="w-4 h-4 text-muted-foreground" />
+            </button>
           </div>
-          <button 
-            onClick={onToggle}
-            className="p-1.5 hover:bg-muted rounded-lg transition-colors"
-          >
-            <PanelLeftClose className="w-4 h-4 text-muted-foreground" />
-          </button>
-        </div>
-
+        )}
 
         {/* Navigation */}
         <nav className="p-3 flex-1 overflow-y-auto">
