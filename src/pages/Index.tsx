@@ -2,6 +2,7 @@ import { useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import SidebarTrigger from "@/components/SidebarTrigger";
 import WelcomeHeader from "@/components/WelcomeHeader";
+import UpcomingSchedule from "@/components/UpcomingSchedule";
 import RecentInterests from "@/components/RecentInterests";
 import HRHelper from "@/components/HRHelper";
 import QuickActions from "@/components/QuickActions";
@@ -250,7 +251,12 @@ const Index = () => {
             />
           ) : (
             <>
-              <WelcomeHeader userName="현민" />
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <WelcomeHeader userName="현민" />
+                <div className="flex-shrink-0 w-72">
+                  <UpcomingSchedule />
+                </div>
+              </div>
               
               {/* Quick Actions */}
               <div className="mb-4">
