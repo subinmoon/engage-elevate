@@ -225,27 +225,31 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Top Header Area - spans full width */}
-      <div className="flex border-b border-border">
-        {/* Sidebar Header */}
-        <div className={`${sidebarOpen ? "w-64" : "w-0"} shrink-0 transition-all duration-300 overflow-hidden`}>
-          <div className="min-w-64 p-4 flex items-center justify-between bg-card border-r border-border">
-            <div className="flex items-center gap-2">
-              <img src={logoIcon} alt="Logo" className="w-8 h-8" />
-              <span className="font-bold text-foreground">pear link</span>
-            </div>
-            <button 
-              onClick={() => setSidebarOpen(false)}
-              className="p-1.5 hover:bg-muted rounded-lg transition-colors"
-            >
-              <PanelLeftClose className="w-4 h-4 text-muted-foreground" />
-            </button>
-          </div>
+      {/* Top Header Area - spans full width, transparent */}
+      <div className="flex items-center px-4 py-2">
+        {/* Logo - always visible */}
+        <div className="flex items-center gap-2 shrink-0">
+          <img src={logoIcon} alt="Logo" className="w-8 h-8" />
+          <span className="font-bold text-foreground">pear link</span>
         </div>
         
-        {/* Header Navigation - next to sidebar header */}
-        <div className="flex-1 bg-card">
+        {/* Sidebar close button - only when open */}
+        {sidebarOpen && (
+          <button 
+            onClick={() => setSidebarOpen(false)}
+            className="ml-2 p-1.5 hover:bg-muted rounded-lg transition-colors"
+          >
+            <PanelLeftClose className="w-4 h-4 text-muted-foreground" />
+          </button>
+        )}
+        
+        {/* Right side: HeaderNav + Schedule */}
+        <div className="flex-1 flex items-center justify-end gap-2">
           <HeaderNav />
+          <UpcomingSchedule 
+            isExpanded={scheduleExpanded} 
+            onToggle={() => setScheduleExpanded(!scheduleExpanded)} 
+          />
         </div>
       </div>
       
@@ -290,30 +294,12 @@ const Index = () => {
           ) : (
             <>
               {/* Header with Welcome & Quick Actions */}
-              <div className="flex items-start justify-between gap-4 mb-4">
+              <div className="mb-4">
                 <WelcomeHeader 
                   userName="현민" 
                   onSelectAction={(template) => setPrefillMessage(template)}
                 />
-                {!scheduleExpanded && (
-                  <div className="flex-shrink-0">
-                    <UpcomingSchedule 
-                      isExpanded={false} 
-                      onToggle={() => setScheduleExpanded(true)} 
-                    />
-                  </div>
-                )}
               </div>
-
-              {/* Expanded Schedule - Full Width */}
-              {scheduleExpanded && (
-                <div className="mb-4">
-                  <UpcomingSchedule 
-                    isExpanded={true} 
-                    onToggle={() => setScheduleExpanded(false)} 
-                  />
-                </div>
-              )}
               
               {/* Main Content Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-6">

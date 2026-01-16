@@ -126,12 +126,12 @@ const Sidebar = ({
     <aside 
       className={`${
         isOpen ? "w-64" : "w-0"
-      } bg-card border-r border-border flex flex-col transition-all duration-300 overflow-hidden shrink-0`}
+      } bg-card flex flex-col transition-all duration-300 overflow-hidden shrink-0`}
     >
       <div className="min-w-64 flex flex-col h-full">
         {/* Header - conditionally rendered */}
         {!hideHeader && (
-          <div className="p-4 flex items-center justify-between border-b border-border">
+          <div className="p-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <img src={logoIcon} alt="Logo" className="w-8 h-8" />
               <span className="font-bold text-foreground">pear link</span>
