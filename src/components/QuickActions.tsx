@@ -1,4 +1,4 @@
-import { MessageSquare, Sparkles, BarChart3, Zap } from "lucide-react";
+import { MessageSquare, Sparkles, BarChart3, Zap, Calendar } from "lucide-react";
 
 interface QuickAction {
   id: string;
@@ -9,6 +9,13 @@ interface QuickAction {
 }
 
 const actions: QuickAction[] = [
+  {
+    id: "schedule",
+    icon: <Calendar className="w-4 h-4" />,
+    label: "일정 확인",
+    iconColor: "text-violet-500",
+    promptTemplate: "다가오는 일정을 알려줘",
+  },
   {
     id: "summary",
     icon: <MessageSquare className="w-4 h-4" />,
@@ -22,13 +29,6 @@ const actions: QuickAction[] = [
     label: "브레인스토밍",
     iconColor: "text-amber-500",
     promptTemplate: "다음 주제에 대해 브레인스토밍을 도와주세요:\n\n주제: [주제를 입력하세요]\n목적: [브레인스토밍의 목적을 입력하세요]",
-  },
-  {
-    id: "tone",
-    icon: <BarChart3 className="w-4 h-4" />,
-    label: "글 다듬기",
-    iconColor: "text-emerald-500",
-    promptTemplate: "다음 글을 더 자연스럽고 전문적으로 다듬어주세요:\n\n[여기에 다듬고 싶은 글을 붙여넣으세요]",
   },
   {
     id: "email",

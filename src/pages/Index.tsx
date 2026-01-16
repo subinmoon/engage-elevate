@@ -8,6 +8,7 @@ import HRHelper from "@/components/HRHelper";
 import QuickActions from "@/components/QuickActions";
 import ChatInput from "@/components/ChatInput";
 import ChatView from "@/components/ChatView";
+import { generateScheduleResponse } from "@/data/scheduleData";
 
 interface Message {
   id: string;
@@ -73,12 +74,19 @@ const Index = () => {
     setIsChatMode(true);
     setIsLoading(true);
 
-    // Mock AI response (UI only)
+    // Mock AI response (UI only) - with schedule awareness
     setTimeout(() => {
+      // Check if it's a schedule-related question
+      const scheduleResponse = generateScheduleResponse(content);
+      
+      const responseContent = scheduleResponse 
+        ? scheduleResponse
+        : `"${content}"에 대해 답변드리겠습니다.\n\n이것은 UI 데모용 응답입니다. 실제 AI 연동 시 더 풍부한 응답을 제공할 수 있습니다.`;
+      
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: `"${content}"에 대해 답변드리겠습니다.\n\n이것은 UI 데모용 응답입니다. 실제 AI 연동 시 더 풍부한 응답을 제공할 수 있습니다.`,
+        content: responseContent,
         timestamp: new Date(),
       };
       const updatedMessages = [...newMessages, assistantMessage];

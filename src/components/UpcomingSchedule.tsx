@@ -6,18 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-interface ScheduleItem {
-  type: "vacation" | "business";
-  title: string;
-  date: string;
-  message?: string;
-  details?: {
-    duration: string;
-    location?: string;
-    notes?: string;
-  };
-}
+import { scheduleData, ScheduleItem } from "@/data/scheduleData";
 
 interface UpcomingScheduleProps {
   isExpanded?: boolean;
@@ -27,29 +16,7 @@ interface UpcomingScheduleProps {
 const UpcomingSchedule = ({ isExpanded = false, onToggle }: UpcomingScheduleProps) => {
   const [selectedSchedule, setSelectedSchedule] = useState<ScheduleItem | null>(null);
 
-  const schedules: ScheduleItem[] = [
-    {
-      type: "vacation",
-      title: "연차 휴가",
-      date: "1/20 (월)",
-      message: "아이와 좋은 시간 보내고 오세요~",
-      details: {
-        duration: "1/20 (월) ~ 1/21 (화)",
-        notes: "가족 여행",
-      },
-    },
-    {
-      type: "business",
-      title: "출장",
-      date: "1/27 (월)",
-      message: "좋은 성과 있길 바랍니다!",
-      details: {
-        duration: "1/27 (월) ~ 1/28 (화)",
-        location: "부산 해운대",
-        notes: "고객사 미팅",
-      },
-    },
-  ];
+  const schedules = scheduleData;
 
   const getIcon = (type: ScheduleItem["type"]) => {
     switch (type) {
