@@ -141,59 +141,6 @@ const Sidebar = ({
           </button>
         </div>
 
-        {/* 바로가기 */}
-        <div className="px-3 py-2 border-b border-border">
-          <button 
-            onClick={() => setLinksOpen(!linksOpen)}
-            className="w-full flex items-center gap-2 px-2 py-1.5 text-sm font-medium text-muted-foreground hover:bg-muted rounded-lg transition-colors"
-          >
-            <Link className="w-4 h-4" />
-            바로가기
-            {linksOpen ? <ChevronDown className="w-3 h-3 ml-auto" /> : <ChevronRight className="w-3 h-3 ml-auto" />}
-          </button>
-          
-          {linksOpen && (
-            <div className="mt-1 space-y-0.5">
-              {/* AI 포탈로 이동 */}
-              <a 
-                href="#" 
-                className="flex items-center gap-2 px-2 py-1.5 text-sm text-foreground hover:bg-muted rounded-lg transition-colors"
-              >
-                <Home className="w-4 h-4 text-primary" />
-                <span>AI 포탈로 이동</span>
-              </a>
-              
-              {/* 즐겨찾기 - 접히는 섹션 */}
-              <button 
-                onClick={() => setShortcutsOpen(!shortcutsOpen)}
-                className="w-full flex items-center gap-2 px-2 py-1.5 text-sm text-foreground hover:bg-muted rounded-lg transition-colors"
-              >
-                <Heart className="w-4 h-4 text-primary" />
-                <span className="flex-1 text-left">즐겨찾기</span>
-                {shortcutsOpen ? <ChevronDown className="w-3 h-3 text-muted-foreground" /> : <ChevronRight className="w-3 h-3 text-muted-foreground" />}
-              </button>
-              
-              {shortcutsOpen && (
-                <div className="ml-5 space-y-0.5 border-l border-border pl-2">
-                  <a 
-                    href="#" 
-                    className="flex items-center justify-between gap-2 px-2 py-1 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
-                  >
-                    <span>전자결재</span>
-                    <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-                  </a>
-                  <a 
-                    href="#" 
-                    className="flex items-center justify-between gap-2 px-2 py-1 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
-                  >
-                    <span>IT 헬프데스크</span>
-                    <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-                  </a>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
 
         {/* Navigation */}
         <nav className="p-3 flex-1 overflow-y-auto">

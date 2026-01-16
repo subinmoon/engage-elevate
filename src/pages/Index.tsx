@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import SidebarTrigger from "@/components/SidebarTrigger";
+import HeaderNav from "@/components/HeaderNav";
 import WelcomeHeader from "@/components/WelcomeHeader";
 import UpcomingSchedule from "@/components/UpcomingSchedule";
 import RecentInterests from "@/components/RecentInterests";
@@ -241,8 +242,11 @@ const Index = () => {
       {!sidebarOpen && <SidebarTrigger onClick={() => setSidebarOpen(true)} />}
 
       {/* Main Content */}
-      <main className="flex-1 min-h-screen bg-background">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
+      <main className="flex-1 min-h-screen bg-background flex flex-col">
+        {/* Header Navigation */}
+        <HeaderNav />
+        
+        <div className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 py-6 w-full">
           {isChatMode ? (
             <ChatView
               messages={messages}
