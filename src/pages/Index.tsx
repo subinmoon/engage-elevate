@@ -251,9 +251,9 @@ const Index = () => {
             />
           ) : (
             <>
-              <div className="flex items-start justify-between gap-4 mb-4">
+              <div className="flex items-start justify-between gap-4 mb-2">
                 <WelcomeHeader userName="현민" />
-                <div className="flex-shrink-0 w-72">
+                <div className="flex-shrink-0 ml-auto">
                   <UpcomingSchedule />
                 </div>
               </div>
