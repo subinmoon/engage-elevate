@@ -1,4 +1,4 @@
-import { Calendar, Plane, Palmtree, Bell } from "lucide-react";
+import { Calendar, Plane, Palmtree, Bell, HelpCircle } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -9,11 +9,11 @@ import { scheduleData, ScheduleItem } from "@/data/scheduleData";
 interface UpcomingScheduleProps {
   isExpanded?: boolean;
   onToggle?: () => void;
+  onGetHelp?: (prompt: string) => void;
 }
 
-const UpcomingSchedule = ({ isExpanded = false, onToggle }: UpcomingScheduleProps) => {
+const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingScheduleProps) => {
   const schedules = scheduleData;
-
 
   const getIcon = (type: ScheduleItem["type"]) => {
     switch (type) {
@@ -29,12 +29,45 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle }: UpcomingScheduleProp
   const getBgColor = (type: ScheduleItem["type"]) => {
     switch (type) {
       case "vacation":
-        return "bg-green-50 border-green-200";
+        return "bg-green-50 border-green-200 hover:bg-green-100";
       case "business":
-        return "bg-blue-50 border-blue-200";
+        return "bg-blue-50 border-blue-200 hover:bg-blue-100";
       default:
-        return "bg-muted border-border";
+        return "bg-muted border-border hover:bg-muted/80";
     }
+  };
+
+  const getTypeLabel = (type: ScheduleItem["type"]) => {
+    switch (type) {
+      case "vacation":
+        return "휴가";
+      case "business":
+        return "출장";
+      default:
+        return "일정";
+    }
+  };
+
+  const handleScheduleClick = (schedule: ScheduleItem) => {
+    const details = schedule.details;
+    let prompt = `"${schedule.title}" 일정에 대해 도움이 필요해요.\n\n`;
+    prompt += `📅 일자: ${schedule.date}\n`;
+    prompt += `📌 유형: ${getTypeLabel(schedule.type)}\n`;
+    
+    if (details?.duration) {
+      prompt += `⏱️ 기간: ${details.duration}\n`;
+    }
+    if (details?.location) {
+      prompt += `📍 장소: ${details.location}\n`;
+    }
+    if (details?.notes) {
+      prompt += `📝 메모: ${details.notes}\n`;
+    }
+    
+    prompt += `\n이 일정과 관련해서 어떤 도움이 필요하신가요?`;
+    
+    onGetHelp?.(prompt);
+    onToggle?.();
   };
 
   return (
@@ -67,9 +100,10 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle }: UpcomingScheduleProp
         {/* Schedule List */}
         <div className="max-h-80 overflow-y-auto p-2 space-y-1.5">
           {schedules.map((schedule, index) => (
-            <div
+            <button
               key={index}
-              className={`rounded-lg border transition-all overflow-hidden ${getBgColor(schedule.type)}`}
+              onClick={() => handleScheduleClick(schedule)}
+              className={`w-full text-left rounded-lg border transition-all overflow-hidden cursor-pointer ${getBgColor(schedule.type)}`}
             >
               {/* Compact Single Line */}
               <div className="flex items-center gap-2 p-2.5">
@@ -80,6 +114,7 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle }: UpcomingScheduleProp
                 <span className="text-[10px] text-muted-foreground whitespace-nowrap">
                   {schedule.date}
                 </span>
+                <HelpCircle className="w-3.5 h-3.5 text-primary/60" />
               </div>
               
               {/* Message - Always visible if exists */}
@@ -92,7 +127,7 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle }: UpcomingScheduleProp
                   </div>
                 </div>
               )}
-            </div>
+            </button>
           ))}
         </div>
       </PopoverContent>
