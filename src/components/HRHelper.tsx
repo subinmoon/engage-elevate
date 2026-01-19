@@ -1,33 +1,36 @@
-import { ChevronRight, FileText, Calendar, Users, Plane, Building2, UserCircle, UtensilsCrossed } from "lucide-react";
+import { FileText, Calendar, Users, Plane, Building2, UserCircle, UtensilsCrossed } from "lucide-react";
 
 const helpItems = [
-  { label: "결재 목록 조회", icon: FileText },
-  { label: "회의실 예약 조회", icon: Calendar },
-  { label: "동료 근무 일정 조회", icon: Users },
-  { label: "휴가 일수 조회", icon: Plane },
-  { label: "조직도 조회", icon: Building2 },
-  { label: "직원 정보 조회", icon: UserCircle },
-  { label: "구내식당 메뉴 조회", icon: UtensilsCrossed },
+  { label: "결재", icon: FileText, color: "bg-purple-100 text-purple-600" },
+  { label: "회의실", icon: Calendar, color: "bg-blue-100 text-blue-600" },
+  { label: "동료일정", icon: Users, color: "bg-green-100 text-green-600" },
+  { label: "휴가", icon: Plane, color: "bg-orange-100 text-orange-600" },
+  { label: "조직도", icon: Building2, color: "bg-pink-100 text-pink-600" },
+  { label: "직원검색", icon: UserCircle, color: "bg-cyan-100 text-cyan-600" },
+  { label: "식단", icon: UtensilsCrossed, color: "bg-amber-100 text-amber-600" },
 ];
 
 const HRHelper = () => {
   return (
-    <div className="bg-card rounded-2xl p-5 shadow-soft h-full border border-border">
+    <div className="bg-card rounded-2xl p-5 shadow-soft border border-border">
       <h2 className="text-base font-bold text-foreground mb-4 flex items-center gap-2">
         <span>🏢</span>
         회사생활도우미
       </h2>
-      <div className="space-y-1">
+      <div className="grid grid-cols-4 gap-2">
         {helpItems.map((item, index) => {
           const Icon = item.icon;
           return (
             <button
               key={index}
-              className="w-full flex items-center gap-3 text-left text-foreground hover:text-primary hover:bg-lavender-light transition-all duration-200 py-2.5 px-3 rounded-xl text-sm font-medium group"
+              className="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-muted/60 transition-all group"
             >
-              <Icon className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-              <span className="flex-1">{item.label}</span>
-              <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity text-primary" />
+              <div className={`w-10 h-10 rounded-xl ${item.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                <Icon className="w-5 h-5" />
+              </div>
+              <span className="text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors text-center">
+                {item.label}
+              </span>
             </button>
           );
         })}
