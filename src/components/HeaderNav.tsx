@@ -1,9 +1,8 @@
-import { useState } from "react";
-import { Home, Star, Search } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Home, Star, Search, ExternalLink } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
   DropdownMenuLabel,
@@ -14,20 +13,58 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { chatbotServices } from "@/data/chatbotServices";
+import { chatbotServices, ChatbotService } from "@/data/chatbotServices";
 
 const HeaderNav = () => {
   const [favoritesOpen, setFavoritesOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [services, setServices] = useState<ChatbotService[]>([]);
 
-  const favoriteServices = chatbotServices.filter((s) => s.isFavorite);
-  const allServices = chatbotServices;
+  useEffect(() => {
+    // Load favorites from localStorage or use defaults
+    const savedFavorites = localStorage.getItem("favoriteServices");
+    if (savedFavorites) {
+      const favoriteIds = JSON.parse(savedFavorites) as string[];
+      setServices(
+        chatbotServices.map((s) => ({
+          ...s,
+          isFavorite: favoriteIds.includes(s.id),
+        }))
+      );
+    } else {
+      setServices(chatbotServices);
+    }
+  }, []);
+
+  const toggleFavorite = (id: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const updatedServices = services.map((s) =>
+      s.id === id ? { ...s, isFavorite: !s.isFavorite } : s
+    );
+    setServices(updatedServices);
+    
+    // Save to localStorage
+    const favoriteIds = updatedServices.filter((s) => s.isFavorite).map((s) => s.id);
+    localStorage.setItem("favoriteServices", JSON.stringify(favoriteIds));
+  };
+
+  const handleServiceClick = (service: ChatbotService) => {
+    if (service.url) {
+      window.open(service.url, "_blank");
+    }
+    setFavoritesOpen(false);
+  };
+
+  const favoriteServices = services.filter((s) => s.isFavorite);
+  const nonFavoriteServices = services.filter((s) => !s.isFavorite);
 
   const filteredFavorites = favoriteServices.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const filteredAll = allServices.filter((item) =>
+  const filteredNonFavorites = nonFavoriteServices.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -67,7 +104,7 @@ const HeaderNav = () => {
           </Tooltip>
           <DropdownMenuContent 
             align="end" 
-            className="w-64 bg-card border border-border z-50"
+            className="w-72 bg-card border border-border z-50"
             onCloseAutoFocus={(e) => e.preventDefault()}
           >
             {/* Search Input */}
@@ -94,44 +131,71 @@ const HeaderNav = () => {
                 </DropdownMenuLabel>
                 <div className="max-h-32 overflow-y-auto">
                   {filteredFavorites.map((item) => (
-                    <DropdownMenuItem key={item.id} asChild>
-                      <a href={item.url || "#"} className="flex items-center gap-2 w-full cursor-pointer">
-                        <span className="text-base">{item.icon}</span>
-                        <span className="flex-1">{item.name}</span>
-                        <Star className="w-3 h-3 text-yellow-500 fill-yellow-400" />
-                      </a>
-                    </DropdownMenuItem>
+                    <div
+                      key={item.id}
+                      className="flex items-center gap-2 px-2 py-1.5 hover:bg-accent rounded-sm cursor-pointer mx-1"
+                    >
+                      <button
+                        onClick={(e) => toggleFavorite(item.id, e)}
+                        className="p-0.5 hover:bg-muted rounded transition-colors"
+                      >
+                        <Star className="w-4 h-4 text-yellow-500 fill-yellow-400" />
+                      </button>
+                      <span className="text-base">{item.icon}</span>
+                      <span
+                        className="flex-1 text-sm cursor-pointer hover:text-primary"
+                        onClick={() => handleServiceClick(item)}
+                      >
+                        {item.name}
+                      </span>
+                      {item.url && (
+                        <ExternalLink className="w-3 h-3 text-muted-foreground" />
+                      )}
+                    </div>
                   ))}
                 </div>
               </>
             )}
 
-            {filteredFavorites.length > 0 && filteredAll.length > filteredFavorites.length && (
+            {filteredFavorites.length > 0 && filteredNonFavorites.length > 0 && (
               <DropdownMenuSeparator />
             )}
 
             {/* All Services Section */}
-            {filteredAll.filter(s => !s.isFavorite).length > 0 && (
+            {filteredNonFavorites.length > 0 && (
               <>
                 <DropdownMenuLabel className="text-xs text-muted-foreground">
                   전체 서비스
                 </DropdownMenuLabel>
                 <div className="max-h-40 overflow-y-auto">
-                  {filteredAll
-                    .filter((s) => !s.isFavorite)
-                    .map((item) => (
-                      <DropdownMenuItem key={item.id} asChild>
-                        <a href={item.url || "#"} className="flex items-center gap-2 w-full cursor-pointer">
-                          <span className="text-base">{item.icon}</span>
-                          <span className="flex-1">{item.name}</span>
-                        </a>
-                      </DropdownMenuItem>
-                    ))}
+                  {filteredNonFavorites.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center gap-2 px-2 py-1.5 hover:bg-accent rounded-sm cursor-pointer mx-1"
+                    >
+                      <button
+                        onClick={(e) => toggleFavorite(item.id, e)}
+                        className="p-0.5 hover:bg-muted rounded transition-colors"
+                      >
+                        <Star className="w-4 h-4 text-muted-foreground hover:text-yellow-500" />
+                      </button>
+                      <span className="text-base">{item.icon}</span>
+                      <span
+                        className="flex-1 text-sm cursor-pointer hover:text-primary"
+                        onClick={() => handleServiceClick(item)}
+                      >
+                        {item.name}
+                      </span>
+                      {item.url && (
+                        <ExternalLink className="w-3 h-3 text-muted-foreground" />
+                      )}
+                    </div>
+                  ))}
                 </div>
               </>
             )}
 
-            {filteredFavorites.length === 0 && filteredAll.filter(s => !s.isFavorite).length === 0 && (
+            {filteredFavorites.length === 0 && filteredNonFavorites.length === 0 && (
               <div className="px-3 py-4 text-sm text-muted-foreground text-center">
                 검색 결과가 없습니다
               </div>
