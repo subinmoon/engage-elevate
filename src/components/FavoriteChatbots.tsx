@@ -13,7 +13,7 @@ const FavoriteChatbots = ({ onSelectChatbot, hasHistory = false }: FavoriteChatb
   const [services, setServices] = useState<ChatbotService[]>([]);
 
   useEffect(() => {
-    // Load favorites from localStorage
+    // Load favorites from localStorage or use defaults from chatbotServices
     const savedFavorites = localStorage.getItem("favoriteServices");
     if (savedFavorites) {
       const favoriteIds = JSON.parse(savedFavorites) as string[];
@@ -24,7 +24,11 @@ const FavoriteChatbots = ({ onSelectChatbot, hasHistory = false }: FavoriteChatb
         }))
       );
     } else {
+      // Use default favorites from chatbotServices (3 are already marked as favorite)
       setServices(chatbotServices);
+      // Save default favorites to localStorage
+      const defaultFavoriteIds = chatbotServices.filter(s => s.isFavorite).map(s => s.id);
+      localStorage.setItem("favoriteServices", JSON.stringify(defaultFavoriteIds));
     }
   }, []);
 
