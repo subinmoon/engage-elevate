@@ -45,21 +45,21 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingS
     switch (type) {
       case "vacation":
         return {
-          bg: "from-green-100/80 via-green-50/60 to-green-100/40",
           bar: "from-green-500 to-green-400",
-          text: "text-green-700"
+          text: "text-green-700",
+          icon: "🌴"
         };
       case "business":
         return {
-          bg: "from-blue-100/80 via-blue-50/60 to-blue-100/40",
           bar: "from-blue-500 to-blue-400",
-          text: "text-blue-700"
+          text: "text-blue-700",
+          icon: "✈️"
         };
       default:
         return {
-          bg: "from-primary/15 via-lavender/20 to-primary/10",
           bar: "from-primary to-lavender",
-          text: "text-foreground/80"
+          text: "text-foreground/80",
+          icon: "📌"
         };
     }
   };
@@ -165,10 +165,10 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingS
                 {schedule.message && (() => {
                   const msgStyle = getMessageStyle(schedule.type);
                   return (
-                    <div className="mt-2 relative overflow-hidden rounded-lg">
-                      <div className={`absolute inset-0 bg-gradient-to-r ${msgStyle.bg}`} />
+                    <div className="mt-2 relative overflow-hidden rounded-lg bg-white shadow-sm border border-black/5">
                       <div className={`absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b ${msgStyle.bar}`} />
-                      <p className={`relative text-[11px] font-medium px-3 py-2 leading-relaxed ${msgStyle.text}`}>
+                      <p className={`text-[11px] font-medium px-3 py-2 leading-relaxed ${msgStyle.text}`}>
+                        <span className="mr-1.5">{msgStyle.icon}</span>
                         {schedule.message}
                       </p>
                     </div>
