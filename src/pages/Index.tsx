@@ -11,7 +11,7 @@ import ChatInput from "@/components/ChatInput";
 import ChatView from "@/components/ChatView";
 import { generateScheduleResponse } from "@/data/scheduleData";
 import logoIcon from "@/assets/logo-icon.png";
-import { PanelLeftClose } from "lucide-react";
+import { PanelLeftClose, ArrowLeft } from "lucide-react";
 
 interface Message {
   id: string;
@@ -242,8 +242,26 @@ const Index = () => {
           </div>
         )}
         
-        {/* Right side: HeaderNav + Schedule + User */}
-        <div className="flex-1 flex items-center justify-end gap-3 px-4 py-2">
+        {/* Right side: Chat controls OR HeaderNav + Schedule + User */}
+        <div className="flex-1 flex items-center gap-3 px-4 py-2">
+          {/* Chat mode: show chat controls on left side */}
+          {isChatMode && (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleBack}
+                className="p-2 hover:bg-muted rounded-lg transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5 text-muted-foreground" />
+              </button>
+              <h2 className="text-base font-medium text-foreground truncate max-w-[200px]">
+                {chatTitle}
+              </h2>
+            </div>
+          )}
+          
+          {/* Spacer to push right items */}
+          <div className="flex-1" />
+          
           <HeaderNav />
           <UpcomingSchedule 
             isExpanded={scheduleExpanded} 
@@ -291,15 +309,8 @@ const Index = () => {
             <ChatView
               messages={messages}
               onSendMessage={handleSendMessage}
-              onBack={handleBack}
               isLoading={isLoading}
-              title={chatTitle}
-              onTitleChange={handleTitleChange}
               onRegenerate={handleRegenerate}
-              onArchive={() => handleArchive()}
-              onPin={() => handlePin()}
-              onDelete={() => handleDelete()}
-              isPinned={chatHistory.find(c => c.id === currentChatId)?.pinned}
             />
           ) : (
             <>
