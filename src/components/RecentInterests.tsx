@@ -22,7 +22,7 @@ const interests: InterestItem[] = [
 
 const RecentInterests = () => {
   return (
-    <div className="bg-white rounded-2xl p-5 h-full shadow-soft">
+    <div className="bg-white rounded-2xl p-5 shadow-soft">
       <div className="flex items-center gap-2 mb-4">
         <div className="w-8 h-8 rounded-lg bg-lavender-light flex items-center justify-center">
           <Star className="w-4 h-4 text-primary" />
