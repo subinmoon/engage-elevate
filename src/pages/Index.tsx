@@ -329,6 +329,7 @@ const Index = () => {
               {/* Favorite Chatbots */}
               <div className="mb-6">
                 <FavoriteChatbots 
+                  hasHistory={chatHistory.length > 0}
                   onSelectChatbot={(chatbot) => {
                     setPrefillMessage(`${chatbot.name}에게 질문하기: `);
                   }}
