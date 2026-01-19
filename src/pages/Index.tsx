@@ -242,8 +242,18 @@ const Index = () => {
           </div>
         )}
         
+        {/* Center: Welcome Message */}
+        <div className="flex-1 flex items-center gap-3 px-4 py-2">
+          {!sidebarOpen && (
+            <img src={logoIcon} alt="Logo" className="w-8 h-8" />
+          )}
+          <h1 className="text-lg font-bold text-foreground">
+            <span className="text-gradient-name">현민</span>님, 무엇을 도와드릴까요?
+          </h1>
+        </div>
+        
         {/* Right side: HeaderNav + Schedule + User */}
-        <div className="flex-1 flex items-center justify-end gap-3 px-4 py-2">
+        <div className="flex items-center gap-3 px-4 py-2">
           <HeaderNav />
           <UpcomingSchedule 
             isExpanded={scheduleExpanded} 
@@ -303,11 +313,12 @@ const Index = () => {
             />
           ) : (
             <>
-              {/* Header with Welcome & Quick Actions */}
+              {/* Quick Actions */}
               <div className="mb-4">
                 <WelcomeHeader 
                   userName="현민" 
                   onSelectAction={(template) => setPrefillMessage(template)}
+                  hideGreeting
                 />
               </div>
               
