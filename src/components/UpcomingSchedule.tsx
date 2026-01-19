@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Calendar, Plane, Palmtree, Bell, HelpCircle, ExternalLink, ChevronDown, ChevronUp } from "lucide-react";
+import { Calendar, Plane, Palmtree, Bell, Sparkles, ExternalLink, ChevronDown, ChevronUp } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -183,7 +183,7 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingS
                       className="flex-1 gap-1.5 h-7 text-xs"
                       onClick={() => handleGetHelp(schedule)}
                     >
-                      <HelpCircle className="w-3 h-3" />
+                      <Sparkles className="w-3 h-3" />
                       AI에게 물어보기
                     </Button>
                     <Button
