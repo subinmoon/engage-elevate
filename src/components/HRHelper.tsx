@@ -1,13 +1,13 @@
 import { FileText, Calendar, Users, Plane, Building2, UserCircle, UtensilsCrossed } from "lucide-react";
 
 const helpItems = [
-  { label: "결재", icon: FileText, color: "bg-slate-100 text-slate-600" },
-  { label: "회의실", icon: Calendar, color: "bg-slate-100 text-slate-600" },
-  { label: "동료일정", icon: Users, color: "bg-slate-100 text-slate-600" },
-  { label: "휴가", icon: Plane, color: "bg-slate-100 text-slate-600" },
-  { label: "조직도", icon: Building2, color: "bg-slate-100 text-slate-600" },
-  { label: "직원검색", icon: UserCircle, color: "bg-slate-100 text-slate-600" },
-  { label: "식단", icon: UtensilsCrossed, color: "bg-slate-100 text-slate-600" },
+  { label: "결재", icon: FileText, color: "bg-purple-100 text-purple-600" },
+  { label: "회의실", icon: Calendar, color: "bg-blue-100 text-blue-600" },
+  { label: "동료일정", icon: Users, color: "bg-green-100 text-green-600" },
+  { label: "휴가", icon: Plane, color: "bg-orange-100 text-orange-600" },
+  { label: "조직도", icon: Building2, color: "bg-pink-100 text-pink-600" },
+  { label: "직원검색", icon: UserCircle, color: "bg-cyan-100 text-cyan-600" },
+  { label: "식단", icon: UtensilsCrossed, color: "bg-amber-100 text-amber-600" },
 ];
 
 const HRHelper = () => {
