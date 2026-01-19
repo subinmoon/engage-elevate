@@ -1,4 +1,4 @@
-import { MessageSquare, Sparkles, BarChart3, Zap, Calendar } from "lucide-react";
+import { MessageSquare, Sparkles, Mail, TrendingUp, Languages, ListTree } from "lucide-react";
 
 interface QuickAction {
   id: string;
@@ -10,16 +10,9 @@ interface QuickAction {
 
 const actions: QuickAction[] = [
   {
-    id: "schedule",
-    icon: <Calendar className="w-4 h-4" />,
-    label: "일정 확인",
-    iconColor: "text-violet-500",
-    promptTemplate: "다가오는 일정을 알려줘",
-  },
-  {
     id: "summary",
     icon: <MessageSquare className="w-4 h-4" />,
-    label: "문서/회의 요약",
+    label: "문서/회의요약",
     iconColor: "text-primary",
     promptTemplate: "다음 내용을 요약해주세요:\n\n[여기에 문서나 회의 내용을 붙여넣으세요]",
   },
@@ -32,10 +25,31 @@ const actions: QuickAction[] = [
   },
   {
     id: "email",
-    icon: <Zap className="w-4 h-4" />,
-    label: "메일 초안 생성",
+    icon: <Mail className="w-4 h-4" />,
+    label: "메일&메세지 초안",
     iconColor: "text-rose-500",
-    promptTemplate: "다음 조건에 맞는 이메일 초안을 작성해주세요:\n\n받는 사람: [예: 팀장님, 고객사 담당자]\n목적: [예: 회의 일정 조율, 프로젝트 진행 상황 공유]\n주요 내용: [전달하고 싶은 핵심 내용]\n톤앤매너: [예: 공식적, 친근한, 정중한]",
+    promptTemplate: "다음 조건에 맞는 메일/메세지 초안을 작성해주세요:\n\n받는 사람: [예: 팀장님, 고객사 담당자]\n목적: [예: 회의 일정 조율, 프로젝트 진행 상황 공유]\n주요 내용: [전달하고 싶은 핵심 내용]\n톤앤매너: [예: 공식적, 친근한, 정중한]",
+  },
+  {
+    id: "market",
+    icon: <TrendingUp className="w-4 h-4" />,
+    label: "시장 동향 조사",
+    iconColor: "text-emerald-500",
+    promptTemplate: "다음 주제에 대한 시장 동향을 조사해주세요:\n\n산업/분야: [예: AI, 핀테크, 헬스케어]\n관심 키워드: [예: 최신 트렌드, 경쟁사 분석, 시장 규모]",
+  },
+  {
+    id: "translate",
+    icon: <Languages className="w-4 h-4" />,
+    label: "번역 요청",
+    iconColor: "text-blue-500",
+    promptTemplate: "다음 내용을 번역해주세요:\n\n원본 언어: [예: 영어]\n번역할 언어: [예: 한국어]\n\n[번역할 내용을 여기에 붙여넣으세요]",
+  },
+  {
+    id: "structure",
+    icon: <ListTree className="w-4 h-4" />,
+    label: "텍스트 구조화",
+    iconColor: "text-violet-500",
+    promptTemplate: "다음 내용을 구조화해주세요:\n\n[정리가 필요한 텍스트를 여기에 붙여넣으세요]\n\n원하는 형식: [예: 목록, 표, 마인드맵 형태, 개요]",
   },
 ];
 
@@ -56,7 +70,7 @@ const QuickActions = ({ onSelectAction }: QuickActionsProps) => {
         <span>⚡</span>
         빠른 시작
       </h2>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
         {actions.map((action) => (
           <button
             key={action.id}
