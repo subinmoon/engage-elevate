@@ -243,13 +243,20 @@ const Index = () => {
           </button>
         )}
         
-        {/* Right side: HeaderNav + Schedule */}
-        <div className="flex-1 flex items-center justify-end gap-2">
+        {/* Right side: HeaderNav + Schedule + User */}
+        <div className="flex-1 flex items-center justify-end gap-3">
           <HeaderNav />
           <UpcomingSchedule 
             isExpanded={scheduleExpanded} 
             onToggle={() => setScheduleExpanded(!scheduleExpanded)} 
           />
+          {/* User Profile */}
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium text-primary">
+              문
+            </div>
+            <span className="text-sm font-medium text-foreground hidden sm:block">문수빈</span>
+          </div>
         </div>
       </div>
       
