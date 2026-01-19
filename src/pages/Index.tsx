@@ -257,32 +257,6 @@ const Index = () => {
           {/* Chat mode: show chat controls on left side */}
           {isChatMode && (
             <div className="flex items-center gap-2">
-              {/* More actions dropdown - left of back button */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className="p-1.5 hover:bg-muted rounded-lg transition-colors">
-                    <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-40 bg-card">
-                  <DropdownMenuItem onClick={() => handleShareChat(currentChatId!)}>
-                    <Share2 className="w-4 h-4 mr-2" />
-                    공유
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handlePin()}>
-                    <Pin className="w-4 h-4 mr-2" />
-                    {chatHistory.find(c => c.id === currentChatId)?.pinned ? "고정 해제" : "채팅 고정"}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem 
-                    onClick={() => handleDelete()}
-                    className="text-destructive focus:text-destructive"
-                  >
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    삭제
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              
               <button
                 onClick={handleBack}
                 className="p-2 hover:bg-muted rounded-lg transition-colors"
@@ -350,7 +324,14 @@ const Index = () => {
           {/* Spacer to push right items */}
           <div className="flex-1" />
           
-          <HeaderNav />
+          <HeaderNav 
+            isChatMode={isChatMode}
+            currentChatId={currentChatId}
+            chatHistory={chatHistory}
+            onShare={handleShareChat}
+            onPin={handlePin}
+            onDelete={handleDelete}
+          />
           <UpcomingSchedule 
             isExpanded={scheduleExpanded} 
             onToggle={() => setScheduleExpanded(!scheduleExpanded)}

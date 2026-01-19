@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { Home, Star, Search, ExternalLink } from "lucide-react";
+import { Home, Star, Search, ExternalLink, MoreHorizontal, Share2, Pin, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
   DropdownMenuLabel,
+  DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import {
   Tooltip,
@@ -15,7 +16,21 @@ import {
 } from "@/components/ui/tooltip";
 import { chatbotServices, ChatbotService } from "@/data/chatbotServices";
 
-const HeaderNav = () => {
+interface ChatHistoryItem {
+  id: string;
+  pinned?: boolean;
+}
+
+interface HeaderNavProps {
+  isChatMode?: boolean;
+  currentChatId?: string | null;
+  chatHistory?: ChatHistoryItem[];
+  onShare?: (id: string) => void;
+  onPin?: () => void;
+  onDelete?: () => void;
+}
+
+const HeaderNav = ({ isChatMode, currentChatId, chatHistory, onShare, onPin, onDelete }: HeaderNavProps) => {
   const [favoritesOpen, setFavoritesOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [services, setServices] = useState<ChatbotService[]>([]);
@@ -68,9 +83,39 @@ const HeaderNav = () => {
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const isPinned = chatHistory?.find(c => c.id === currentChatId)?.pinned;
+
   return (
     <TooltipProvider delayDuration={200}>
       <div className="flex items-center gap-1">
+        {/* Chat mode: More actions dropdown - left of Home icon */}
+        {isChatMode && currentChatId && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="p-2 hover:bg-muted/50 rounded-lg transition-colors">
+                <MoreHorizontal className="w-5 h-5 text-muted-foreground" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-40 bg-card">
+              <DropdownMenuItem onClick={() => onShare?.(currentChatId)}>
+                <Share2 className="w-4 h-4 mr-2" />
+                공유
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => onPin?.()}>
+                <Pin className="w-4 h-4 mr-2" />
+                {isPinned ? "고정 해제" : "채팅 고정"}
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={() => onDelete?.()}
+                className="text-destructive focus:text-destructive"
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                삭제
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+
         {/* AI 포탈로 이동 */}
         <Tooltip>
           <TooltipTrigger asChild>
