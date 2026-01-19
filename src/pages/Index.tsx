@@ -243,7 +243,7 @@ const Index = () => {
         )}
         
         {/* Center: Welcome Message */}
-        <div className="flex-1 flex items-center gap-3 px-4 py-2">
+        <div className={`flex-1 flex items-center gap-3 py-2 ${!sidebarOpen ? 'pl-16' : 'px-4'}`}>
           {!sidebarOpen && (
             <img src={logoIcon} alt="Logo" className="w-8 h-8" />
           )}
