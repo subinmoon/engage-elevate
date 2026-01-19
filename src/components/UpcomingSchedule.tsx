@@ -184,7 +184,7 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingS
                       onClick={() => handleGetHelp(schedule)}
                     >
                       <HelpCircle className="w-3 h-3" />
-                      도움받기
+                      AI에게 물어보기
                     </Button>
                     <Button
                       variant="outline"
