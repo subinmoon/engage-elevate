@@ -1,4 +1,4 @@
-import { Star, ArrowRight } from "lucide-react";
+import { Star, ArrowRight, TrendingUp, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface InterestItem {
@@ -7,6 +7,13 @@ interface InterestItem {
   description: string;
 }
 
+interface PopularQuestion {
+  id: string;
+  title: string;
+  icon: React.ReactNode;
+}
+
+// 실제 대화 이력이 있을 때 표시할 데이터
 const interests: InterestItem[] = [
   {
     id: "1",
@@ -20,7 +27,49 @@ const interests: InterestItem[] = [
   },
 ];
 
-const RecentInterests = () => {
+// 첫 진입 시 표시할 인기 질문
+const popularQuestions: PopularQuestion[] = [
+  { id: "1", title: "휴가 신청은 어떻게 하나요?", icon: <TrendingUp className="w-4 h-4 text-orange-500" /> },
+  { id: "2", title: "복지 포인트 사용처가 궁금해요", icon: <TrendingUp className="w-4 h-4 text-orange-500" /> },
+  { id: "3", title: "출장비 정산 방법 알려주세요", icon: <Lightbulb className="w-4 h-4 text-yellow-500" /> },
+  { id: "4", title: "신규 입사자 체크리스트", icon: <Lightbulb className="w-4 h-4 text-yellow-500" /> },
+];
+
+interface RecentInterestsProps {
+  hasHistory?: boolean;
+  onQuestionClick?: (question: string) => void;
+}
+
+const RecentInterests = ({ hasHistory = false, onQuestionClick }: RecentInterestsProps) => {
+  if (!hasHistory) {
+    // 첫 진입 시: 인기 질문 표시
+    return (
+      <div className="bg-white rounded-2xl p-5 shadow-soft">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center">
+            <TrendingUp className="w-4 h-4 text-orange-500" />
+          </div>
+          <h2 className="text-base font-bold text-foreground">이런 것도 물어보세요</h2>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          {popularQuestions.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => onQuestionClick?.(item.title)}
+              className="flex items-center gap-2 bg-gradient-to-r from-orange-50 to-yellow-50 hover:from-orange-100 hover:to-yellow-100 rounded-xl p-3 text-left transition-all hover:shadow-md group"
+            >
+              <span className="shrink-0">{item.icon}</span>
+              <span className="text-sm text-foreground group-hover:text-primary truncate">
+                {item.title}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // 대화 이력이 있을 때: 최근 관심사 표시
   return (
     <div className="bg-white rounded-2xl p-5 shadow-soft">
       <div className="flex items-center gap-2 mb-4">
@@ -43,6 +92,7 @@ const RecentInterests = () => {
               <Button
                 size="sm"
                 className="shrink-0 bg-primary hover:bg-lavender-dark text-primary-foreground gap-1 rounded-full px-4 h-8 text-xs"
+                onClick={() => onQuestionClick?.(item.title)}
               >
                 질문하기
                 <ArrowRight className="w-3 h-3" />
