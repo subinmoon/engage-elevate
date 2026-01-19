@@ -6,6 +6,7 @@ import WelcomeHeader from "@/components/WelcomeHeader";
 import UpcomingSchedule from "@/components/UpcomingSchedule";
 import RecentInterests from "@/components/RecentInterests";
 import HRHelper from "@/components/HRHelper";
+import FavoriteChatbots from "@/components/FavoriteChatbots";
 import ChatInput from "@/components/ChatInput";
 import ChatView from "@/components/ChatView";
 import { generateScheduleResponse } from "@/data/scheduleData";
@@ -311,13 +312,22 @@ const Index = () => {
               </div>
               
               {/* Main Content Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-6">
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
                 <div className="lg:col-span-3">
                   <RecentInterests />
                 </div>
                 <div className="lg:col-span-2">
                   <HRHelper />
                 </div>
+              </div>
+              
+              {/* Favorite Chatbots */}
+              <div className="mb-6">
+                <FavoriteChatbots 
+                  onSelectChatbot={(chatbot) => {
+                    setPrefillMessage(`${chatbot.name}에게 질문하기: `);
+                  }}
+                />
               </div>
               
               {/* Chat Input - Bottom */}
