@@ -264,13 +264,39 @@ const Index = () => {
                 <ArrowLeft className="w-5 h-5 text-muted-foreground" />
               </button>
               
-              {/* Editable title */}
+              {/* More actions dropdown - next to back button */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="p-1.5 hover:bg-muted rounded-lg transition-colors">
+                    <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-40 bg-card">
+                  <DropdownMenuItem onClick={() => handleShareChat(currentChatId!)}>
+                    <Share2 className="w-4 h-4 mr-2" />
+                    공유
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handlePin()}>
+                    <Pin className="w-4 h-4 mr-2" />
+                    {chatHistory.find(c => c.id === currentChatId)?.pinned ? "고정 해제" : "채팅 고정"}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => handleDelete()}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    삭제
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              
+              {/* Editable title - full width, no truncation */}
               {isEditingTitle ? (
                 <div className="flex items-center gap-1">
                   <Input
                     value={editTitleValue}
                     onChange={(e) => setEditTitleValue(e.target.value)}
-                    className="h-7 text-sm font-medium w-40"
+                    className="h-7 text-sm font-medium w-60"
                     autoFocus
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
@@ -304,7 +330,7 @@ const Index = () => {
                 </div>
               ) : (
                 <div className="flex items-center gap-1 group">
-                  <h2 className="text-base font-medium text-foreground truncate max-w-[200px]">
+                  <h2 className="text-base font-medium text-foreground">
                     {chatTitle}
                   </h2>
                   <button
@@ -318,32 +344,6 @@ const Index = () => {
                   </button>
                 </div>
               )}
-              
-              {/* More actions dropdown */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className="p-1.5 hover:bg-muted rounded-lg transition-colors">
-                    <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-40 bg-card">
-                  <DropdownMenuItem onClick={() => handleShareChat(currentChatId!)}>
-                    <Share2 className="w-4 h-4 mr-2" />
-                    공유
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handlePin()}>
-                    <Pin className="w-4 h-4 mr-2" />
-                    {chatHistory.find(c => c.id === currentChatId)?.pinned ? "고정 해제" : "채팅 고정"}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem 
-                    onClick={() => handleDelete()}
-                    className="text-destructive focus:text-destructive"
-                  >
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    삭제
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
             </div>
           )}
           
