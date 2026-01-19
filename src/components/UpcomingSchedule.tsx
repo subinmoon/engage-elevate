@@ -1,9 +1,11 @@
-import { Calendar, Plane, Palmtree, Bell, HelpCircle } from "lucide-react";
+import { useState } from "react";
+import { Calendar, Plane, Palmtree, Bell, HelpCircle, ExternalLink, ChevronDown, ChevronUp } from "lucide-react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 import { scheduleData, ScheduleItem } from "@/data/scheduleData";
 
 interface UpcomingScheduleProps {
@@ -13,6 +15,7 @@ interface UpcomingScheduleProps {
 }
 
 const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingScheduleProps) => {
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const schedules = scheduleData;
 
   const getIcon = (type: ScheduleItem["type"]) => {
@@ -26,14 +29,15 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingS
     }
   };
 
-  const getBgColor = (type: ScheduleItem["type"]) => {
+  const getBgColor = (type: ScheduleItem["type"], isExpanded: boolean) => {
+    const ring = isExpanded ? "ring-2 ring-primary/30" : "";
     switch (type) {
       case "vacation":
-        return "bg-green-50 border-green-200 hover:bg-green-100";
+        return `bg-green-50 border-green-200 ${ring}`;
       case "business":
-        return "bg-blue-50 border-blue-200 hover:bg-blue-100";
+        return `bg-blue-50 border-blue-200 ${ring}`;
       default:
-        return "bg-muted border-border hover:bg-muted/80";
+        return `bg-muted border-border ${ring}`;
     }
   };
 
@@ -48,7 +52,11 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingS
     }
   };
 
-  const handleScheduleClick = (schedule: ScheduleItem) => {
+  const handleScheduleClick = (index: number) => {
+    setExpandedIndex(expandedIndex === index ? null : index);
+  };
+
+  const handleGetHelp = (schedule: ScheduleItem) => {
     const details = schedule.details;
     let prompt = `"${schedule.title}" 일정에 대해 도움이 필요해요.\n\n`;
     prompt += `📅 일자: ${schedule.date}\n`;
@@ -70,8 +78,14 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingS
     onToggle?.();
   };
 
+  const handleGoToDetail = (schedule: ScheduleItem) => {
+    // Mock navigation - in real app would navigate to detail page
+    console.log("상세 사이트 이동:", schedule.title);
+    window.open(`#/schedule/${schedule.title}`, '_blank');
+  };
+
   return (
-    <Popover open={isExpanded} onOpenChange={() => onToggle?.()}>
+    <Popover open={isExpanded} onOpenChange={() => { onToggle?.(); setExpandedIndex(null); }}>
       <PopoverTrigger asChild>
         <button
           className="relative p-2 hover:bg-muted/50 rounded-lg transition-all cursor-pointer"
@@ -98,36 +112,93 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingS
         </div>
 
         {/* Schedule List */}
-        <div className="max-h-80 overflow-y-auto p-2 space-y-1.5">
+        <div className="max-h-96 overflow-y-auto p-2 space-y-1.5">
           {schedules.map((schedule, index) => (
-            <button
+            <div
               key={index}
-              onClick={() => handleScheduleClick(schedule)}
-              className={`w-full text-left rounded-lg border transition-all overflow-hidden cursor-pointer ${getBgColor(schedule.type)}`}
+              className={`rounded-lg border transition-all overflow-hidden ${getBgColor(schedule.type, expandedIndex === index)}`}
             >
-              {/* Compact Single Line */}
-              <div className="flex items-center gap-2 p-2.5">
-                {getIcon(schedule.type)}
-                <span className="text-xs font-medium text-foreground flex-1 truncate">
-                  {schedule.title}
-                </span>
-                <span className="text-[10px] text-muted-foreground whitespace-nowrap">
-                  {schedule.date}
-                </span>
-                <HelpCircle className="w-3.5 h-3.5 text-primary/60" />
-              </div>
-              
-              {/* Message - Always visible if exists */}
-              {schedule.message && (
-                <div className="px-2.5 pb-2 -mt-1">
-                  <div className="bg-primary/10 rounded-md px-2 py-1.5">
-                    <p className="text-[10px] text-primary font-medium">
+              {/* Header Row - Clickable */}
+              <button
+                onClick={() => handleScheduleClick(index)}
+                className="w-full text-left p-2.5 hover:bg-black/5 transition-colors"
+              >
+                <div className="flex items-center gap-2">
+                  {getIcon(schedule.type)}
+                  <span className="text-xs font-medium text-foreground flex-1 truncate">
+                    {schedule.title}
+                  </span>
+                  <span className="text-[10px] text-muted-foreground whitespace-nowrap">
+                    {schedule.date}
+                  </span>
+                  {expandedIndex === index ? (
+                    <ChevronUp className="w-3.5 h-3.5 text-muted-foreground" />
+                  ) : (
+                    <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
+                  )}
+                </div>
+                
+                {/* Message - Gray style */}
+                {schedule.message && (
+                  <div className="mt-1.5 bg-muted/60 rounded-md px-2 py-1.5">
+                    <p className="text-[10px] text-muted-foreground">
                       💬 {schedule.message}
                     </p>
                   </div>
+                )}
+              </button>
+
+              {/* Expanded Detail Section */}
+              {expandedIndex === index && (
+                <div className="px-2.5 pb-2.5 space-y-2 border-t border-black/10">
+                  {/* Detail Info */}
+                  <div className="bg-white/50 rounded-md p-2 space-y-1 mt-2 text-[11px]">
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">유형</span>
+                      <span className="font-medium">{getTypeLabel(schedule.type)}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">기간</span>
+                      <span className="font-medium">{schedule.details?.duration || schedule.date}</span>
+                    </div>
+                    {schedule.details?.location && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">장소</span>
+                        <span className="font-medium">{schedule.details.location}</span>
+                      </div>
+                    )}
+                    {schedule.details?.notes && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">메모</span>
+                        <span className="font-medium">{schedule.details.notes}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 gap-1.5 h-7 text-xs"
+                      onClick={() => handleGetHelp(schedule)}
+                    >
+                      <HelpCircle className="w-3 h-3" />
+                      도움받기
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 gap-1.5 h-7 text-xs"
+                      onClick={() => handleGoToDetail(schedule)}
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      상세 사이트
+                    </Button>
+                  </div>
                 </div>
               )}
-            </button>
+            </div>
           ))}
         </div>
       </PopoverContent>
