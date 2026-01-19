@@ -13,29 +13,30 @@ const FavoriteChatbots = ({ onSelectChatbot, hasHistory = false }: FavoriteChatb
   // 첫 진입 시 또는 즐겨찾기가 없을 때 빈 상태 표시
   if (!hasHistory || favoriteChatbots.length === 0) {
     return (
-      <div className="bg-card rounded-2xl p-5 shadow-soft">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-8 h-8 rounded-lg bg-lavender-light flex items-center justify-center">
-            <Bot className="w-4 h-4 text-primary" />
+      <div className="bg-card rounded-2xl p-4 shadow-soft">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-lavender-light flex items-center justify-center">
+              <Bot className="w-3.5 h-3.5 text-primary" />
+            </div>
+            <h2 className="text-sm font-semibold text-foreground">즐겨찾는 챗봇</h2>
           </div>
-          <h2 className="text-base font-semibold text-foreground">즐겨찾는 챗봇</h2>
-        </div>
-        
-        <div className="flex flex-col items-center justify-center py-6 text-center">
-          <div className="w-14 h-14 rounded-full bg-lavender-light flex items-center justify-center mb-3">
-            <Sparkles className="w-7 h-7 text-primary" />
+          
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-primary" />
+              <span className="text-sm text-muted-foreground">나만의 챗봇을 만들어보세요~</span>
+            </div>
+            <Button 
+              variant="outline"
+              size="sm"
+              className="gap-1.5 border-primary/30 text-primary hover:bg-primary/10 h-8 text-xs"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              챗봇 만들기
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Button>
           </div>
-          <p className="text-muted-foreground mb-4">
-            나만의 챗봇을 만들어보세요~
-          </p>
-          <Button 
-            variant="outline"
-            className="gap-2 border-primary/30 text-primary hover:bg-primary/10"
-          >
-            <Plus className="w-4 h-4" />
-            챗봇 만들기
-            <ArrowRight className="w-4 h-4" />
-          </Button>
         </div>
       </div>
     );
