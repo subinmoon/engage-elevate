@@ -314,7 +314,12 @@ const Index = () => {
               {/* Main Content Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
                 <div className="lg:col-span-3">
-                  <RecentInterests />
+                  <RecentInterests 
+                    hasHistory={chatHistory.length > 0}
+                    onQuestionClick={(question) => {
+                      setPrefillMessage(question);
+                    }}
+                  />
                 </div>
                 <div className="lg:col-span-2">
                   <HRHelper />
