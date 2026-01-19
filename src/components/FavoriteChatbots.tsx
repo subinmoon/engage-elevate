@@ -1,19 +1,52 @@
-import { Bot, Star, ArrowRight } from "lucide-react";
+import { Bot, Star, ArrowRight, Plus, Sparkles } from "lucide-react";
 import { chatbotServices, ChatbotService } from "@/data/chatbotServices";
+import { Button } from "@/components/ui/button";
 
 interface FavoriteChatbotsProps {
   onSelectChatbot?: (chatbot: ChatbotService) => void;
+  hasHistory?: boolean;
 }
 
-const FavoriteChatbots = ({ onSelectChatbot }: FavoriteChatbotsProps) => {
+const FavoriteChatbots = ({ onSelectChatbot, hasHistory = false }: FavoriteChatbotsProps) => {
   const favoriteChatbots = chatbotServices.filter(c => c.isFavorite);
 
-  if (favoriteChatbots.length === 0) return null;
+  // 첫 진입 시 또는 즐겨찾기가 없을 때 빈 상태 표시
+  if (!hasHistory || favoriteChatbots.length === 0) {
+    return (
+      <div className="bg-card rounded-2xl p-5 shadow-soft">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-8 h-8 rounded-lg bg-lavender-light flex items-center justify-center">
+            <Bot className="w-4 h-4 text-primary" />
+          </div>
+          <h2 className="text-base font-semibold text-foreground">즐겨찾는 챗봇</h2>
+        </div>
+        
+        <div className="flex flex-col items-center justify-center py-6 text-center">
+          <div className="w-14 h-14 rounded-full bg-lavender-light flex items-center justify-center mb-3">
+            <Sparkles className="w-7 h-7 text-primary" />
+          </div>
+          <p className="text-muted-foreground mb-4">
+            나만의 챗봇을 만들어보세요~
+          </p>
+          <Button 
+            variant="outline"
+            className="gap-2 border-primary/30 text-primary hover:bg-primary/10"
+          >
+            <Plus className="w-4 h-4" />
+            챗봇 만들기
+            <ArrowRight className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-card rounded-2xl p-5 shadow-soft">
       <div className="flex items-center gap-2 mb-4">
-        <Bot className="w-5 h-5 text-primary" />
+        <div className="w-8 h-8 rounded-lg bg-lavender-light flex items-center justify-center">
+          <Bot className="w-4 h-4 text-primary" />
+        </div>
         <h2 className="text-base font-semibold text-foreground">즐겨찾는 챗봇</h2>
         <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
       </div>

@@ -29,10 +29,10 @@ const interests: InterestItem[] = [
 
 // 첫 진입 시 표시할 인기 질문
 const popularQuestions: PopularQuestion[] = [
-  { id: "1", title: "휴가 신청은 어떻게 하나요?", icon: <TrendingUp className="w-4 h-4 text-orange-500" /> },
-  { id: "2", title: "복지 포인트 사용처가 궁금해요", icon: <TrendingUp className="w-4 h-4 text-orange-500" /> },
-  { id: "3", title: "출장비 정산 방법 알려주세요", icon: <Lightbulb className="w-4 h-4 text-yellow-500" /> },
-  { id: "4", title: "신규 입사자 체크리스트", icon: <Lightbulb className="w-4 h-4 text-yellow-500" /> },
+  { id: "1", title: "휴가 신청은 어떻게 하나요?", icon: <Lightbulb className="w-4 h-4 text-primary" /> },
+  { id: "2", title: "복지 포인트 사용처가 궁금해요", icon: <TrendingUp className="w-4 h-4 text-primary" /> },
+  { id: "3", title: "출장비 정산 방법 알려주세요", icon: <Lightbulb className="w-4 h-4 text-primary" /> },
+  { id: "4", title: "신규 입사자 체크리스트", icon: <TrendingUp className="w-4 h-4 text-primary" /> },
 ];
 
 interface RecentInterestsProps {
@@ -46,8 +46,8 @@ const RecentInterests = ({ hasHistory = false, onQuestionClick }: RecentInterest
     return (
       <div className="bg-white rounded-2xl p-5 shadow-soft">
         <div className="flex items-center gap-2 mb-4">
-          <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center">
-            <TrendingUp className="w-4 h-4 text-orange-500" />
+          <div className="w-8 h-8 rounded-lg bg-lavender-light flex items-center justify-center">
+            <Lightbulb className="w-4 h-4 text-primary" />
           </div>
           <h2 className="text-base font-bold text-foreground">이런 것도 물어보세요</h2>
         </div>
@@ -56,7 +56,7 @@ const RecentInterests = ({ hasHistory = false, onQuestionClick }: RecentInterest
             <button
               key={item.id}
               onClick={() => onQuestionClick?.(item.title)}
-              className="flex items-center gap-2 bg-gradient-to-r from-orange-50 to-yellow-50 hover:from-orange-100 hover:to-yellow-100 rounded-xl p-3 text-left transition-all hover:shadow-md group"
+              className="flex items-center gap-2 bg-lavender-light hover:bg-primary/20 rounded-xl p-3 text-left transition-all hover:shadow-md group"
             >
               <span className="shrink-0">{item.icon}</span>
               <span className="text-sm text-foreground group-hover:text-primary truncate">
