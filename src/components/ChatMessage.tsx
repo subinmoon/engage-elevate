@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { Copy, Check, ThumbsUp, ThumbsDown, MessageSquare, RotateCcw, ExternalLink, FileText, ChevronDown, ChevronUp } from "lucide-react";
+import { Copy, Check, ThumbsUp, ThumbsDown, MessageSquare, RotateCcw, ExternalLink, FileText, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -28,10 +28,6 @@ const ChatMessage = ({ role, content, timestamp, onRegenerate, isLastAssistant, 
   const [feedback, setFeedback] = useState<"like" | "dislike" | null>(null);
   const [showAllSources, setShowAllSources] = useState(false);
 
-  const visibleSources = sources && sources.length > 0 
-    ? (showAllSources ? sources : sources.slice(0, 3)) 
-    : [];
-
   const handleCopy = async () => {
     await navigator.clipboard.writeText(content);
     setCopied(true);
@@ -57,72 +53,73 @@ const ChatMessage = ({ role, content, timestamp, onRegenerate, isLastAssistant, 
           <img src={logoIcon} alt="AI" className="w-5 h-5" />
         </div>
       )}
-      <div className="flex flex-col">
+      <div className="flex flex-col max-w-[80%]">
         <div className={cn("flex items-end gap-2", isUser && "flex-row-reverse")}>
           <div
             className={cn(
-              "max-w-[80%] rounded-2xl px-4 py-3",
+              "rounded-2xl px-4 py-3",
               isUser
                 ? "bg-primary text-primary-foreground"
                 : "bg-muted text-foreground"
             )}
           >
             <p className="text-sm leading-relaxed whitespace-pre-wrap">{content}</p>
-            
-            {/* Sources section */}
-            {!isUser && sources && sources.length > 0 && (
-              <div className="mt-3 pt-3 border-t border-border/50">
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-2">
-                  <FileText className="w-3 h-3" />
-                  <span className="font-medium">출처 ({sources.length})</span>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {visibleSources.map((source, index) => (
-                    <a
-                      key={index}
-                      href={source.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group/source flex items-center gap-1.5 px-2.5 py-1.5 bg-background/80 hover:bg-background border border-border/50 rounded-lg text-xs transition-all hover:shadow-sm hover:border-primary/30"
-                      title={source.description || source.title}
-                    >
-                      <span className="w-4 h-4 rounded bg-primary/10 text-primary flex items-center justify-center text-[10px] font-medium">
-                        {index + 1}
-                      </span>
-                      <span className="max-w-[120px] truncate text-foreground/80 group-hover/source:text-foreground">
-                        {source.title}
-                      </span>
-                      <ExternalLink className="w-3 h-3 text-muted-foreground group-hover/source:text-primary transition-colors" />
-                    </a>
-                  ))}
-                </div>
-                {sources.length > 3 && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="mt-2 h-6 px-2 text-xs text-muted-foreground hover:text-foreground"
-                    onClick={() => setShowAllSources(!showAllSources)}
-                  >
-                    {showAllSources ? (
-                      <>
-                        <ChevronUp className="w-3 h-3 mr-1" />
-                        접기
-                      </>
-                    ) : (
-                      <>
-                        <ChevronDown className="w-3 h-3 mr-1" />
-                        {sources.length - 3}개 더 보기
-                      </>
-                    )}
-                  </Button>
-                )}
-              </div>
-            )}
           </div>
           <span className="text-[10px] text-muted-foreground mb-1 flex-shrink-0">
             {formattedTime}
           </span>
         </div>
+        
+        {/* Sources section - Collapsible pill outside bubble */}
+        {!isUser && sources && sources.length > 0 && (
+          <div className="mt-2">
+            <button
+              onClick={() => setShowAllSources(!showAllSources)}
+              className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors group/toggle"
+            >
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted/60 hover:bg-muted transition-colors">
+                <FileText className="w-3 h-3" />
+                <span className="font-medium">{sources.length}개 출처</span>
+                <ChevronDown className={cn(
+                  "w-3 h-3 transition-transform duration-200",
+                  showAllSources && "rotate-180"
+                )} />
+              </div>
+            </button>
+            
+            <div className={cn(
+              "grid gap-1.5 overflow-hidden transition-all duration-300 ease-out mt-2",
+              showAllSources ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+            )}>
+              {sources.map((source, index) => (
+                <a
+                  key={index}
+                  href={source.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group/source flex items-start gap-2.5 px-3 py-2 bg-gradient-to-r from-muted/60 to-muted/30 hover:from-primary/10 hover:to-primary/5 rounded-xl transition-all duration-200 hover:shadow-sm border border-transparent hover:border-primary/20"
+                >
+                  <span className="w-5 h-5 rounded-full bg-primary/15 text-primary flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">
+                    {index + 1}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs font-medium text-foreground truncate">
+                        {source.title}
+                      </span>
+                      <ExternalLink className="w-3 h-3 text-muted-foreground group-hover/source:text-primary transition-colors flex-shrink-0" />
+                    </div>
+                    {source.description && (
+                      <p className="text-[10px] text-muted-foreground mt-0.5 line-clamp-1">
+                        {source.description}
+                      </p>
+                    )}
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
         
         {/* Actions for all messages */}
         <div className={cn(
