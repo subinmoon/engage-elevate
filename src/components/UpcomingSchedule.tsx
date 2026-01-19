@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Calendar, Plane, Palmtree, X, Bell } from "lucide-react";
+import { Calendar, Plane, Palmtree, Bell, ChevronDown, ChevronUp, HelpCircle } from "lucide-react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { scheduleData, ScheduleItem } from "@/data/scheduleData";
 
 interface UpcomingScheduleProps {
@@ -14,7 +15,7 @@ interface UpcomingScheduleProps {
 }
 
 const UpcomingSchedule = ({ isExpanded = false, onToggle }: UpcomingScheduleProps) => {
-  const [selectedSchedule, setSelectedSchedule] = useState<ScheduleItem | null>(null);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   const schedules = scheduleData;
 
@@ -40,15 +41,25 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle }: UpcomingScheduleProp
     }
   };
 
-  const getBgColor = (type: ScheduleItem["type"]) => {
+  const getBgColor = (type: ScheduleItem["type"], isExpanded: boolean) => {
+    const base = isExpanded ? "ring-2 ring-primary/30" : "";
     switch (type) {
       case "vacation":
-        return "bg-green-50 border-green-200 hover:bg-green-100";
+        return `bg-green-50 border-green-200 ${base}`;
       case "business":
-        return "bg-blue-50 border-blue-200 hover:bg-blue-100";
+        return `bg-blue-50 border-blue-200 ${base}`;
       default:
-        return "bg-muted border-border hover:bg-muted/80";
+        return `bg-muted border-border ${base}`;
     }
+  };
+
+  const toggleExpand = (index: number) => {
+    setExpandedIndex(expandedIndex === index ? null : index);
+  };
+
+  const handleGetHelp = (schedule: ScheduleItem) => {
+    // TODO: Implement help functionality
+    console.log("도움받기 clicked for:", schedule.title);
   };
 
   return (
@@ -67,8 +78,8 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle }: UpcomingScheduleProp
         )}
       </button>
 
-      {/* Schedule List Modal */}
-      <Dialog open={isExpanded} onOpenChange={() => onToggle?.()}>
+      {/* Schedule List Modal with Expandable Cards */}
+      <Dialog open={isExpanded} onOpenChange={() => { onToggle?.(); setExpandedIndex(null); }}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
@@ -78,73 +89,80 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle }: UpcomingScheduleProp
           </DialogHeader>
           <div className="space-y-3 max-h-[60vh] overflow-y-auto">
             {schedules.map((schedule, index) => (
-              <button
+              <div
                 key={index}
-                onClick={() => setSelectedSchedule(schedule)}
-                className={`flex flex-col w-full p-4 rounded-xl border transition-all text-left ${getBgColor(schedule.type)}`}
+                className={`rounded-xl border transition-all overflow-hidden ${getBgColor(schedule.type, expandedIndex === index)}`}
               >
-                <div className="flex items-center gap-2 mb-2">
-                  {getIcon(schedule.type)}
-                  <span className="text-sm font-semibold text-foreground">
-                    {schedule.title}
-                  </span>
-                </div>
-                <span className="text-xs font-medium text-muted-foreground mb-1">
-                  📅 {schedule.date}
-                </span>
-                {schedule.message && (
-                  <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                    {schedule.message}
-                  </p>
-                )}
-              </button>
-            ))}
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Detail Dialog */}
-      <Dialog open={!!selectedSchedule} onOpenChange={() => setSelectedSchedule(null)}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              {selectedSchedule && getIcon(selectedSchedule.type)}
-              {selectedSchedule?.title}
-            </DialogTitle>
-          </DialogHeader>
-          {selectedSchedule && (
-            <div className="space-y-4">
-              <div className="bg-muted/50 rounded-lg p-4 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">유형</span>
-                  <span className="text-sm font-medium">{getTypeLabel(selectedSchedule.type)}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">기간</span>
-                  <span className="text-sm font-medium">{selectedSchedule.details?.duration || selectedSchedule.date}</span>
-                </div>
-                {selectedSchedule.details?.location && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">장소</span>
-                    <span className="text-sm font-medium">{selectedSchedule.details.location}</span>
+                {/* Card Header - Clickable */}
+                <button
+                  onClick={() => toggleExpand(index)}
+                  className="flex items-center justify-between w-full p-4 text-left hover:bg-black/5 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    {getIcon(schedule.type)}
+                    <div>
+                      <span className="text-sm font-semibold text-foreground block">
+                        {schedule.title}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        📅 {schedule.date}
+                      </span>
+                    </div>
                   </div>
-                )}
-                {selectedSchedule.details?.notes && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">메모</span>
-                    <span className="text-sm font-medium">{selectedSchedule.details.notes}</span>
+                  {expandedIndex === index ? (
+                    <ChevronUp className="w-4 h-4 text-muted-foreground" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                  )}
+                </button>
+
+                {/* Expanded Detail */}
+                {expandedIndex === index && (
+                  <div className="px-4 pb-4 space-y-3 border-t border-black/10">
+                    <div className="bg-white/50 rounded-lg p-3 space-y-2 mt-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">유형</span>
+                        <span className="text-xs font-medium">{getTypeLabel(schedule.type)}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">기간</span>
+                        <span className="text-xs font-medium">{schedule.details?.duration || schedule.date}</span>
+                      </div>
+                      {schedule.details?.location && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-muted-foreground">장소</span>
+                          <span className="text-xs font-medium">{schedule.details.location}</span>
+                        </div>
+                      )}
+                      {schedule.details?.notes && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-muted-foreground">메모</span>
+                          <span className="text-xs font-medium">{schedule.details.notes}</span>
+                        </div>
+                      )}
+                    </div>
+                    {schedule.message && (
+                      <div className="bg-primary/10 rounded-lg p-2 text-center">
+                        <p className="text-xs text-primary font-medium">
+                          💬 {schedule.message}
+                        </p>
+                      </div>
+                    )}
+                    {/* 도움받기 Button */}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full gap-2"
+                      onClick={() => handleGetHelp(schedule)}
+                    >
+                      <HelpCircle className="w-4 h-4" />
+                      도움받기
+                    </Button>
                   </div>
                 )}
               </div>
-              {selectedSchedule.message && (
-                <div className="bg-primary/10 rounded-lg p-3 text-center">
-                  <p className="text-sm text-primary font-medium">
-                    💬 {selectedSchedule.message}
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
+            ))}
+          </div>
         </DialogContent>
       </Dialog>
     </>
