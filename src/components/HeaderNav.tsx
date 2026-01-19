@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Home, Heart, Star, Search } from "lucide-react";
+import { Home, Star, Search } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import {
   Tooltip,
@@ -12,21 +14,21 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { chatbotServices } from "@/data/chatbotServices";
 
 const HeaderNav = () => {
   const [favoritesOpen, setFavoritesOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const favorites = [
-    { id: "approval", label: "전자결재", href: "#" },
-    { id: "helpdesk", label: "IT 헬프데스크", href: "#" },
-    { id: "hr", label: "HR 시스템", href: "#" },
-    { id: "mail", label: "메일", href: "#" },
-    { id: "calendar", label: "캘린더", href: "#" },
-  ];
+  const favoriteServices = chatbotServices.filter((s) => s.isFavorite);
+  const allServices = chatbotServices;
 
-  const filteredFavorites = favorites.filter((item) =>
-    item.label.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredFavorites = favoriteServices.filter((item) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const filteredAll = allServices.filter((item) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -53,7 +55,7 @@ const HeaderNav = () => {
             <TooltipTrigger asChild>
               <DropdownMenuTrigger asChild>
                 <button className="p-2 hover:bg-muted/50 rounded-lg transition-colors">
-                  <Heart className="w-5 h-5 text-muted-foreground" />
+                  <Star className="w-5 h-5 text-yellow-500 fill-yellow-400" />
                 </button>
               </DropdownMenuTrigger>
             </TooltipTrigger>
@@ -65,7 +67,7 @@ const HeaderNav = () => {
           </Tooltip>
           <DropdownMenuContent 
             align="end" 
-            className="w-56 bg-card border border-border z-50"
+            className="w-64 bg-card border border-border z-50"
             onCloseAutoFocus={(e) => e.preventDefault()}
           >
             {/* Search Input */}
@@ -82,23 +84,58 @@ const HeaderNav = () => {
                 />
               </div>
             </div>
-            {/* Favorites List */}
-            <div className="max-h-48 overflow-y-auto py-1">
-              {filteredFavorites.length > 0 ? (
-                filteredFavorites.map((item) => (
-                  <DropdownMenuItem key={item.id} asChild>
-                    <a href={item.href} className="flex items-center justify-between w-full cursor-pointer">
-                      <span>{item.label}</span>
-                      <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-                    </a>
-                  </DropdownMenuItem>
-                ))
-              ) : (
-                <div className="px-3 py-2 text-sm text-muted-foreground text-center">
-                  검색 결과가 없습니다
+            
+            {/* Favorites Section */}
+            {filteredFavorites.length > 0 && (
+              <>
+                <DropdownMenuLabel className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Star className="w-3 h-3 text-yellow-500 fill-yellow-400" />
+                  즐겨찾기
+                </DropdownMenuLabel>
+                <div className="max-h-32 overflow-y-auto">
+                  {filteredFavorites.map((item) => (
+                    <DropdownMenuItem key={item.id} asChild>
+                      <a href={item.url || "#"} className="flex items-center gap-2 w-full cursor-pointer">
+                        <span className="text-base">{item.icon}</span>
+                        <span className="flex-1">{item.name}</span>
+                        <Star className="w-3 h-3 text-yellow-500 fill-yellow-400" />
+                      </a>
+                    </DropdownMenuItem>
+                  ))}
                 </div>
-              )}
-            </div>
+              </>
+            )}
+
+            {filteredFavorites.length > 0 && filteredAll.length > filteredFavorites.length && (
+              <DropdownMenuSeparator />
+            )}
+
+            {/* All Services Section */}
+            {filteredAll.filter(s => !s.isFavorite).length > 0 && (
+              <>
+                <DropdownMenuLabel className="text-xs text-muted-foreground">
+                  전체 서비스
+                </DropdownMenuLabel>
+                <div className="max-h-40 overflow-y-auto">
+                  {filteredAll
+                    .filter((s) => !s.isFavorite)
+                    .map((item) => (
+                      <DropdownMenuItem key={item.id} asChild>
+                        <a href={item.url || "#"} className="flex items-center gap-2 w-full cursor-pointer">
+                          <span className="text-base">{item.icon}</span>
+                          <span className="flex-1">{item.name}</span>
+                        </a>
+                      </DropdownMenuItem>
+                    ))}
+                </div>
+              </>
+            )}
+
+            {filteredFavorites.length === 0 && filteredAll.filter(s => !s.isFavorite).length === 0 && (
+              <div className="px-3 py-4 text-sm text-muted-foreground text-center">
+                검색 결과가 없습니다
+              </div>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
