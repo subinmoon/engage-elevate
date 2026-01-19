@@ -1,4 +1,4 @@
-import { FileText, Calendar, Users, Plane, Building2, UserCircle, UtensilsCrossed } from "lucide-react";
+import { FileText, Calendar, Users, Plane, Building2, UserCircle, UtensilsCrossed, Mail } from "lucide-react";
 
 const helpItems = [
   { label: "결재", icon: FileText, color: "bg-purple-100 text-purple-600" },
@@ -8,6 +8,7 @@ const helpItems = [
   { label: "조직도", icon: Building2, color: "bg-pink-100 text-pink-600" },
   { label: "직원검색", icon: UserCircle, color: "bg-cyan-100 text-cyan-600" },
   { label: "식단", icon: UtensilsCrossed, color: "bg-amber-100 text-amber-600" },
+  { label: "메일전송", icon: Mail, color: "bg-indigo-100 text-indigo-600" },
 ];
 
 const HRHelper = () => {
