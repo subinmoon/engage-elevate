@@ -11,7 +11,15 @@ import ChatInput from "@/components/ChatInput";
 import ChatView from "@/components/ChatView";
 import { generateScheduleResponse } from "@/data/scheduleData";
 import logoIcon from "@/assets/logo-icon.png";
-import { PanelLeftClose, ArrowLeft } from "lucide-react";
+import { PanelLeftClose, ArrowLeft, Pencil, Check, X, MoreHorizontal, Share2, Pin, Trash2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
 
 interface Message {
   id: string;
@@ -39,6 +47,8 @@ const Index = () => {
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [prefillMessage, setPrefillMessage] = useState("");
   const [scheduleExpanded, setScheduleExpanded] = useState(false);
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [editTitleValue, setEditTitleValue] = useState("");
 
   const handleSendMessage = (content: string) => {
     const userMessage: Message = {
@@ -253,9 +263,87 @@ const Index = () => {
               >
                 <ArrowLeft className="w-5 h-5 text-muted-foreground" />
               </button>
-              <h2 className="text-base font-medium text-foreground truncate max-w-[200px]">
-                {chatTitle}
-              </h2>
+              
+              {/* Editable title */}
+              {isEditingTitle ? (
+                <div className="flex items-center gap-1">
+                  <Input
+                    value={editTitleValue}
+                    onChange={(e) => setEditTitleValue(e.target.value)}
+                    className="h-7 text-sm font-medium w-40"
+                    autoFocus
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        if (editTitleValue.trim()) {
+                          handleTitleChange(editTitleValue.trim());
+                        }
+                        setIsEditingTitle(false);
+                      }
+                      if (e.key === "Escape") {
+                        setIsEditingTitle(false);
+                      }
+                    }}
+                  />
+                  <button
+                    onClick={() => {
+                      if (editTitleValue.trim()) {
+                        handleTitleChange(editTitleValue.trim());
+                      }
+                      setIsEditingTitle(false);
+                    }}
+                    className="p-1 hover:bg-green-100 rounded transition-colors"
+                  >
+                    <Check className="w-4 h-4 text-green-600" />
+                  </button>
+                  <button
+                    onClick={() => setIsEditingTitle(false)}
+                    className="p-1 hover:bg-red-100 rounded transition-colors"
+                  >
+                    <X className="w-4 h-4 text-red-500" />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1 group">
+                  <h2 className="text-base font-medium text-foreground truncate max-w-[200px]">
+                    {chatTitle}
+                  </h2>
+                  <button
+                    onClick={() => {
+                      setEditTitleValue(chatTitle);
+                      setIsEditingTitle(true);
+                    }}
+                    className="p-1 opacity-0 group-hover:opacity-100 hover:bg-muted rounded transition-all"
+                  >
+                    <Pencil className="w-3.5 h-3.5 text-muted-foreground" />
+                  </button>
+                </div>
+              )}
+              
+              {/* More actions dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="p-1.5 hover:bg-muted rounded-lg transition-colors">
+                    <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-40 bg-card">
+                  <DropdownMenuItem onClick={() => handleShareChat(currentChatId!)}>
+                    <Share2 className="w-4 h-4 mr-2" />
+                    공유
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handlePin()}>
+                    <Pin className="w-4 h-4 mr-2" />
+                    {chatHistory.find(c => c.id === currentChatId)?.pinned ? "고정 해제" : "채팅 고정"}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => handleDelete()}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    삭제
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           )}
           
