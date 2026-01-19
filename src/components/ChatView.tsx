@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import ChatMessage from "@/components/ChatMessage";
+import ChatMessage, { Source } from "@/components/ChatMessage";
 import ChatInput from "@/components/ChatInput";
 
 interface Message {
@@ -7,6 +7,7 @@ interface Message {
   role: "user" | "assistant";
   content: string;
   timestamp: Date;
+  sources?: Source[];
 }
 
 interface ChatViewProps {
@@ -78,6 +79,7 @@ const ChatView = ({ messages, onSendMessage, isLoading, onRegenerate }: ChatView
             timestamp={message.timestamp}
             isLastAssistant={index === lastAssistantIndex}
             onRegenerate={onRegenerate}
+            sources={message.sources}
           />
         ))}
         {isLoading && (

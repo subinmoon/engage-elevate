@@ -20,12 +20,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import { Source } from "@/components/ChatMessage";
 
 interface Message {
   id: string;
   role: "user" | "assistant";
   content: string;
   timestamp: Date;
+  sources?: Source[];
 }
 
 export interface ChatSession {
@@ -96,11 +98,20 @@ const Index = () => {
         ? scheduleResponse
         : `"${content}"에 대해 답변드리겠습니다.\n\n이것은 UI 데모용 응답입니다. 실제 AI 연동 시 더 풍부한 응답을 제공할 수 있습니다.`;
       
+      // Demo sources for the response
+      const demoSources: Source[] = [
+        { title: "사내 복지 정책 가이드", url: "https://example.com/policy", description: "복지 정책에 대한 상세 안내 문서" },
+        { title: "HR 포털 FAQ", url: "https://example.com/hr-faq", description: "자주 묻는 질문 모음" },
+        { title: "2024년 업데이트 공지", url: "https://example.com/notice", description: "최신 정책 변경사항 안내" },
+        { title: "근무 규정 문서", url: "https://example.com/work-rules", description: "근무 관련 규정 전문" },
+      ];
+      
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
         content: responseContent,
         timestamp: new Date(),
+        sources: demoSources,
       };
       const updatedMessages = [...newMessages, assistantMessage];
       setMessages(updatedMessages);
