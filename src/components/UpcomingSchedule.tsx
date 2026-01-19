@@ -138,11 +138,13 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingS
                   )}
                 </div>
                 
-                {/* Message - Gray style */}
+                {/* Message - Highlighted style */}
                 {schedule.message && (
-                  <div className="mt-1.5 bg-muted/60 rounded-md px-2 py-1.5">
-                    <p className="text-[10px] text-muted-foreground">
-                      💬 {schedule.message}
+                  <div className="mt-2 relative overflow-hidden rounded-lg">
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/15 via-lavender/20 to-primary/10" />
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-lavender" />
+                    <p className="relative text-[11px] text-foreground/80 font-medium px-3 py-2 leading-relaxed">
+                      {schedule.message}
                     </p>
                   </div>
                 )}
