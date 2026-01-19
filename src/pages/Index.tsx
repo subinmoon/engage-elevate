@@ -248,7 +248,11 @@ const Index = () => {
           <HeaderNav />
           <UpcomingSchedule 
             isExpanded={scheduleExpanded} 
-            onToggle={() => setScheduleExpanded(!scheduleExpanded)} 
+            onToggle={() => setScheduleExpanded(!scheduleExpanded)}
+            onGetHelp={(prompt) => {
+              setPrefillMessage(prompt);
+              setScheduleExpanded(false);
+            }}
           />
           {/* User Profile */}
           <div className="flex items-center gap-2">
