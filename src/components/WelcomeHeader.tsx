@@ -5,7 +5,6 @@ import { MessageSquare, Sparkles, Mail, TrendingUp, Languages, ListTree } from "
 interface WelcomeHeaderProps {
   userName?: string;
   onSelectAction?: (promptTemplate: string) => void;
-  hideGreeting?: boolean;
 }
 
 interface QuickAction {
@@ -71,7 +70,7 @@ const greetingMessages = [
   "오늘도 좋은 일만 가득하길! ✨",
 ];
 
-const WelcomeHeader = ({ userName = "현민", onSelectAction, hideGreeting = false }: WelcomeHeaderProps) => {
+const WelcomeHeader = ({ userName = "현민", onSelectAction }: WelcomeHeaderProps) => {
   const [greeting, setGreeting] = useState("");
 
   useEffect(() => {
@@ -86,16 +85,14 @@ const WelcomeHeader = ({ userName = "현민", onSelectAction, hideGreeting = fal
   };
 
   return (
-    <div className="w-full">
-      {/* Welcome Message - only shown if not hidden */}
-      {!hideGreeting && (
-        <div className="flex items-center gap-4 mb-4">
-          <img src={logoIcon} alt="Logo" className="w-12 h-12" />
-          <h1 className="text-2xl font-bold text-foreground">
-            <span className="text-gradient-name">{userName}</span>님, {greeting}
-          </h1>
-        </div>
-      )}
+    <div className="w-full mb-4">
+      {/* Welcome Message */}
+      <div className="flex items-center gap-4 mb-4">
+        <img src={logoIcon} alt="Logo" className="w-12 h-12" />
+        <h1 className="text-2xl font-bold text-foreground">
+          <span className="text-gradient-name">{userName}</span>님, {greeting}
+        </h1>
+      </div>
 
       {/* Quick Actions */}
       <div className="flex flex-wrap gap-2">
