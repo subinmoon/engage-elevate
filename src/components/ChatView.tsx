@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useRef, useEffect, useState } from "react";
 import ChatMessage, { Source } from "@/components/ChatMessage";
 import ChatInput from "@/components/ChatInput";
 
@@ -42,6 +42,10 @@ const suggestionsMap: Record<string, string[]> = {
 };
 
 const ChatView = ({ messages, onSendMessage, isLoading, onRegenerate }: ChatViewProps) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isNearBottom, setIsNearBottom] = useState(true);
+  const prevMessagesLength = useRef(messages.length);
+
   // Find the last assistant message index
   const lastAssistantIndex = useMemo(() => {
     for (let i = messages.length - 1; i >= 0; i--) {
@@ -49,6 +53,7 @@ const ChatView = ({ messages, onSendMessage, isLoading, onRegenerate }: ChatView
     }
     return -1;
   }, [messages]);
+
   const suggestions = useMemo(() => {
     if (messages.length === 0) return suggestionsMap.default;
     
@@ -67,10 +72,30 @@ const ChatView = ({ messages, onSendMessage, isLoading, onRegenerate }: ChatView
     return suggestionsMap.default;
   }, [messages]);
 
+  // Check if user is near bottom of scroll
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+      const isBottom = scrollHeight - scrollTop - clientHeight < 100;
+      setIsNearBottom(isBottom);
+    }
+  };
+
+  // Only auto-scroll when new messages are added AND user is near bottom
+  useEffect(() => {
+    if (messages.length > prevMessagesLength.current && isNearBottom && scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+    prevMessagesLength.current = messages.length;
+  }, [messages.length, isNearBottom]);
+
   return (
     <div className="flex flex-col h-full min-h-[calc(100vh-48px)]">
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto pb-4 space-y-2">
+      <div 
+        ref={scrollRef}
+        onScroll={handleScroll}
+        className="flex-1 overflow-y-auto pb-4 space-y-2">
         {messages.map((message, index) => (
           <ChatMessage
             key={message.id}
