@@ -257,14 +257,7 @@ const Index = () => {
           {/* Chat mode: show chat controls on left side */}
           {isChatMode && (
             <div className="flex items-center gap-2">
-              <button
-                onClick={handleBack}
-                className="p-2 hover:bg-muted rounded-lg transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5 text-muted-foreground" />
-              </button>
-              
-              {/* More actions dropdown - next to back button */}
+              {/* More actions dropdown - left of back button */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="p-1.5 hover:bg-muted rounded-lg transition-colors">
@@ -289,6 +282,13 @@ const Index = () => {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+              
+              <button
+                onClick={handleBack}
+                className="p-2 hover:bg-muted rounded-lg transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5 text-muted-foreground" />
+              </button>
               
               {/* Editable title - full width, no truncation */}
               {isEditingTitle ? (
