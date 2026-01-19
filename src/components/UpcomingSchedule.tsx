@@ -1,11 +1,9 @@
-import { useState } from "react";
-import { Calendar, Plane, Palmtree, Bell, ChevronDown, ChevronUp, HelpCircle } from "lucide-react";
+import { Calendar, Plane, Palmtree, Bell } from "lucide-react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
 import { scheduleData, ScheduleItem } from "@/data/scheduleData";
 
 interface UpcomingScheduleProps {
@@ -14,9 +12,8 @@ interface UpcomingScheduleProps {
 }
 
 const UpcomingSchedule = ({ isExpanded = false, onToggle }: UpcomingScheduleProps) => {
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-
   const schedules = scheduleData;
+
 
   const getIcon = (type: ScheduleItem["type"]) => {
     switch (type) {
@@ -29,39 +26,19 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle }: UpcomingScheduleProp
     }
   };
 
-  const getTypeLabel = (type: ScheduleItem["type"]) => {
+  const getBgColor = (type: ScheduleItem["type"]) => {
     switch (type) {
       case "vacation":
-        return "휴가";
+        return "bg-green-50 border-green-200";
       case "business":
-        return "출장";
+        return "bg-blue-50 border-blue-200";
       default:
-        return "일정";
+        return "bg-muted border-border";
     }
-  };
-
-  const getBgColor = (type: ScheduleItem["type"], isExpanded: boolean) => {
-    const base = isExpanded ? "ring-2 ring-primary/30" : "";
-    switch (type) {
-      case "vacation":
-        return `bg-green-50 border-green-200 ${base}`;
-      case "business":
-        return `bg-blue-50 border-blue-200 ${base}`;
-      default:
-        return `bg-muted border-border ${base}`;
-    }
-  };
-
-  const toggleExpand = (index: number) => {
-    setExpandedIndex(expandedIndex === index ? null : index);
-  };
-
-  const handleGetHelp = (schedule: ScheduleItem) => {
-    console.log("도움받기 clicked for:", schedule.title);
   };
 
   return (
-    <Popover open={isExpanded} onOpenChange={() => { onToggle?.(); setExpandedIndex(null); }}>
+    <Popover open={isExpanded} onOpenChange={() => onToggle?.()}>
       <PopoverTrigger asChild>
         <button
           className="relative p-2 hover:bg-muted/50 rounded-lg transition-all cursor-pointer"
@@ -88,76 +65,31 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle }: UpcomingScheduleProp
         </div>
 
         {/* Schedule List */}
-        <div className="max-h-80 overflow-y-auto p-2 space-y-2">
+        <div className="max-h-80 overflow-y-auto p-2 space-y-1.5">
           {schedules.map((schedule, index) => (
             <div
               key={index}
-              className={`rounded-lg border transition-all overflow-hidden ${getBgColor(schedule.type, expandedIndex === index)}`}
+              className={`rounded-lg border transition-all overflow-hidden ${getBgColor(schedule.type)}`}
             >
-              {/* Card Header */}
-              <button
-                onClick={() => toggleExpand(index)}
-                className="flex items-center justify-between w-full p-3 text-left hover:bg-black/5 transition-colors"
-              >
-                <div className="flex items-center gap-2">
-                  {getIcon(schedule.type)}
-                  <div>
-                    <span className="text-xs font-semibold text-foreground block">
-                      {schedule.title}
-                    </span>
-                    <span className="text-[10px] text-muted-foreground">
-                      {schedule.date}
-                    </span>
+              {/* Compact Single Line */}
+              <div className="flex items-center gap-2 p-2.5">
+                {getIcon(schedule.type)}
+                <span className="text-xs font-medium text-foreground flex-1 truncate">
+                  {schedule.title}
+                </span>
+                <span className="text-[10px] text-muted-foreground whitespace-nowrap">
+                  {schedule.date}
+                </span>
+              </div>
+              
+              {/* Message - Always visible if exists */}
+              {schedule.message && (
+                <div className="px-2.5 pb-2 -mt-1">
+                  <div className="bg-primary/10 rounded-md px-2 py-1.5">
+                    <p className="text-[10px] text-primary font-medium">
+                      💬 {schedule.message}
+                    </p>
                   </div>
-                </div>
-                {expandedIndex === index ? (
-                  <ChevronUp className="w-3 h-3 text-muted-foreground" />
-                ) : (
-                  <ChevronDown className="w-3 h-3 text-muted-foreground" />
-                )}
-              </button>
-
-              {/* Expanded Detail */}
-              {expandedIndex === index && (
-                <div className="px-3 pb-3 space-y-2 border-t border-black/10">
-                  <div className="bg-white/50 rounded-md p-2 space-y-1.5 mt-2 text-[11px]">
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">유형</span>
-                      <span className="font-medium">{getTypeLabel(schedule.type)}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">기간</span>
-                      <span className="font-medium">{schedule.details?.duration || schedule.date}</span>
-                    </div>
-                    {schedule.details?.location && (
-                      <div className="flex items-center justify-between">
-                        <span className="text-muted-foreground">장소</span>
-                        <span className="font-medium">{schedule.details.location}</span>
-                      </div>
-                    )}
-                    {schedule.details?.notes && (
-                      <div className="flex items-center justify-between">
-                        <span className="text-muted-foreground">메모</span>
-                        <span className="font-medium">{schedule.details.notes}</span>
-                      </div>
-                    )}
-                  </div>
-                  {schedule.message && (
-                    <div className="bg-primary/10 rounded-md p-2 text-center">
-                      <p className="text-[10px] text-primary font-medium">
-                        💬 {schedule.message}
-                      </p>
-                    </div>
-                  )}
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full gap-1.5 h-7 text-xs"
-                    onClick={() => handleGetHelp(schedule)}
-                  >
-                    <HelpCircle className="w-3 h-3" />
-                    도움받기
-                  </Button>
                 </div>
               )}
             </div>
