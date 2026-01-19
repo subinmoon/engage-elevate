@@ -1,10 +1,13 @@
-import { Star, ArrowRight, TrendingUp } from "lucide-react";
+import { Star, ArrowRight, TrendingUp, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { format, parseISO, isToday, isYesterday } from "date-fns";
+import { ko } from "date-fns/locale";
 
 interface InterestItem {
   id: string;
   title: string;
   description: string;
+  date?: string;
 }
 
 // 실제 대화 이력이 있을 때 표시할 데이터
@@ -13,11 +16,13 @@ const interests: InterestItem[] = [
     id: "1",
     title: "복지카드 발급",
     description: "복지카드 발급 방법에 대한 궁금증이 다 해결되었나요?",
+    date: "2025-01-18",
   },
   {
     id: "2",
     title: "출장 신청 방법",
     description: "출장 신청은 잘 되었나요? 더 궁금한게 있으신가요?",
+    date: "2025-01-17",
   },
 ];
 
@@ -54,27 +59,45 @@ const RecentInterests = ({ hasHistory = false, onQuestionClick }: RecentInterest
         <h2 className="text-base font-bold text-foreground">{title}</h2>
       </div>
       <div className="space-y-3">
-        {displayItems.map((item) => (
-          <div 
-            key={item.id} 
-            className="bg-blue-light rounded-xl p-4 transition-shadow hover:shadow-md"
-          >
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-foreground mb-0.5">{item.title}</h3>
-                <p className="text-sm text-muted-foreground truncate">{item.description}</p>
+        {displayItems.map((item) => {
+          const formatDate = (dateStr?: string) => {
+            if (!dateStr) return null;
+            const date = parseISO(dateStr);
+            if (isToday(date)) return "오늘";
+            if (isYesterday(date)) return "어제";
+            return format(date, "M월 d일", { locale: ko });
+          };
+
+          return (
+            <div 
+              key={item.id} 
+              className="bg-blue-light rounded-xl p-4 transition-shadow hover:shadow-md"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <h3 className="font-semibold text-foreground">{item.title}</h3>
+                    {item.date && (
+                      <span className="inline-flex items-center gap-1 text-xs text-muted-foreground bg-white/60 px-2 py-0.5 rounded-full">
+                        <Calendar className="w-3 h-3" />
+                        {formatDate(item.date)}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-sm text-muted-foreground truncate">{item.description}</p>
+                </div>
+                <Button
+                  size="sm"
+                  className="shrink-0 bg-primary hover:bg-lavender-dark text-primary-foreground gap-1 rounded-full px-4 h-8 text-xs"
+                  onClick={() => onQuestionClick?.(item.title)}
+                >
+                  질문하기
+                  <ArrowRight className="w-3 h-3" />
+                </Button>
               </div>
-              <Button
-                size="sm"
-                className="shrink-0 bg-primary hover:bg-lavender-dark text-primary-foreground gap-1 rounded-full px-4 h-8 text-xs"
-                onClick={() => onQuestionClick?.(item.title)}
-              >
-                질문하기
-                <ArrowRight className="w-3 h-3" />
-              </Button>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
