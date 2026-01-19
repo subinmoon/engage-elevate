@@ -93,7 +93,7 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingS
         >
           <Bell className="w-5 h-5 text-muted-foreground" />
           {schedules.length > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-primary text-primary-foreground text-xs font-bold rounded-full flex items-center justify-center px-1">
+            <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center px-1">
               {schedules.length}
             </span>
           )}
