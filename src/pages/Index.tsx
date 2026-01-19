@@ -7,7 +7,6 @@ import UpcomingSchedule from "@/components/UpcomingSchedule";
 import RecentInterests from "@/components/RecentInterests";
 import HRHelper from "@/components/HRHelper";
 import FavoriteChatbots from "@/components/FavoriteChatbots";
-import QuickActions from "@/components/QuickActions";
 import ChatInput from "@/components/ChatInput";
 import ChatView from "@/components/ChatView";
 import { generateScheduleResponse } from "@/data/scheduleData";
@@ -384,9 +383,12 @@ const Index = () => {
             />
           ) : (
             <>
-              {/* Header with Welcome */}
+              {/* Header with Welcome & Quick Actions */}
               <div className="mb-4">
-                <WelcomeHeader userName="현민" />
+                <WelcomeHeader 
+                  userName="현민" 
+                  onSelectAction={(template) => setPrefillMessage(template)}
+                />
               </div>
               
               {/* Main Content Grid */}
@@ -405,18 +407,13 @@ const Index = () => {
               </div>
               
               {/* Favorite Chatbots */}
-              <div className="mb-4">
+              <div className="mb-6">
                 <FavoriteChatbots 
                   hasHistory={chatHistory.length > 0}
                   onSelectChatbot={(chatbot) => {
                     setPrefillMessage(`${chatbot.name}에게 질문하기: `);
                   }}
                 />
-              </div>
-              
-              {/* Quick Actions - Above Chat Input */}
-              <div className="flex flex-wrap gap-2 mb-3">
-                <QuickActions onSelectAction={(template) => setPrefillMessage(template)} />
               </div>
               
               {/* Chat Input - Bottom */}
