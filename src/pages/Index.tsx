@@ -225,26 +225,25 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Top Header Area - spans full width, transparent */}
-      <div className="flex items-center px-4 py-2">
-        {/* Logo - always visible */}
-        <div className="flex items-center gap-2 shrink-0">
+      {/* Top Header Area - spans full width */}
+      <div className="flex items-center">
+        {/* Logo area - matches sidebar background */}
+        <div className={`flex items-center gap-2 shrink-0 px-4 py-2 ${sidebarOpen ? 'w-64 bg-card' : ''}`}>
           <img src={logoIcon} alt="Logo" className="w-8 h-8" />
           <span className="font-bold text-foreground">pear link</span>
+          {/* Sidebar close button - only when open */}
+          {sidebarOpen && (
+            <button 
+              onClick={() => setSidebarOpen(false)}
+              className="ml-auto p-1.5 hover:bg-muted rounded-lg transition-colors"
+            >
+              <PanelLeftClose className="w-4 h-4 text-muted-foreground" />
+            </button>
+          )}
         </div>
         
-        {/* Sidebar close button - only when open */}
-        {sidebarOpen && (
-          <button 
-            onClick={() => setSidebarOpen(false)}
-            className="ml-2 p-1.5 hover:bg-muted rounded-lg transition-colors"
-          >
-            <PanelLeftClose className="w-4 h-4 text-muted-foreground" />
-          </button>
-        )}
-        
         {/* Right side: HeaderNav + Schedule + User */}
-        <div className="flex-1 flex items-center justify-end gap-3">
+        <div className="flex-1 flex items-center justify-end gap-3 px-4 py-2">
           <HeaderNav />
           <UpcomingSchedule 
             isExpanded={scheduleExpanded} 
