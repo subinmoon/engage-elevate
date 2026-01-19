@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Calendar, Plane, Palmtree, X } from "lucide-react";
+import { Calendar, Plane, Palmtree, X, Bell } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -56,13 +56,15 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle }: UpcomingScheduleProp
       {/* Trigger Button - always visible in header */}
       <button
         onClick={onToggle}
-        className="bg-card/50 hover:bg-muted/50 rounded-full px-3 py-1.5 transition-all cursor-pointer flex items-center gap-2"
+        className="relative p-2 hover:bg-muted/50 rounded-lg transition-all cursor-pointer"
         title="일정 보기"
       >
-        <span className="text-lg">😊</span>
-        <span className="text-xs text-muted-foreground font-medium">
-          {schedules.length}개 일정
-        </span>
+        <Bell className="w-5 h-5 text-muted-foreground" />
+        {schedules.length > 0 && (
+          <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-primary text-primary-foreground text-xs font-bold rounded-full flex items-center justify-center px-1">
+            {schedules.length}
+          </span>
+        )}
       </button>
 
       {/* Schedule List Modal */}

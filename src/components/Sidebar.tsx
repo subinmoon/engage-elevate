@@ -272,15 +272,6 @@ const Sidebar = ({
           </div>
         </nav>
 
-        {/* User Profile */}
-        <div className="p-4 border-t border-border">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium text-primary">
-              문
-            </div>
-            <span className="text-sm font-medium text-foreground">문수빈</span>
-          </div>
-        </div>
       </div>
     </aside>
   );
