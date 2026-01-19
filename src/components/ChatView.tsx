@@ -90,12 +90,12 @@ const ChatView = ({ messages, onSendMessage, isLoading, onRegenerate }: ChatView
   }, [messages.length, isNearBottom]);
 
   return (
-    <div className="flex flex-col h-full min-h-[calc(100vh-48px)]">
+    <div className="flex flex-col h-[calc(100vh-120px)] max-h-[calc(100vh-120px)]">
       {/* Messages */}
       <div 
         ref={scrollRef}
         onScroll={handleScroll}
-        className="flex-1 overflow-y-auto pb-4 space-y-2">
+        className="flex-1 overflow-y-auto pb-4 space-y-2 min-h-0">
         {messages.map((message, index) => (
           <ChatMessage
             key={message.id}
