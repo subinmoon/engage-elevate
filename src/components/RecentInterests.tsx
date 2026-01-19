@@ -1,16 +1,10 @@
-import { Star, ArrowRight, TrendingUp, Lightbulb } from "lucide-react";
+import { Star, ArrowRight, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface InterestItem {
   id: string;
   title: string;
   description: string;
-}
-
-interface PopularQuestion {
-  id: string;
-  title: string;
-  icon: React.ReactNode;
 }
 
 // 실제 대화 이력이 있을 때 표시할 데이터
@@ -27,12 +21,18 @@ const interests: InterestItem[] = [
   },
 ];
 
-// 첫 진입 시 표시할 인기 질문
-const popularQuestions: PopularQuestion[] = [
-  { id: "1", title: "휴가 신청은 어떻게 하나요?", icon: <Lightbulb className="w-4 h-4 text-primary" /> },
-  { id: "2", title: "복지 포인트 사용처가 궁금해요", icon: <TrendingUp className="w-4 h-4 text-primary" /> },
-  { id: "3", title: "출장비 정산 방법 알려주세요", icon: <Lightbulb className="w-4 h-4 text-primary" /> },
-  { id: "4", title: "신규 입사자 체크리스트", icon: <TrendingUp className="w-4 h-4 text-primary" /> },
+// 첫 진입 시 표시할 인기 질문 (다른 임직원들이 자주 묻는 질문)
+const popularQuestions: InterestItem[] = [
+  {
+    id: "1",
+    title: "휴가 신청 방법",
+    description: "다른 임직원들이 가장 많이 물어본 질문이에요!",
+  },
+  {
+    id: "2",
+    title: "복지 포인트 사용처",
+    description: "복지 포인트 어디서 쓸 수 있는지 궁금하시죠?",
+  },
 ];
 
 interface RecentInterestsProps {
@@ -41,45 +41,20 @@ interface RecentInterestsProps {
 }
 
 const RecentInterests = ({ hasHistory = false, onQuestionClick }: RecentInterestsProps) => {
-  if (!hasHistory) {
-    // 첫 진입 시: 인기 질문 표시
-    return (
-      <div className="bg-white rounded-2xl p-5 shadow-soft">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-8 h-8 rounded-lg bg-lavender-light flex items-center justify-center">
-            <Lightbulb className="w-4 h-4 text-primary" />
-          </div>
-          <h2 className="text-base font-bold text-foreground">이런 것도 물어보세요</h2>
-        </div>
-        <div className="grid grid-cols-2 gap-2">
-          {popularQuestions.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => onQuestionClick?.(item.title)}
-              className="flex items-center gap-2 bg-lavender-light hover:bg-primary/20 rounded-xl p-3 text-left transition-all hover:shadow-md group"
-            >
-              <span className="shrink-0">{item.icon}</span>
-              <span className="text-sm text-foreground group-hover:text-primary truncate">
-                {item.title}
-              </span>
-            </button>
-          ))}
-        </div>
-      </div>
-    );
-  }
+  const displayItems = hasHistory ? interests : popularQuestions;
+  const title = hasHistory ? "최근 관심사" : "다른 임직원들은 이런걸 자주 물어봐요!";
+  const icon = hasHistory ? <Star className="w-4 h-4 text-primary" /> : <TrendingUp className="w-4 h-4 text-primary" />;
 
-  // 대화 이력이 있을 때: 최근 관심사 표시
   return (
     <div className="bg-white rounded-2xl p-5 shadow-soft">
       <div className="flex items-center gap-2 mb-4">
         <div className="w-8 h-8 rounded-lg bg-lavender-light flex items-center justify-center">
-          <Star className="w-4 h-4 text-primary" />
+          {icon}
         </div>
-        <h2 className="text-base font-bold text-foreground">최근 관심사</h2>
+        <h2 className="text-base font-bold text-foreground">{title}</h2>
       </div>
       <div className="space-y-3">
-        {interests.map((item) => (
+        {displayItems.map((item) => (
           <div 
             key={item.id} 
             className="bg-blue-light rounded-xl p-4 transition-shadow hover:shadow-md"
