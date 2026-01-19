@@ -41,6 +41,29 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingS
     }
   };
 
+  const getMessageStyle = (type: ScheduleItem["type"]) => {
+    switch (type) {
+      case "vacation":
+        return {
+          bg: "from-green-100/80 via-green-50/60 to-green-100/40",
+          bar: "from-green-500 to-green-400",
+          text: "text-green-700"
+        };
+      case "business":
+        return {
+          bg: "from-blue-100/80 via-blue-50/60 to-blue-100/40",
+          bar: "from-blue-500 to-blue-400",
+          text: "text-blue-700"
+        };
+      default:
+        return {
+          bg: "from-primary/15 via-lavender/20 to-primary/10",
+          bar: "from-primary to-lavender",
+          text: "text-foreground/80"
+        };
+    }
+  };
+
   const getTypeLabel = (type: ScheduleItem["type"]) => {
     switch (type) {
       case "vacation":
@@ -138,16 +161,19 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingS
                   )}
                 </div>
                 
-                {/* Message - Highlighted style */}
-                {schedule.message && (
-                  <div className="mt-2 relative overflow-hidden rounded-lg">
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary/15 via-lavender/20 to-primary/10" />
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-lavender" />
-                    <p className="relative text-[11px] text-foreground/80 font-medium px-3 py-2 leading-relaxed">
-                      {schedule.message}
-                    </p>
-                  </div>
-                )}
+                {/* Message - Highlighted style with type-based colors */}
+                {schedule.message && (() => {
+                  const msgStyle = getMessageStyle(schedule.type);
+                  return (
+                    <div className="mt-2 relative overflow-hidden rounded-lg">
+                      <div className={`absolute inset-0 bg-gradient-to-r ${msgStyle.bg}`} />
+                      <div className={`absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b ${msgStyle.bar}`} />
+                      <p className={`relative text-[11px] font-medium px-3 py-2 leading-relaxed ${msgStyle.text}`}>
+                        {schedule.message}
+                      </p>
+                    </div>
+                  );
+                })()}
               </button>
 
               {/* Expanded Detail Section */}
