@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Bot, Star, ArrowRight, Plus, Sparkles } from "lucide-react";
 import { chatbotServices, ChatbotService } from "@/data/chatbotServices";
 import { Button } from "@/components/ui/button";
@@ -8,10 +9,29 @@ interface FavoriteChatbotsProps {
 }
 
 const FavoriteChatbots = ({ onSelectChatbot, hasHistory = false }: FavoriteChatbotsProps) => {
-  const favoriteChatbots = chatbotServices.filter(c => c.isFavorite);
+  const [showList, setShowList] = useState(false);
+  const [services, setServices] = useState<ChatbotService[]>([]);
+
+  useEffect(() => {
+    // Load favorites from localStorage
+    const savedFavorites = localStorage.getItem("favoriteServices");
+    if (savedFavorites) {
+      const favoriteIds = JSON.parse(savedFavorites) as string[];
+      setServices(
+        chatbotServices.map((s) => ({
+          ...s,
+          isFavorite: favoriteIds.includes(s.id),
+        }))
+      );
+    } else {
+      setServices(chatbotServices);
+    }
+  }, []);
+
+  const favoriteChatbots = services.filter(c => c.isFavorite);
 
   // 첫 진입 시 또는 즐겨찾기가 없을 때 빈 상태 표시
-  if (!hasHistory || favoriteChatbots.length === 0) {
+  if (!hasHistory && !showList) {
     return (
       <div className="bg-card rounded-2xl p-4 shadow-soft">
         <div className="flex items-center justify-between">
@@ -31,6 +51,7 @@ const FavoriteChatbots = ({ onSelectChatbot, hasHistory = false }: FavoriteChatb
               variant="outline"
               size="sm"
               className="gap-1.5 border-primary/30 text-primary hover:bg-primary/10 h-8 text-xs"
+              onClick={() => setShowList(true)}
             >
               <Plus className="w-3.5 h-3.5" />
               챗봇 만들기
@@ -38,6 +59,23 @@ const FavoriteChatbots = ({ onSelectChatbot, hasHistory = false }: FavoriteChatb
             </Button>
           </div>
         </div>
+      </div>
+    );
+  }
+
+  // 즐겨찾기 없을 때
+  if (favoriteChatbots.length === 0) {
+    return (
+      <div className="bg-card rounded-2xl p-5 shadow-soft">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-8 h-8 rounded-lg bg-lavender-light flex items-center justify-center">
+            <Bot className="w-4 h-4 text-primary" />
+          </div>
+          <h2 className="text-base font-semibold text-foreground">즐겨찾는 챗봇</h2>
+        </div>
+        <p className="text-sm text-muted-foreground text-center py-4">
+          즐겨찾는 챗봇이 없습니다. 헤더의 ⭐ 버튼에서 추가해보세요!
+        </p>
       </div>
     );
   }
