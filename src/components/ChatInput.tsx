@@ -1,6 +1,12 @@
-import { useState, useEffect } from "react";
-import { Plus, Globe, ChevronDown, Send } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Plus, Globe, ChevronDown, Send, Paperclip, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const responseTypes = [
   { id: "concise", label: "간결" },
@@ -53,20 +59,33 @@ const ChatInput = ({ onSendMessage, disabled, initialMessage, onMessageChange }:
       </div>
       <div className="flex items-center justify-between px-4 pb-4 pt-2">
         <div className="flex items-center gap-1.5 flex-wrap">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="rounded-full h-8 w-8 p-0 hover:bg-muted"
+              >
+                <Plus className="w-4 h-4 text-muted-foreground" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="bg-background border shadow-lg z-50">
+              <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+                <Globe className="w-4 h-4" />
+                <span>Web Search</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+                <FileText className="w-4 h-4" />
+                <span>사규</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Button
             variant="ghost"
             size="sm"
             className="rounded-full h-8 w-8 p-0 hover:bg-muted"
           >
-            <Plus className="w-4 h-4 text-muted-foreground" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="rounded-full gap-1.5 hover:bg-muted text-muted-foreground h-8 px-3 text-xs"
-          >
-            <Globe className="w-3.5 h-3.5" />
-            Web Search
+            <Paperclip className="w-4 h-4 text-muted-foreground" />
           </Button>
           <Button
             variant="ghost"
