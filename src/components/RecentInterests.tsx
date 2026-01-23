@@ -51,15 +51,15 @@ const RecentInterests = ({ hasHistory = false, onQuestionClick }: RecentInterest
   const icon = hasHistory ? <Star className="w-4 h-4 text-primary" /> : <TrendingUp className="w-4 h-4 text-primary" />;
 
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-soft">
-      <div className="flex items-center gap-2 mb-4">
-        <div className="w-8 h-8 rounded-lg bg-lavender-light flex items-center justify-center">
+    <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-5 shadow-soft">
+      <div className="flex items-center gap-2 mb-2 sm:mb-4">
+        <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-lavender-light flex items-center justify-center">
           {icon}
         </div>
-        <h2 className="text-base font-bold text-foreground">{title}</h2>
+        <h2 className="text-sm sm:text-base font-bold text-foreground">{title}</h2>
       </div>
-      <div className="space-y-3">
-        {displayItems.map((item) => {
+      <div className="space-y-2 sm:space-y-3">
+        {displayItems.slice(0, 2).map((item) => {
           const formatDate = (dateStr?: string) => {
             if (!dateStr) return null;
             const date = parseISO(dateStr);
@@ -71,27 +71,27 @@ const RecentInterests = ({ hasHistory = false, onQuestionClick }: RecentInterest
           return (
             <div 
               key={item.id} 
-              className="bg-blue-light rounded-xl p-4 transition-shadow hover:shadow-md"
+              className="bg-blue-light rounded-lg sm:rounded-xl p-2.5 sm:p-4 transition-shadow hover:shadow-md"
             >
-              <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center justify-between gap-2 sm:gap-3">
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <h3 className="font-semibold text-foreground">{item.title}</h3>
+                  <div className="flex items-center gap-1.5 sm:gap-2 mb-0.5">
+                    <h3 className="font-semibold text-foreground text-sm sm:text-base">{item.title}</h3>
                     {item.date && (
-                      <span className="inline-flex items-center gap-1 text-xs text-muted-foreground bg-white/60 px-2 py-0.5 rounded-full">
+                      <span className="hidden sm:inline-flex items-center gap-1 text-xs text-muted-foreground bg-white/60 px-2 py-0.5 rounded-full">
                         <Calendar className="w-3 h-3" />
                         {formatDate(item.date)}
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-muted-foreground truncate">{item.description}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground truncate">{item.description}</p>
                 </div>
                 <Button
                   size="sm"
-                  className="shrink-0 bg-primary hover:bg-lavender-dark text-primary-foreground gap-1 rounded-full px-4 h-8 text-xs"
+                  className="shrink-0 bg-primary hover:bg-lavender-dark text-primary-foreground gap-1 rounded-full px-2.5 sm:px-4 h-7 sm:h-8 text-xs"
                   onClick={() => onQuestionClick?.(item.title)}
                 >
-                  질문하기
+                  <span className="hidden sm:inline">질문하기</span>
                   <ArrowRight className="w-3 h-3" />
                 </Button>
               </div>
