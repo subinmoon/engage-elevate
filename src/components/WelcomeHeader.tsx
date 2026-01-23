@@ -85,27 +85,27 @@ const WelcomeHeader = ({ userName = "현민", onSelectAction }: WelcomeHeaderPro
   };
 
   return (
-    <div className="w-full mb-4">
+    <div className="w-full mb-2 sm:mb-4">
       {/* Welcome Message */}
-      <div className="flex items-center gap-4 mb-4">
-        <img src={logoIcon} alt="Logo" className="w-12 h-12" />
-        <h1 className="text-2xl font-bold text-foreground">
+      <div className="flex items-center gap-2 sm:gap-4 mb-2 sm:mb-4">
+        <img src={logoIcon} alt="Logo" className="w-8 h-8 sm:w-12 sm:h-12" />
+        <h1 className="text-lg sm:text-2xl font-bold text-foreground">
           <span className="text-gradient-name">{userName}</span>님, {greeting}
         </h1>
       </div>
 
-      {/* Quick Actions */}
-      <div className="flex flex-wrap gap-2">
+      {/* Quick Actions - horizontal scroll on mobile */}
+      <div className="flex gap-2 overflow-x-auto pb-1 sm:pb-0 sm:flex-wrap scrollbar-hide">
         {actions.map((action) => (
           <button
             key={action.id}
             onClick={() => handleActionClick(action)}
-            className="bg-card border border-border rounded-full py-2 px-4 flex items-center gap-2 transition-all duration-200 hover:shadow-soft hover:bg-muted/50 active:scale-[0.98]"
+            className="bg-card border border-border rounded-full py-1.5 sm:py-2 px-3 sm:px-4 flex items-center gap-1.5 sm:gap-2 transition-all duration-200 hover:shadow-soft hover:bg-muted/50 active:scale-[0.98] shrink-0"
           >
             <div className={`${action.iconColor}`}>
               {action.icon}
             </div>
-            <span className="text-sm font-medium text-foreground">
+            <span className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">
               {action.label}
             </span>
           </button>
