@@ -37,31 +37,25 @@ const FavoriteChatbots = ({ onSelectChatbot, hasHistory = false }: FavoriteChatb
   // 첫 진입 시 또는 즐겨찾기가 없을 때 빈 상태 표시
   if (!hasHistory && !showList) {
     return (
-      <div className="bg-card rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-soft">
+      <div className="bg-card rounded-xl sm:rounded-2xl p-2 sm:p-4 shadow-soft">
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-lavender-light flex items-center justify-center">
-              <Bot className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-primary" />
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg bg-lavender-light flex items-center justify-center">
+              <Bot className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-primary" />
             </div>
-            <h2 className="text-xs sm:text-sm font-semibold text-foreground">즐겨찾는 챗봇</h2>
+            <h2 className="text-[11px] sm:text-sm font-semibold text-foreground">즐겨찾는 챗봇</h2>
           </div>
           
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className="hidden sm:flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-sm text-muted-foreground">나만의 챗봇을 만들어보세요~</span>
-            </div>
-            <Button 
-              variant="outline"
-              size="sm"
-              className="gap-1 sm:gap-1.5 border-primary/30 text-primary hover:bg-primary/10 h-7 sm:h-8 text-xs px-2 sm:px-3"
-              onClick={() => setShowList(true)}
-            >
-              <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-              <span className="hidden sm:inline">챗봇 만들기</span>
-              <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-            </Button>
-          </div>
+          <Button 
+            variant="outline"
+            size="sm"
+            className="gap-1 border-primary/30 text-primary hover:bg-primary/10 h-6 sm:h-8 text-[10px] sm:text-xs px-2"
+            onClick={() => setShowList(true)}
+          >
+            <Plus className="w-3 h-3" />
+            <span className="hidden xs:inline">만들기</span>
+            <ArrowRight className="w-3 h-3" />
+          </Button>
         </div>
       </div>
     );

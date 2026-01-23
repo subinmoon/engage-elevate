@@ -307,34 +307,34 @@ const Index = () => {
 
         {/* Main Content */}
         <main className="flex-1 bg-background overflow-hidden">
-          <div className="max-w-5xl mx-auto px-3 sm:px-6 py-3 sm:py-6 w-full h-full flex flex-col">
+          <div className="max-w-5xl mx-auto px-2 sm:px-6 py-2 sm:py-6 w-full h-[calc(100vh-52px)] sm:h-auto flex flex-col">
           {isChatMode ? <ChatView messages={messages} onSendMessage={handleSendMessage} isLoading={isLoading} onRegenerate={handleRegenerate} /> : <>
               {/* Header with Welcome & Quick Actions */}
-              <div className="mb-2 sm:mb-4 shrink-0">
+              <div className="mb-1.5 sm:mb-4 shrink-0">
                 <WelcomeHeader userName="현민" onSelectAction={template => setPrefillMessage(template)} />
               </div>
               
-              {/* Main Content Grid - flex on mobile for better fit */}
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-2 sm:gap-4 mb-2 sm:mb-4 flex-1 min-h-0">
-                <div className="lg:col-span-3">
+              {/* Main Content - Stack on mobile, grid on desktop */}
+              <div className="flex-1 flex flex-col sm:grid sm:grid-cols-5 gap-1.5 sm:gap-4 min-h-0 overflow-hidden">
+                <div className="sm:col-span-3 min-h-0">
                   <RecentInterests hasHistory={chatHistory.length > 0} onQuestionClick={question => {
                   setPrefillMessage(question);
                 }} />
                 </div>
-                <div className="lg:col-span-2">
+                <div className="sm:col-span-2 min-h-0">
                   <HRHelper />
                 </div>
               </div>
               
               {/* Favorite Chatbots */}
-              <div className="mb-2 sm:mb-6 shrink-0">
+              <div className="my-1.5 sm:my-4 shrink-0">
                 <FavoriteChatbots hasHistory={chatHistory.length > 0} onSelectChatbot={chatbot => {
                 setPrefillMessage(`${chatbot.name}에게 질문하기: `);
               }} />
               </div>
               
               {/* Chat Input - Bottom */}
-              <div className="shrink-0 mt-auto">
+              <div className="shrink-0 mt-auto pb-1 sm:pb-0">
                 <ChatInput onSendMessage={msg => {
                 handleSendMessage(msg);
                 setPrefillMessage("");

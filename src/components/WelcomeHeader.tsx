@@ -85,27 +85,27 @@ const WelcomeHeader = ({ userName = "현민", onSelectAction }: WelcomeHeaderPro
   };
 
   return (
-    <div className="w-full mb-2 sm:mb-4">
+    <div className="w-full">
       {/* Welcome Message */}
-      <div className="flex items-center gap-2 sm:gap-4 mb-2 sm:mb-4">
-        <img src={logoIcon} alt="Logo" className="w-8 h-8 sm:w-12 sm:h-12" />
-        <h1 className="text-lg sm:text-2xl font-bold text-foreground">
+      <div className="flex items-center gap-2 mb-1.5 sm:mb-4">
+        <img src={logoIcon} alt="Logo" className="w-7 h-7 sm:w-12 sm:h-12" />
+        <h1 className="text-base sm:text-2xl font-bold text-foreground">
           <span className="text-gradient-name">{userName}</span>님, {greeting}
         </h1>
       </div>
 
       {/* Quick Actions - horizontal scroll on mobile */}
-      <div className="flex gap-2 overflow-x-auto pb-1 sm:pb-0 sm:flex-wrap scrollbar-hide">
+      <div className="flex gap-1.5 overflow-x-auto pb-0.5 sm:pb-0 sm:flex-wrap sm:gap-2 scrollbar-hide -mx-1 px-1">
         {actions.map((action) => (
           <button
             key={action.id}
             onClick={() => handleActionClick(action)}
-            className="bg-card border border-border rounded-full py-1.5 sm:py-2 px-3 sm:px-4 flex items-center gap-1.5 sm:gap-2 transition-all duration-200 hover:shadow-soft hover:bg-muted/50 active:scale-[0.98] shrink-0"
+            className="bg-card border border-border rounded-full py-1 sm:py-2 px-2.5 sm:px-4 flex items-center gap-1 sm:gap-2 transition-all duration-200 hover:shadow-soft hover:bg-muted/50 active:scale-[0.98] shrink-0"
           >
-            <div className={`${action.iconColor}`}>
+            <div className={`${action.iconColor} [&>svg]:w-3.5 [&>svg]:h-3.5 sm:[&>svg]:w-4 sm:[&>svg]:h-4`}>
               {action.icon}
             </div>
-            <span className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">
+            <span className="text-[11px] sm:text-sm font-medium text-foreground whitespace-nowrap">
               {action.label}
             </span>
           </button>
