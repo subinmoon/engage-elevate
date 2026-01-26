@@ -57,10 +57,15 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        lavender: {
-          DEFAULT: "hsl(var(--lavender))",
-          light: "hsl(var(--lavender-light))",
-          dark: "hsl(var(--lavender-dark))",
+        "isu-blue": {
+          DEFAULT: "hsl(var(--isu-blue))",
+          light: "hsl(var(--isu-blue-light))",
+          dark: "hsl(var(--isu-blue-dark))",
+        },
+        "isu-green": {
+          DEFAULT: "hsl(var(--isu-green))",
+          light: "hsl(var(--isu-green-light))",
+          dark: "hsl(var(--isu-green-dark))",
         },
         "blue-light": "hsl(var(--blue-light))",
         mint: {
