@@ -119,7 +119,7 @@ const ChatInput = ({ onSendMessage, disabled, initialMessage, onMessageChange }:
           size="icon"
           className={`rounded-full h-8 w-8 sm:h-10 sm:w-10 transition-colors flex-shrink-0 ${
             message.trim() && !disabled
-              ? "bg-primary hover:bg-lavender-dark text-primary-foreground" 
+              ? "bg-accent hover:bg-isu-green-dark text-accent-foreground" 
               : "bg-muted text-muted-foreground"
           }`}
           disabled={!message.trim() || disabled}
