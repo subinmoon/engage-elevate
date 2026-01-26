@@ -53,7 +53,7 @@ const RecentInterests = ({ hasHistory = false, onQuestionClick }: RecentInterest
   return (
     <div className="bg-white rounded-xl sm:rounded-2xl p-2.5 sm:p-5 shadow-soft h-full">
       <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-4">
-        <div className="w-5 h-5 sm:w-8 sm:h-8 rounded-md sm:rounded-lg bg-lavender-light flex items-center justify-center">
+        <div className="w-5 h-5 sm:w-8 sm:h-8 rounded-md sm:rounded-lg bg-isu-blue-light flex items-center justify-center">
           <div className="[&>svg]:w-3 [&>svg]:h-3 sm:[&>svg]:w-4 sm:[&>svg]:h-4">{icon}</div>
         </div>
         <h2 className="text-xs sm:text-base font-bold text-foreground line-clamp-1">{title}</h2>
@@ -80,7 +80,7 @@ const RecentInterests = ({ hasHistory = false, onQuestionClick }: RecentInterest
                 </div>
                 <Button
                   size="sm"
-                  className="shrink-0 bg-primary hover:bg-lavender-dark text-primary-foreground rounded-full px-2 sm:px-4 h-6 sm:h-8 text-[10px] sm:text-xs"
+                  className="shrink-0 bg-accent hover:bg-isu-green-dark text-accent-foreground rounded-full px-2 sm:px-4 h-6 sm:h-8 text-[10px] sm:text-xs"
                   onClick={() => onQuestionClick?.(item.title)}
                 >
                   <ArrowRight className="w-3 h-3" />
