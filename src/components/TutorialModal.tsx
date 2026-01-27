@@ -699,7 +699,7 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
   return (
     <Dialog open={open}>
       <DialogContent 
-        className="sm:max-w-2xl w-[95vw] h-[600px] overflow-hidden p-0 border-none bg-gradient-to-br from-sky-50 via-white to-sky-50/50" 
+        className="sm:max-w-xl w-[95vw] h-[520px] overflow-hidden p-0 border-none bg-gradient-to-br from-sky-50 via-white to-sky-50/50" 
         aria-describedby={undefined}
         overlayClassName="bg-black/40"
       >
@@ -708,18 +708,18 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
         </VisuallyHidden>
         
         <div className="flex h-full">
-          {/* 왼쪽: 마스코트 영역 */}
-          <div className="hidden sm:flex w-48 bg-gradient-to-b from-sky-100 to-sky-50 flex-col items-center justify-center border-r border-sky-200/50">
+          {/* 왼쪽: 마스코트 영역 - 데스크탑만 */}
+          <div className="hidden sm:flex w-40 bg-gradient-to-b from-sky-100 to-sky-50 flex-col items-center justify-center border-r border-sky-200/50">
             <LargeMascot emotion={currentEmotion()} />
-            <p className="mt-6 text-sm font-medium text-gray-600">이수 GPT</p>
+            <p className="mt-4 text-sm font-medium text-gray-600">이수 GPT</p>
             
             {/* 진행 표시 */}
-            <div className="mt-8 flex gap-1.5">
+            <div className="mt-6 flex gap-1.5">
               {[0, 1, 2, 3, 4].map((idx) => (
                 <div
                   key={idx}
                   className={cn(
-                    "w-2 h-2 rounded-full transition-all duration-300",
+                    "w-1.5 h-1.5 rounded-full transition-all duration-300",
                     idx <= getPhaseIndex() ? "bg-primary" : "bg-gray-300"
                   )}
                 />
@@ -730,7 +730,7 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
           {/* 오른쪽: 채팅 영역 */}
           <div className="flex-1 flex flex-col">
             {/* 헤더 */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white/80">
+            <div className="flex items-center justify-between px-3 py-2 border-b border-gray-100 bg-white/80">
               {canGoBack ? (
                 <button
                   onClick={handleGoBack}
@@ -743,7 +743,11 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
                 <div />
               )}
               
-              <span className="text-sm font-medium text-gray-600 sm:hidden">이수 GPT</span>
+              {/* 모바일: 헤더에 미니 마스코트 + 타이틀 */}
+              <div className="sm:hidden flex items-center gap-2">
+                <MiniMascot emotion={currentEmotion()} size="sm" />
+                <span className="text-sm font-medium text-gray-600">이수 GPT</span>
+              </div>
               
               <button
                 onClick={handleSkipAll}
@@ -757,14 +761,22 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
             {/* 채팅 내용 */}
             <div 
               ref={chatContainerRef}
-              className="flex-1 overflow-y-auto px-4 py-6 space-y-4"
+              className="flex-1 overflow-y-auto px-3 py-4 space-y-3"
             >
-              {/* 모바일에서 마스코트 표시 */}
-              <div className="sm:hidden flex justify-center pb-4">
-                <LargeMascot emotion={currentEmotion()} />
-              </div>
-              
               {renderCurrentStep()}
+            </div>
+            
+            {/* 모바일 진행 표시 */}
+            <div className="sm:hidden flex justify-center gap-1.5 py-2 border-t border-gray-100 bg-white/50">
+              {[0, 1, 2, 3, 4].map((idx) => (
+                <div
+                  key={idx}
+                  className={cn(
+                    "w-1.5 h-1.5 rounded-full transition-all duration-300",
+                    idx <= getPhaseIndex() ? "bg-primary" : "bg-gray-300"
+                  )}
+                />
+              ))}
             </div>
           </div>
         </div>
