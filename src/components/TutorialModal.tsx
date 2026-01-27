@@ -56,54 +56,131 @@ const lengthOptions = [
   { id: "detailed", label: "자세히" },
 ];
 
-// 귀여운 캐릭터 컴포넌트 (이수GPT 마스코트)
+// 고퀄리티 마스코트 캐릭터 컴포넌트
 function MascotCharacter({ className, emotion = "happy" }: { className?: string; emotion?: "happy" | "wave" | "excited" | "thinking" }) {
-  const eyeStyle = emotion === "thinking" ? "animate-pulse" : "";
-  const bodyAnimation = emotion === "wave" ? "animate-bounce" : emotion === "excited" ? "animate-pulse" : "";
-  
   return (
-    <div className={cn("relative", bodyAnimation, className)}>
-      {/* 캐릭터 몸통 */}
-      <div className="w-24 h-24 bg-gradient-to-br from-[#2AABE2] to-[#1E90B8] rounded-2xl shadow-lg relative">
-        {/* 하이라이트 */}
-        <div className="absolute top-2 left-2 w-6 h-6 bg-white/30 rounded-full blur-sm" />
-        
-        {/* 눈 */}
-        <div className="absolute top-8 left-4 flex gap-4">
-          <div className={cn("w-4 h-5 bg-white rounded-full flex items-center justify-center", eyeStyle)}>
-            <div className="w-2 h-2 bg-gray-800 rounded-full" />
+    <div className={cn("relative", className)}>
+      {/* 그림자 */}
+      <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-28 h-4 bg-black/10 rounded-[100%] blur-md" />
+      
+      {/* 메인 캐릭터 컨테이너 */}
+      <div className={cn(
+        "relative transition-transform duration-300",
+        emotion === "wave" && "animate-[bounce_1s_ease-in-out_infinite]",
+        emotion === "excited" && "animate-[wiggle_0.5s_ease-in-out_infinite]"
+      )}>
+        {/* 캐릭터 몸통 */}
+        <div className="w-32 h-32 relative">
+          {/* 메인 바디 - 3D 효과 */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#3BB8E8] via-[#2AABE2] to-[#1A8BC2] rounded-3xl shadow-2xl overflow-hidden">
+            {/* 광택 하이라이트 */}
+            <div className="absolute top-3 left-3 w-10 h-10 bg-white/40 rounded-full blur-md" />
+            <div className="absolute top-4 left-5 w-4 h-4 bg-white/60 rounded-full" />
+            
+            {/* 바디 하단 그라데이션 */}
+            <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-[#1A7BA8]/30 to-transparent" />
           </div>
-          <div className={cn("w-4 h-5 bg-white rounded-full flex items-center justify-center", eyeStyle)}>
-            <div className="w-2 h-2 bg-gray-800 rounded-full" />
+          
+          {/* 눈 컨테이너 */}
+          <div className="absolute top-10 left-1/2 -translate-x-1/2 flex gap-5">
+            {/* 왼쪽 눈 */}
+            <div className="relative">
+              <div className={cn(
+                "w-6 h-7 bg-white rounded-full shadow-inner flex items-center justify-center transition-all duration-200",
+                emotion === "thinking" && "h-5"
+              )}>
+                {/* 눈동자 */}
+                <div className={cn(
+                  "w-3 h-3 bg-gray-800 rounded-full relative transition-all duration-300",
+                  emotion === "thinking" && "translate-y-0.5 translate-x-0.5",
+                  emotion === "excited" && "scale-110"
+                )}>
+                  {/* 눈 반짝임 */}
+                  <div className="absolute top-0.5 left-0.5 w-1 h-1 bg-white rounded-full" />
+                </div>
+              </div>
+              {/* 눈썹 (thinking 상태) */}
+              {emotion === "thinking" && (
+                <div className="absolute -top-2 left-0 w-6 h-1 bg-[#1A7BA8] rounded-full transform -rotate-6" />
+              )}
+            </div>
+            
+            {/* 오른쪽 눈 */}
+            <div className="relative">
+              <div className={cn(
+                "w-6 h-7 bg-white rounded-full shadow-inner flex items-center justify-center transition-all duration-200",
+                emotion === "thinking" && "h-5"
+              )}>
+                <div className={cn(
+                  "w-3 h-3 bg-gray-800 rounded-full relative transition-all duration-300",
+                  emotion === "thinking" && "translate-y-0.5 -translate-x-0.5",
+                  emotion === "excited" && "scale-110"
+                )}>
+                  <div className="absolute top-0.5 left-0.5 w-1 h-1 bg-white rounded-full" />
+                </div>
+              </div>
+              {emotion === "thinking" && (
+                <div className="absolute -top-2 right-0 w-6 h-1 bg-[#1A7BA8] rounded-full transform rotate-6" />
+              )}
+            </div>
+          </div>
+          
+          {/* 볼터치 */}
+          <div className="absolute top-[4.5rem] left-4 w-4 h-2.5 bg-pink-400/40 rounded-full blur-[2px]" />
+          <div className="absolute top-[4.5rem] right-4 w-4 h-2.5 bg-pink-400/40 rounded-full blur-[2px]" />
+          
+          {/* 입 */}
+          <div className="absolute bottom-7 left-1/2 -translate-x-1/2">
+            {emotion === "happy" && (
+              <div className="w-8 h-4 border-b-[3px] border-white rounded-b-full" />
+            )}
+            {emotion === "wave" && (
+              <div className="w-10 h-5 bg-white/90 rounded-b-xl rounded-t-sm flex items-center justify-center">
+                <div className="w-4 h-2 bg-pink-300 rounded-full mt-1" />
+              </div>
+            )}
+            {emotion === "excited" && (
+              <div className="w-10 h-6 bg-white/90 rounded-full flex items-center justify-center">
+                <div className="w-5 h-3 bg-pink-300 rounded-full" />
+              </div>
+            )}
+            {emotion === "thinking" && (
+              <div className="w-4 h-4 bg-white/70 rounded-full" />
+            )}
           </div>
         </div>
         
-        {/* 입 */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
-          {emotion === "happy" || emotion === "excited" ? (
-            <div className="w-6 h-3 border-b-2 border-white rounded-b-full" />
-          ) : (
-            <div className="w-4 h-2 bg-white/60 rounded-full" />
-          )}
-        </div>
+        {/* 손 (wave 상태) */}
+        {emotion === "wave" && (
+          <div className="absolute -right-6 top-8 origin-bottom-left animate-[wave-hand_0.6s_ease-in-out_infinite_alternate]">
+            <div className="w-7 h-12 bg-gradient-to-br from-[#3BB8E8] to-[#1A8BC2] rounded-xl shadow-lg relative">
+              <div className="absolute top-1 left-1 w-2 h-2 bg-white/30 rounded-full" />
+            </div>
+          </div>
+        )}
         
-        {/* 볼터치 */}
-        <div className="absolute bottom-8 left-1 w-3 h-2 bg-pink-300/50 rounded-full" />
-        <div className="absolute bottom-8 right-1 w-3 h-2 bg-pink-300/50 rounded-full" />
+        {/* 반짝이 효과 (excited 상태) */}
+        {emotion === "excited" && (
+          <>
+            <div className="absolute -top-3 -right-3 animate-[sparkle_1s_ease-in-out_infinite]">
+              <Sparkles className="w-6 h-6 text-yellow-400 drop-shadow-lg" />
+            </div>
+            <div className="absolute -top-2 -left-4 animate-[sparkle_1s_ease-in-out_infinite_0.3s]">
+              <Sparkles className="w-5 h-5 text-yellow-300 drop-shadow-lg" />
+            </div>
+            <div className="absolute top-0 right-2 animate-[sparkle_1s_ease-in-out_infinite_0.6s]">
+              <Sparkles className="w-4 h-4 text-orange-300 drop-shadow-lg" />
+            </div>
+          </>
+        )}
+        
+        {/* 물음표 (thinking 상태) */}
+        {emotion === "thinking" && (
+          <div className="absolute -top-4 -right-2 animate-bounce">
+            <span className="text-2xl font-bold text-primary drop-shadow-md">?</span>
+          </div>
+        )}
       </div>
-      
-      {/* 손 인사 (wave 상태일 때) */}
-      {emotion === "wave" && (
-        <div className="absolute -right-3 top-6 w-5 h-8 bg-gradient-to-br from-[#2AABE2] to-[#1E90B8] rounded-lg transform rotate-12 animate-[wave_0.5s_ease-in-out_infinite_alternate] origin-bottom" />
-      )}
-      
-      {/* 반짝이 효과 */}
-      {emotion === "excited" && (
-        <>
-          <Sparkles className="absolute -top-2 -right-2 w-5 h-5 text-yellow-400 animate-pulse" />
-          <Sparkles className="absolute -top-1 -left-3 w-4 h-4 text-yellow-300 animate-pulse" style={{ animationDelay: "200ms" }} />
-        </>
-      )}
     </div>
   );
 }

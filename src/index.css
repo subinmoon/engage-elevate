@@ -139,3 +139,30 @@
   mask-composite: exclude;
   pointer-events: none;
 }
+
+/* 튜토리얼 캐릭터 애니메이션 */
+@keyframes wave-hand {
+  0% { transform: rotate(-5deg); }
+  100% { transform: rotate(20deg); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+@keyframes sparkle {
+  0%, 100% { 
+    opacity: 1; 
+    transform: scale(1) rotate(0deg); 
+  }
+  50% { 
+    opacity: 0.6; 
+    transform: scale(1.2) rotate(15deg); 
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
