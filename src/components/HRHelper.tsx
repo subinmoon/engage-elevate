@@ -13,23 +13,23 @@ const helpItems = [
 
 const HRHelper = () => {
   return (
-    <div className="bg-card rounded-xl sm:rounded-2xl p-2.5 sm:p-5 shadow-soft border border-border h-full">
-      <h2 className="text-xs sm:text-base font-bold text-foreground mb-1.5 sm:mb-4 flex items-center gap-1.5">
-        <span className="text-sm sm:text-base">🏢</span>
+    <div className="bg-card rounded-2xl p-5 shadow-soft border border-border">
+      <h2 className="text-base font-bold text-foreground mb-4 flex items-center gap-2">
+        <span>🏢</span>
         회사생활도우미
       </h2>
-      <div className="grid grid-cols-4 gap-0.5 sm:gap-2">
+      <div className="grid grid-cols-4 gap-2">
         {helpItems.map((item, index) => {
           const Icon = item.icon;
           return (
             <button
               key={index}
-              className="flex flex-col items-center gap-0.5 sm:gap-1 p-1 sm:p-3 rounded-lg hover:bg-muted/60 transition-all group"
+              className="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-muted/60 transition-all group"
             >
-              <div className={`w-7 h-7 sm:w-10 sm:h-10 rounded-lg ${item.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                <Icon className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
+              <div className={`w-10 h-10 rounded-xl ${item.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                <Icon className="w-5 h-5" />
               </div>
-              <span className="text-[9px] sm:text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors text-center leading-tight">
+              <span className="text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors text-center">
                 {item.label}
               </span>
             </button>

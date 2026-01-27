@@ -37,25 +37,31 @@ const FavoriteChatbots = ({ onSelectChatbot, hasHistory = false }: FavoriteChatb
   // 첫 진입 시 또는 즐겨찾기가 없을 때 빈 상태 표시
   if (!hasHistory && !showList) {
     return (
-      <div className="bg-card rounded-xl sm:rounded-2xl p-2 sm:p-4 shadow-soft">
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg bg-isu-green-light flex items-center justify-center">
-              <Bot className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-accent" />
+      <div className="bg-card rounded-2xl p-4 shadow-soft">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-lavender-light flex items-center justify-center">
+              <Bot className="w-3.5 h-3.5 text-primary" />
             </div>
-            <h2 className="text-[11px] sm:text-sm font-semibold text-foreground">즐겨찾는 챗봇</h2>
+            <h2 className="text-sm font-semibold text-foreground">즐겨찾는 챗봇</h2>
           </div>
           
-          <Button 
-            variant="outline"
-            size="sm"
-            className="gap-1 border-accent/50 text-accent hover:bg-accent/10 h-6 sm:h-8 text-[10px] sm:text-xs px-2"
-            onClick={() => setShowList(true)}
-          >
-            <Plus className="w-3 h-3" />
-            <span className="hidden xs:inline">만들기</span>
-            <ArrowRight className="w-3 h-3" />
-          </Button>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-primary" />
+              <span className="text-sm text-muted-foreground">나만의 챗봇을 만들어보세요~</span>
+            </div>
+            <Button 
+              variant="outline"
+              size="sm"
+              className="gap-1.5 border-primary/30 text-primary hover:bg-primary/10 h-8 text-xs"
+              onClick={() => setShowList(true)}
+            >
+              <Plus className="w-3.5 h-3.5" />
+              챗봇 만들기
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Button>
+          </div>
         </div>
       </div>
     );
@@ -66,8 +72,8 @@ const FavoriteChatbots = ({ onSelectChatbot, hasHistory = false }: FavoriteChatb
     return (
       <div className="bg-card rounded-2xl p-5 shadow-soft">
         <div className="flex items-center gap-2 mb-4">
-          <div className="w-8 h-8 rounded-lg bg-isu-green-light flex items-center justify-center">
-            <Bot className="w-4 h-4 text-accent" />
+          <div className="w-8 h-8 rounded-lg bg-lavender-light flex items-center justify-center">
+            <Bot className="w-4 h-4 text-primary" />
           </div>
           <h2 className="text-base font-semibold text-foreground">즐겨찾는 챗봇</h2>
         </div>
@@ -81,8 +87,8 @@ const FavoriteChatbots = ({ onSelectChatbot, hasHistory = false }: FavoriteChatb
   return (
     <div className="bg-card rounded-2xl p-5 shadow-soft">
       <div className="flex items-center gap-2 mb-4">
-        <div className="w-8 h-8 rounded-lg bg-isu-green-light flex items-center justify-center">
-          <Bot className="w-4 h-4 text-accent" />
+        <div className="w-8 h-8 rounded-lg bg-lavender-light flex items-center justify-center">
+          <Bot className="w-4 h-4 text-primary" />
         </div>
         <h2 className="text-base font-semibold text-foreground">즐겨찾는 챗봇</h2>
         <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
@@ -93,7 +99,7 @@ const FavoriteChatbots = ({ onSelectChatbot, hasHistory = false }: FavoriteChatb
           <button
             key={chatbot.id}
             onClick={() => onSelectChatbot?.(chatbot)}
-            className="group flex items-start gap-3 p-3 bg-muted/40 hover:bg-accent/10 rounded-xl transition-all text-left border border-transparent hover:border-accent/30"
+            className="group flex items-start gap-3 p-3 bg-muted/40 hover:bg-primary/10 rounded-xl transition-all text-left border border-transparent hover:border-primary/20"
           >
             <span className="text-xl shrink-0">{chatbot.icon}</span>
             <div className="flex-1 min-w-0">

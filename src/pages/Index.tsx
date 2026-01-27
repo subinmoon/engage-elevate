@@ -235,7 +235,7 @@ const Index = () => {
           </div>}
         
         {/* Right side: Chat controls OR HeaderNav + Schedule + User */}
-        <div className="flex-1 flex items-center gap-3 py-2 px-[12px]">
+        <div className="flex-1 flex items-center gap-3 px-4 py-2">
           {/* Chat mode: show chat controls on left side */}
           {isChatMode && <div className="flex items-center gap-2">
               <button onClick={handleBack} className="p-2 hover:bg-muted rounded-lg transition-colors">
@@ -306,40 +306,38 @@ const Index = () => {
         {!sidebarOpen && <SidebarTrigger onClick={() => setSidebarOpen(true)} />}
 
         {/* Main Content */}
-        <main className="flex-1 bg-background overflow-hidden">
-          <div className="max-w-5xl mx-auto px-2 sm:px-6 py-2 sm:py-6 w-full h-[calc(100vh-52px)] sm:h-auto flex flex-col">
+        <main className="flex-1 bg-background">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 w-full">
           {isChatMode ? <ChatView messages={messages} onSendMessage={handleSendMessage} isLoading={isLoading} onRegenerate={handleRegenerate} /> : <>
               {/* Header with Welcome & Quick Actions */}
-              <div className="mb-1.5 sm:mb-4 shrink-0">
+              <div className="mb-4">
                 <WelcomeHeader userName="현민" onSelectAction={template => setPrefillMessage(template)} />
               </div>
               
-              {/* Main Content - Stack on mobile, grid on desktop */}
-              <div className="flex-1 flex flex-col sm:grid sm:grid-cols-5 gap-1.5 sm:gap-4 min-h-0 overflow-hidden">
-                <div className="sm:col-span-3 min-h-0">
+              {/* Main Content Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
+                <div className="lg:col-span-3">
                   <RecentInterests hasHistory={chatHistory.length > 0} onQuestionClick={question => {
                   setPrefillMessage(question);
                 }} />
                 </div>
-                <div className="sm:col-span-2 min-h-0">
+                <div className="lg:col-span-2">
                   <HRHelper />
                 </div>
               </div>
               
               {/* Favorite Chatbots */}
-              <div className="my-1.5 sm:my-4 shrink-0">
+              <div className="mb-6">
                 <FavoriteChatbots hasHistory={chatHistory.length > 0} onSelectChatbot={chatbot => {
                 setPrefillMessage(`${chatbot.name}에게 질문하기: `);
               }} />
               </div>
               
               {/* Chat Input - Bottom */}
-              <div className="shrink-0 mt-auto pb-1 sm:pb-0">
-                <ChatInput onSendMessage={msg => {
-                handleSendMessage(msg);
-                setPrefillMessage("");
-              }} initialMessage={prefillMessage} onMessageChange={() => setPrefillMessage("")} />
-              </div>
+              <ChatInput onSendMessage={msg => {
+              handleSendMessage(msg);
+              setPrefillMessage("");
+            }} initialMessage={prefillMessage} onMessageChange={() => setPrefillMessage("")} />
             </>}
           </div>
         </main>

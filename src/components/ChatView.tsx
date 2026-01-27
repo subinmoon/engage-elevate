@@ -90,12 +90,12 @@ const ChatView = ({ messages, onSendMessage, isLoading, onRegenerate }: ChatView
   }, [messages.length, isNearBottom]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-120px)] max-h-[calc(100vh-120px)] relative">
+    <div className="flex flex-col h-[calc(100vh-120px)] max-h-[calc(100vh-120px)]">
       {/* Messages */}
       <div 
         ref={scrollRef}
         onScroll={handleScroll}
-        className="flex-1 overflow-y-auto pb-4 sm:pb-4 space-y-2 min-h-0 mb-[100px] sm:mb-0">
+        className="flex-1 overflow-y-auto pb-4 space-y-2 min-h-0">
         {messages.map((message, index) => (
           <ChatMessage
             key={message.id}
@@ -125,7 +125,7 @@ const ChatView = ({ messages, onSendMessage, isLoading, onRegenerate }: ChatView
 
       {/* Suggestions */}
       {!isLoading && messages.length > 0 && (
-        <div className="flex flex-wrap gap-2 pt-4 pb-[100px] sm:pb-0">
+        <div className="flex flex-wrap gap-2 pt-4">
           {suggestions.map((suggestion, index) => (
             <button
               key={index}
@@ -138,13 +138,8 @@ const ChatView = ({ messages, onSendMessage, isLoading, onRegenerate }: ChatView
         </div>
       )}
 
-      {/* Input - Floating on mobile */}
-      <div className="hidden sm:block mt-auto pt-4">
-        <ChatInput onSendMessage={onSendMessage} disabled={isLoading} />
-      </div>
-      
-      {/* Mobile floating input */}
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 p-3 bg-background/95 backdrop-blur-sm border-t border-border z-50">
+      {/* Input */}
+      <div className="mt-auto pt-4">
         <ChatInput onSendMessage={onSendMessage} disabled={isLoading} />
       </div>
     </div>
