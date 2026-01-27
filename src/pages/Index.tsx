@@ -55,10 +55,8 @@ const Index = () => {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [editTitleValue, setEditTitleValue] = useState("");
   
-  // Initial setup modal state
-  const [showSetupModal, setShowSetupModal] = useState(() => {
-    return !localStorage.getItem("userSettings");
-  });
+  // Initial setup modal state - always show on page load
+  const [showSetupModal, setShowSetupModal] = useState(true);
   const [userSettings, setUserSettings] = useState<UserSettings | null>(() => {
     const saved = localStorage.getItem("userSettings");
     return saved ? JSON.parse(saved) : null;
