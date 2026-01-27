@@ -129,50 +129,65 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
             </div>
           </div>
 
-          {/* Answer Length Selection - compact */}
-          <div className="flex items-center justify-between bg-white/60 rounded-lg p-3 border border-purple-100">
-            <label className="text-xs font-medium text-foreground flex items-center gap-1.5">
-              <span>📏</span> 답변 길이
-            </label>
-            <div className="flex bg-purple-100 rounded-full p-0.5">
-              {lengthOptions.map((option) => (
-                <button
-                  key={option.id}
-                  onClick={() => setAnswerLength(option.id)}
-                  className={cn(
-                    "px-3 py-1 text-xs font-medium rounded-full transition-all",
-                    answerLength === option.id
-                      ? "bg-gradient-to-r from-purple-500 to-pink-400 text-white shadow-sm"
-                      : "text-purple-500 hover:bg-purple-100"
-                  )}
-                >
-                  {option.label}
-                </button>
-              ))}
+          {/* Answer Length Selection */}
+          <div className="bg-white/60 rounded-lg p-3 border border-purple-100 space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-medium text-foreground flex items-center gap-1.5">
+                <span>📏</span> 답변 길이
+              </label>
+              <div className="flex bg-purple-100 rounded-full p-0.5">
+                {lengthOptions.map((option) => (
+                  <button
+                    key={option.id}
+                    onClick={() => setAnswerLength(option.id)}
+                    className={cn(
+                      "px-3 py-1 text-xs font-medium rounded-full transition-all",
+                      answerLength === option.id
+                        ? "bg-gradient-to-r from-purple-500 to-pink-400 text-white shadow-sm"
+                        : "text-purple-500 hover:bg-purple-100"
+                    )}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
             </div>
+            <p className="text-[10px] text-muted-foreground ml-5">
+              원하는 답변 스타일에 맞게 길이를 조절해요
+            </p>
           </div>
 
-          {/* Toggle Options - compact row */}
+          {/* Toggle Options */}
           <div className="grid grid-cols-2 gap-2">
-            <div className="flex items-center justify-between bg-white/60 rounded-lg p-3 border border-purple-100">
-              <label className="text-xs font-medium text-foreground flex items-center gap-1.5">
-                <span>🌐</span> 자동 검색
-              </label>
-              <Checkbox
-                checked={allowWebSearch}
-                onCheckedChange={(checked) => setAllowWebSearch(checked as boolean)}
-                className="border-purple-400 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
-              />
+            <div className="bg-white/60 rounded-lg p-3 border border-purple-100 space-y-1.5">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-medium text-foreground flex items-center gap-1.5">
+                  <span>🌐</span> 자동 검색
+                </label>
+                <Checkbox
+                  checked={allowWebSearch}
+                  onCheckedChange={(checked) => setAllowWebSearch(checked as boolean)}
+                  className="border-purple-400 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
+                />
+              </div>
+              <p className="text-[10px] text-muted-foreground leading-tight">
+                필요시 인터넷 검색을 자동으로 해요
+              </p>
             </div>
-            <div className="flex items-center justify-between bg-white/60 rounded-lg p-3 border border-purple-100">
-              <label className="text-xs font-medium text-foreground flex items-center gap-1.5">
-                <span>💡</span> 질문 추천
-              </label>
-              <Checkbox
-                checked={allowFollowUpQuestions}
-                onCheckedChange={(checked) => setAllowFollowUpQuestions(checked as boolean)}
-                className="border-purple-400 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
-              />
+            <div className="bg-white/60 rounded-lg p-3 border border-purple-100 space-y-1.5">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-medium text-foreground flex items-center gap-1.5">
+                  <span>💡</span> 질문 추천
+                </label>
+                <Checkbox
+                  checked={allowFollowUpQuestions}
+                  onCheckedChange={(checked) => setAllowFollowUpQuestions(checked as boolean)}
+                  className="border-purple-400 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
+                />
+              </div>
+              <p className="text-[10px] text-muted-foreground leading-tight">
+                대화 중 다음 질문을 추천해드려요
+              </p>
             </div>
           </div>
 
