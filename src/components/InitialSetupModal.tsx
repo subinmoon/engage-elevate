@@ -57,18 +57,18 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
 
   return (
     <Dialog open={open}>
-      <DialogContent className="sm:max-w-[480px] max-h-[85vh] overflow-y-auto p-0 border-none bg-gradient-to-br from-purple-50/80 via-white to-pink-50/50">
-        {/* Header with softer gradient */}
-        <div className="relative bg-gradient-to-r from-purple-400 via-purple-300 to-pink-300 px-6 py-5 text-center">
+      <DialogContent className="sm:max-w-[480px] max-h-[85vh] overflow-y-auto p-0 border-none bg-gradient-to-br from-purple-50/90 via-white to-pink-50/70">
+        {/* Header with balanced gradient */}
+        <div className="relative bg-gradient-to-r from-purple-500 via-purple-400 to-pink-400 px-6 py-5 text-center">
           <div className="relative">
             <div className="flex items-center justify-center gap-1.5 mb-2">
-              <Sparkles className="w-5 h-5 text-white/90 animate-pulse" />
+              <Sparkles className="w-5 h-5 text-yellow-200 animate-pulse" />
               <span className="text-2xl">✨</span>
             </div>
-            <h2 className="text-base font-bold text-white leading-relaxed drop-shadow-sm">
+            <h2 className="text-base font-bold text-white leading-relaxed">
               놓치기 쉬운 업무까지 먼저 알려주는 업무 비서,
               <br />
-              <span className="text-purple-50">이수 GPT</span>와 친해져봐요!
+              <span className="text-yellow-100">이수 GPT</span>와 친해져봐요!
             </h2>
           </div>
         </div>
@@ -142,8 +142,8 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
                   className={cn(
                     "px-3 py-1 text-xs font-medium rounded-full transition-all",
                     answerLength === option.id
-                      ? "bg-gradient-to-r from-purple-400 to-pink-300 text-white shadow-sm"
-                      : "text-purple-500 hover:bg-purple-100/50"
+                      ? "bg-gradient-to-r from-purple-500 to-pink-400 text-white shadow-sm"
+                      : "text-purple-500 hover:bg-purple-100"
                   )}
                 >
                   {option.label}
@@ -179,7 +179,7 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
           {/* Submit Button */}
           <Button
             onClick={handleSubmit}
-            className="w-full bg-gradient-to-r from-purple-400 to-pink-300 hover:from-purple-500 hover:to-pink-400 text-white py-5 text-sm font-semibold rounded-lg shadow-md shadow-purple-200/50 transition-all hover:shadow-lg hover:scale-[1.01]"
+            className="w-full bg-gradient-to-r from-purple-500 to-pink-400 hover:from-purple-600 hover:to-pink-500 text-white py-5 text-sm font-semibold rounded-lg shadow-md shadow-purple-300/40 transition-all hover:shadow-lg hover:scale-[1.01]"
           >
             🚀 대화 시작하기
           </Button>
