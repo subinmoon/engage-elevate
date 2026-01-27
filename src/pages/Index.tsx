@@ -235,7 +235,7 @@ const Index = () => {
           </div>}
         
         {/* Right side: Chat controls OR HeaderNav + Schedule + User */}
-        <div className="flex-1 flex items-center gap-3 px-4 py-2">
+        <div className="flex-1 flex items-center gap-3 py-2 px-[12px]">
           {/* Chat mode: show chat controls on left side */}
           {isChatMode && <div className="flex items-center gap-2">
               <button onClick={handleBack} className="p-2 hover:bg-muted rounded-lg transition-colors">
