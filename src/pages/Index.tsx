@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { Source } from "@/components/ChatMessage";
-import { InitialSetupModal } from "@/components/InitialSetupModal";
+import { TutorialModal } from "@/components/TutorialModal";
 
 interface Message {
   id: string;
@@ -65,6 +65,10 @@ const Index = () => {
   const handleSetupComplete = (settings: UserSettings) => {
     setUserSettings(settings);
     localStorage.setItem("userSettings", JSON.stringify(settings));
+    setShowSetupModal(false);
+  };
+
+  const handleSetupSkip = () => {
     setShowSetupModal(false);
   };
 
@@ -248,8 +252,13 @@ const Index = () => {
     setIsChatMode(false);
   };
   return <>
-    {/* Initial Setup Modal */}
-    <InitialSetupModal open={showSetupModal} onComplete={handleSetupComplete} />
+    {/* Tutorial Modal */}
+    <TutorialModal 
+      open={showSetupModal} 
+      onComplete={handleSetupComplete} 
+      onSkip={handleSetupSkip}
+      userName="경민"
+    />
     
     <div className="min-h-screen bg-background flex flex-col">
       {/* Top Header Area - spans full width */}
