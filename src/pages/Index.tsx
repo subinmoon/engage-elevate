@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import SidebarTrigger from "@/components/SidebarTrigger";
 import HeaderNav from "@/components/HeaderNav";
@@ -16,6 +16,8 @@ import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { Source } from "@/components/ChatMessage";
+import { InitialSetupModal } from "@/components/InitialSetupModal";
+
 interface Message {
   id: string;
   role: "user" | "assistant";
@@ -31,6 +33,15 @@ export interface ChatSession {
   archived?: boolean;
   pinned?: boolean;
 }
+
+interface UserSettings {
+  userName: string;
+  assistantName: string;
+  toneStyle: string;
+  answerLength: string;
+  allowWebSearch: boolean;
+  allowFollowUpQuestions: boolean;
+}
 const Index = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isChatMode, setIsChatMode] = useState(false);
@@ -43,6 +54,22 @@ const Index = () => {
   const [scheduleExpanded, setScheduleExpanded] = useState(false);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [editTitleValue, setEditTitleValue] = useState("");
+  
+  // Initial setup modal state
+  const [showSetupModal, setShowSetupModal] = useState(() => {
+    return !localStorage.getItem("userSettings");
+  });
+  const [userSettings, setUserSettings] = useState<UserSettings | null>(() => {
+    const saved = localStorage.getItem("userSettings");
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  const handleSetupComplete = (settings: UserSettings) => {
+    setUserSettings(settings);
+    localStorage.setItem("userSettings", JSON.stringify(settings));
+    setShowSetupModal(false);
+  };
+
   const handleSendMessage = (content: string) => {
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -222,7 +249,11 @@ const Index = () => {
     setChatTitle("새 대화");
     setIsChatMode(false);
   };
-  return <div className="min-h-screen bg-background flex flex-col">
+  return <>
+    {/* Initial Setup Modal */}
+    <InitialSetupModal open={showSetupModal} onComplete={handleSetupComplete} />
+    
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Top Header Area - spans full width */}
       <div className="flex items-center">
         {/* Logo area - matches sidebar background, hidden when sidebar closed */}
@@ -342,6 +373,7 @@ const Index = () => {
           </div>
         </main>
       </div>
-    </div>;
+    </div>
+  </>;
 };
 export default Index;
