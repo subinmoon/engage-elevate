@@ -16,7 +16,8 @@ import {
   Link,
   Home,
   Heart,
-  Star
+  Star,
+  Settings
 } from "lucide-react";
 import logoIcon from "@/assets/logo-icon.png";
 import { cn } from "@/lib/utils";
@@ -43,6 +44,7 @@ interface SidebarProps {
   onArchiveChat?: (chatId: string) => void;
   onDeleteChat?: (chatId: string) => void;
   hideHeader?: boolean;
+  onOpenSettings?: () => void;
 }
 
 const defaultChatHistory = [
@@ -69,7 +71,8 @@ const Sidebar = ({
   onPinChat,
   onArchiveChat,
   onDeleteChat,
-  hideHeader = false
+  hideHeader = false,
+  onOpenSettings
 }: SidebarProps) => {
   const [historyOpen, setHistoryOpen] = useState(true);
   const [chatbotOpen, setChatbotOpen] = useState(true);
@@ -272,6 +275,16 @@ const Sidebar = ({
           </div>
         </nav>
 
+        {/* Settings at bottom */}
+        <div className="p-3 border-t border-border">
+          <button 
+            onClick={onOpenSettings}
+            className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted rounded-xl transition-colors"
+          >
+            <Settings className="w-4 h-4" />
+            대화 설정
+          </button>
+        </div>
       </div>
     </aside>
   );
