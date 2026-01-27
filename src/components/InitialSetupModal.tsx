@@ -107,29 +107,34 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
   };
 
   // Assistant message bubble with animation
-  const AssistantMessage = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
-    <div 
-      className="flex gap-3 items-start animate-[fade-in_0.4s_ease-out_forwards,scale-in_0.3s_ease-out_forwards] opacity-0"
-      style={{ animationDelay: `${delay}ms` }}
-    >
-      <img 
-        src={logoIcon} 
-        alt="Assistant" 
-        className="w-8 h-8 rounded-full flex-shrink-0 animate-[bounce_0.5s_ease-out]" 
-        style={{ animationDelay: `${delay + 100}ms` }}
-      />
-      <div className="bg-muted rounded-2xl rounded-tl-md px-4 py-3 max-w-[85%]">
-        <p className="text-sm text-foreground leading-relaxed">{children}</p>
+  // NOTE: previously used custom keyframes (fade-in/scale-in) that don't exist -> content stayed opacity-0.
+  const AssistantMessage = forwardRef<HTMLDivElement, { children: React.ReactNode; delay?: number }>(
+    ({ children, delay = 0 }, ref) => (
+      <div
+        ref={ref}
+        className="flex items-start gap-3 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300"
+        style={{ animationDelay: `${delay}ms` }}
+      >
+        <img
+          src={logoIcon}
+          alt="Assistant"
+          className="w-8 h-8 rounded-full flex-shrink-0 motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-300"
+          style={{ animationDelay: `${delay + 100}ms` }}
+        />
+        <div className="bg-muted rounded-2xl rounded-tl-md px-4 py-3 max-w-[85%]">
+          <p className="text-sm text-foreground leading-relaxed">{children}</p>
+        </div>
       </div>
-    </div>
+    ),
   );
+  AssistantMessage.displayName = "AssistantMessage";
 
   // User input area with animation - using forwardRef to avoid ref warning
   const AnimatedInputArea = forwardRef<HTMLDivElement, { children: React.ReactNode; delay?: number }>(
     ({ children, delay = 200 }, ref) => (
       <div 
         ref={ref}
-        className="flex justify-end animate-[fade-in_0.3s_ease-out_forwards] opacity-0"
+        className="flex justify-end motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-200"
         style={{ animationDelay: `${delay}ms` }}
       >
         {children}
@@ -139,9 +144,9 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
   AnimatedInputArea.displayName = "AnimatedInputArea";
 
   const CompletedAnswer = ({ answer }: { answer: string }) => (
-    <div className="flex justify-end items-center gap-2 animate-[scale-in_0.3s_ease-out_forwards]">
-      <Check className="w-4 h-4 text-primary animate-[bounce_0.4s_ease-out]" />
-      <div className="bg-primary/10 text-primary rounded-full px-3 py-1.5 animate-[fade-in_0.2s_ease-out]">
+    <div className="flex justify-end items-center gap-2 motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 motion-safe:duration-200">
+      <Check className="w-4 h-4 text-primary" />
+      <div className="bg-primary/10 text-primary rounded-full px-3 py-1.5">
         <p className="text-sm font-medium">{answer}</p>
       </div>
     </div>
@@ -252,15 +257,15 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
                 저한테 어떤 느낌으로 말해줬으면 해요?
               </AssistantMessage>
               
-              {step === 3 ? (
-                <div className="space-y-2 animate-[fade-in_0.3s_ease-out_forwards] opacity-0" style={{ animationDelay: '200ms' }}>
+               {step === 3 ? (
+                 <div className="space-y-2 motion-safe:animate-in motion-safe:fade-in motion-safe:duration-300" style={{ animationDelay: "200ms" }}>
                   <div className="grid grid-cols-2 gap-2">
                     {toneOptions.map((option, idx) => (
                       <button
                         key={option.id}
                         onClick={() => setToneStyle(option.id)}
                         className={cn(
-                          "flex items-center gap-2 px-3 py-2.5 rounded-xl border-2 transition-all text-left animate-[scale-in_0.25s_ease-out_forwards] opacity-0",
+                           "flex items-center gap-2 px-3 py-2.5 rounded-xl border-2 transition-all text-left motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 motion-safe:duration-200",
                           toneStyle === option.id
                             ? "border-primary bg-primary/10"
                             : "border-border bg-card hover:border-primary/50"
@@ -293,8 +298,8 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
                 답변은 어느 정도 길이가 좋으세요?
               </AssistantMessage>
               
-              {step === 4 ? (
-                <div className="flex justify-end animate-[fade-in_0.3s_ease-out_forwards] opacity-0" style={{ animationDelay: '200ms' }}>
+               {step === 4 ? (
+                 <div className="flex justify-end motion-safe:animate-in motion-safe:fade-in motion-safe:duration-300" style={{ animationDelay: "200ms" }}>
                   <div className="flex bg-muted rounded-full p-1 gap-1">
                     {lengthOptions.map((option) => (
                       <button
@@ -325,11 +330,11 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
                 거의 다 왔어요~! 🎉 마지막으로 몇 가지만 더요!
               </AssistantMessage>
               
-              <div className="space-y-2 animate-[fade-in_0.3s_ease-out_forwards] opacity-0" style={{ animationDelay: '200ms' }}>
+               <div className="space-y-2 motion-safe:animate-in motion-safe:fade-in motion-safe:duration-300" style={{ animationDelay: "200ms" }}>
                 <button
                   onClick={() => setAllowWebSearch(!allowWebSearch)}
                   className={cn(
-                    "w-full flex items-center justify-between px-4 py-3 rounded-xl border-2 transition-all text-left animate-[scale-in_0.25s_ease-out_forwards] opacity-0",
+                     "w-full flex items-center justify-between px-4 py-3 rounded-xl border-2 transition-all text-left motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 motion-safe:duration-200",
                     allowWebSearch
                       ? "border-primary bg-primary/10"
                       : "border-border bg-card"
@@ -352,7 +357,7 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
                 <button
                   onClick={() => setAllowFollowUpQuestions(!allowFollowUpQuestions)}
                   className={cn(
-                    "w-full flex items-center justify-between px-4 py-3 rounded-xl border-2 transition-all text-left animate-[scale-in_0.25s_ease-out_forwards] opacity-0",
+                     "w-full flex items-center justify-between px-4 py-3 rounded-xl border-2 transition-all text-left motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 motion-safe:duration-200",
                     allowFollowUpQuestions
                       ? "border-primary bg-primary/10"
                       : "border-border bg-card"
