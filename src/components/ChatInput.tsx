@@ -38,7 +38,7 @@ const ChatInput = ({ onSendMessage, disabled, initialMessage, onMessageChange }:
   };
 
   return (
-    <div className="bg-primary/10 rounded-3xl shadow-soft border-2 border-primary/30">
+    <div className="chat-input-gradient bg-background shadow-lg">
       <div className="p-4 pb-2">
         <textarea
           value={message}
