@@ -185,7 +185,21 @@ function MascotCharacter({ className, emotion = "happy" }: { className?: string;
   );
 }
 
-// 메시지 버블 컴포넌트
+// 말풍선 컴포넌트 (마스코트 옆에 표시)
+function SpeechBubble({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  return (
+    <div 
+      className="relative bg-white rounded-2xl px-6 py-5 shadow-xl max-w-sm motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-left-4 motion-safe:duration-500 border border-gray-100"
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      {/* 말풍선 꼬리 */}
+      <div className="absolute -left-3 top-6 w-4 h-4 bg-white border-l border-b border-gray-100 transform rotate-45" />
+      <p className="text-gray-800 text-lg font-medium leading-relaxed relative z-10">{children}</p>
+    </div>
+  );
+}
+
+// 기존 메시지 버블 (하단용)
 function MessageBubble({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   return (
     <div 
@@ -197,7 +211,7 @@ function MessageBubble({ children, delay = 0 }: { children: React.ReactNode; del
   );
 }
 
-// 버튼 선택지 컴포넌트
+// 버튼 선택지 컴포넌트 (이수 로고 색상 사용)
 function ChoiceButtons({ 
   choices, 
   onSelect,
@@ -218,8 +232,10 @@ function ChoiceButtons({
           onClick={() => onSelect(choice.value)}
           variant={choice.variant === "secondary" ? "outline" : "default"}
           className={cn(
-            "px-6 py-3 rounded-full text-base font-medium transition-all hover:scale-105",
-            choice.variant !== "secondary" && "bg-primary hover:bg-primary/90 shadow-md"
+            "px-8 py-3 rounded-full text-base font-semibold transition-all hover:scale-105",
+            choice.variant !== "secondary" 
+              ? "bg-[#2AABE2] hover:bg-[#2AABE2]/90 text-white shadow-lg shadow-[#2AABE2]/30"
+              : "border-2 border-gray-300 hover:border-[#2AABE2] text-gray-600 hover:text-[#2AABE2]"
           )}
           style={{ animationDelay: `${delay + idx * 100}ms` }}
         >
@@ -295,13 +311,16 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
       // STEP 1: 첫 인사
       case "greeting":
         return (
-          <div className="flex flex-col items-center gap-8 py-8">
-            <MascotCharacter emotion="wave" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-500" />
-            <MessageBubble>
-              반가워요! 👋<br />
-              놓치기 쉬운 업무까지 먼저 알려주는 업무 비서,<br />
-              <strong className="text-primary">이수 GPT</strong>예요.
-            </MessageBubble>
+          <div className="flex flex-col items-center gap-8 py-8 h-full justify-center">
+            {/* 마스코트 + 말풍선 가로 배치 */}
+            <div className="flex items-start gap-4">
+              <MascotCharacter emotion="wave" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-500 shrink-0" />
+              <SpeechBubble>
+                반가워요! 👋<br />
+                놓치기 쉬운 업무까지 먼저 알려주는 업무 비서,<br />
+                <span className="text-[#2AABE2] font-bold text-xl">이수 GPT</span>예요.
+              </SpeechBubble>
+            </div>
             <ChoiceButtons
               choices={[{ label: "다음", value: "next" }]}
               onSelect={() => setStep("intro-ask")}
@@ -312,11 +331,13 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
       // STEP 2: 소개 여부 묻기
       case "intro-ask":
         return (
-          <div className="flex flex-col items-center gap-8 py-8">
-            <MascotCharacter emotion="thinking" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-500" />
-            <MessageBubble>
-              저에 대해서 조금 알려드려도 될까요?
-            </MessageBubble>
+          <div className="flex flex-col items-center gap-8 py-8 h-full justify-center">
+            <div className="flex items-start gap-4">
+              <MascotCharacter emotion="thinking" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-500 shrink-0" />
+              <SpeechBubble>
+                저에 대해서 조금 <span className="text-[#2AABE2] font-bold">알려드려도</span> 될까요?
+              </SpeechBubble>
+            </div>
             <ChoiceButtons
               choices={[
                 { label: "괜찮아", value: "skip", variant: "secondary" },
@@ -330,12 +351,14 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
       // STEP 2-1: 괜찮아 선택
       case "intro-skip":
         return (
-          <div className="flex flex-col items-center gap-8 py-8">
-            <MascotCharacter emotion="happy" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-500" />
-            <MessageBubble>
-              알겠어요 🙂<br />
-              이수 GPT가 궁금해질 때 언제든 다시 말씀해 주세요!
-            </MessageBubble>
+          <div className="flex flex-col items-center gap-8 py-8 h-full justify-center">
+            <div className="flex items-start gap-4">
+              <MascotCharacter emotion="happy" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-500 shrink-0" />
+              <SpeechBubble>
+                알겠어요 🙂<br />
+                <span className="text-[#2AABE2] font-bold">이수 GPT</span>가 궁금해질 때 언제든 다시 말씀해 주세요!
+              </SpeechBubble>
+            </div>
             <ChoiceButtons
               choices={[{ label: "다음", value: "next" }]}
               onSelect={() => setStep("user-info-ask")}
@@ -397,11 +420,13 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
       // STEP 3: 사용자 정보 설정 여부
       case "user-info-ask":
         return (
-          <div className="flex flex-col items-center gap-8 py-8">
-            <MascotCharacter emotion="happy" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-500" />
-            <MessageBubble>
-              이제 <strong className="text-primary">박{initialUserName}님</strong>에 대해서도 알려주실래요?
-            </MessageBubble>
+          <div className="flex flex-col items-center gap-8 py-8 h-full justify-center">
+            <div className="flex items-start gap-4">
+              <MascotCharacter emotion="happy" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-500 shrink-0" />
+              <SpeechBubble>
+                이제 <span className="text-[#2AABE2] font-bold">박{initialUserName}님</span>에 대해서도 알려주실래요?
+              </SpeechBubble>
+            </div>
             <ChoiceButtons
               choices={[
                 { label: "싫어", value: "skip", variant: "secondary" },
@@ -415,13 +440,15 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
       // STEP 3-1: 싫어 선택 - 바로 시작
       case "user-info-skip":
         return (
-          <div className="flex flex-col items-center gap-8 py-8">
-            <MascotCharacter emotion="happy" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-500" />
-            <MessageBubble>
-              괜찮아요 🙂<br />
-              이제 이수 GPT를 바로 사용하실 수 있어요.<br />
-              앞으로 <strong className="text-primary">{initialUserName}님</strong>이 놓치는 업무가 없도록 최선을 다할게요!
-            </MessageBubble>
+          <div className="flex flex-col items-center gap-8 py-8 h-full justify-center">
+            <div className="flex items-start gap-4">
+              <MascotCharacter emotion="happy" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-500 shrink-0" />
+              <SpeechBubble>
+                괜찮아요 🙂<br />
+                이제 <span className="text-[#2AABE2] font-bold">이수 GPT</span>를 바로 사용하실 수 있어요.<br />
+                앞으로 <span className="text-[#A5CF4C] font-bold">{initialUserName}님</span>이 놓치는 업무가 없도록 최선을 다할게요!
+              </SpeechBubble>
+            </div>
             <ChoiceButtons
               choices={[{ label: "시작하기 🚀", value: "complete" }]}
               onSelect={handleComplete}
@@ -432,12 +459,14 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
       // STEP 3-2: 좋아 선택 - 설정 시작 안내
       case "user-info-settings":
         return (
-          <div className="flex flex-col items-center gap-8 py-8">
-            <MascotCharacter emotion="excited" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-500" />
-            <MessageBubble>
-              좋아요! 몇 가지만 알려주시면<br />
-              더 잘 도와드릴 수 있어요 😊
-            </MessageBubble>
+          <div className="flex flex-col items-center gap-8 py-8 h-full justify-center">
+            <div className="flex items-start gap-4">
+              <MascotCharacter emotion="excited" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-500 shrink-0" />
+              <SpeechBubble>
+                좋아요! 몇 가지만 알려주시면<br />
+                더 <span className="text-[#2AABE2] font-bold">잘 도와드릴 수</span> 있어요 😊
+              </SpeechBubble>
+            </div>
             <ChoiceButtons
               choices={[{ label: "시작하기", value: "next" }]}
               onSelect={() => setStep("settings-name")}
@@ -448,17 +477,19 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
       // 설정: 호칭
       case "settings-name":
         return (
-          <div className="flex flex-col items-center gap-6 py-6">
-            <MascotCharacter emotion="thinking" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-300" />
-            <MessageBubble>
-              어떻게 불러드릴까요?
-            </MessageBubble>
+          <div className="flex flex-col items-center gap-6 py-6 h-full justify-center">
+            <div className="flex items-start gap-4">
+              <MascotCharacter emotion="thinking" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-300 shrink-0" />
+              <SpeechBubble>
+                어떻게 <span className="text-[#2AABE2] font-bold">불러드릴까요?</span>
+              </SpeechBubble>
+            </div>
             <div className="w-full max-w-sm px-4 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300" style={{ animationDelay: "200ms" }}>
               <Input
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
                 placeholder={`예: ${initialUserName}님, 경민씨, 박과장님...`}
-                className="w-full text-center text-lg py-4 rounded-xl border-2 border-primary/30 focus:border-primary bg-white/80"
+                className="w-full text-center text-lg py-4 rounded-xl border-2 border-[#2AABE2]/30 focus:border-[#2AABE2] bg-white/80"
                 onKeyDown={(e) => e.key === "Enter" && setStep("settings-tone")}
                 autoFocus
               />
@@ -477,11 +508,13 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
       // 설정: 말투
       case "settings-tone":
         return (
-          <div className="flex flex-col items-center gap-6 py-6">
-            <MascotCharacter emotion="happy" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-300" />
-            <MessageBubble>
-              어떤 말투가 좋으세요?
-            </MessageBubble>
+          <div className="flex flex-col items-center gap-6 py-6 h-full justify-center">
+            <div className="flex items-start gap-4">
+              <MascotCharacter emotion="happy" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-300 shrink-0" />
+              <SpeechBubble>
+                어떤 <span className="text-[#2AABE2] font-bold">말투</span>가 좋으세요?
+              </SpeechBubble>
+            </div>
             <div className="flex flex-wrap gap-3 justify-center px-4 motion-safe:animate-in motion-safe:fade-in motion-safe:duration-300" style={{ animationDelay: "200ms" }}>
               {toneOptions.map((option, idx) => (
                 <button
@@ -490,15 +523,15 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
                   className={cn(
                     "flex items-center gap-2 px-5 py-3 rounded-xl border-2 transition-all hover:scale-105",
                     toneStyle === option.id
-                      ? "border-primary bg-primary/10 shadow-md"
-                      : "border-gray-200 bg-white/80 hover:border-primary/50"
+                      ? "border-[#2AABE2] bg-[#2AABE2]/10 shadow-md"
+                      : "border-gray-200 bg-white/80 hover:border-[#2AABE2]/50"
                   )}
                   style={{ animationDelay: `${300 + idx * 80}ms` }}
                 >
                   <span className="text-xl">{option.emoji}</span>
                   <span className={cn(
                     "text-base font-medium",
-                    toneStyle === option.id ? "text-primary" : "text-gray-700"
+                    toneStyle === option.id ? "text-[#2AABE2]" : "text-gray-700"
                   )}>
                     {option.label}
                   </span>
@@ -519,11 +552,13 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
       // 설정: 답변 길이
       case "settings-length":
         return (
-          <div className="flex flex-col items-center gap-6 py-6">
-            <MascotCharacter emotion="happy" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-300" />
-            <MessageBubble>
-              답변 길이는요?
-            </MessageBubble>
+          <div className="flex flex-col items-center gap-6 py-6 h-full justify-center">
+            <div className="flex items-start gap-4">
+              <MascotCharacter emotion="happy" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-300 shrink-0" />
+              <SpeechBubble>
+                <span className="text-[#2AABE2] font-bold">답변 길이</span>는요?
+              </SpeechBubble>
+            </div>
             <div className="flex bg-white/80 rounded-full p-1.5 shadow-md motion-safe:animate-in motion-safe:fade-in motion-safe:duration-300" style={{ animationDelay: "200ms" }}>
               {lengthOptions.map((option) => (
                 <button
@@ -532,7 +567,7 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
                   className={cn(
                     "px-6 py-3 text-base font-medium rounded-full transition-all",
                     answerLength === option.id
-                      ? "bg-primary text-primary-foreground shadow-sm"
+                      ? "bg-[#2AABE2] text-white shadow-sm"
                       : "text-gray-600 hover:text-gray-800"
                   )}
                 >
@@ -554,35 +589,37 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
       // 설정: 자동 웹 검색
       case "settings-websearch":
         return (
-          <div className="flex flex-col items-center gap-6 py-6">
-            <MascotCharacter emotion="thinking" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-300" />
-            <MessageBubble>
-              필요할 때 자동으로 웹 검색할까요?
-            </MessageBubble>
+          <div className="flex flex-col items-center gap-6 py-6 h-full justify-center">
+            <div className="flex items-start gap-4">
+              <MascotCharacter emotion="thinking" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-300 shrink-0" />
+              <SpeechBubble>
+                필요할 때 자동으로 <span className="text-[#2AABE2] font-bold">웹 검색</span>할까요?
+              </SpeechBubble>
+            </div>
             <div className="flex gap-4 motion-safe:animate-in motion-safe:fade-in motion-safe:duration-300" style={{ animationDelay: "200ms" }}>
               <button
                 onClick={() => setAllowWebSearch(true)}
                 className={cn(
                   "flex flex-col items-center gap-2 px-8 py-4 rounded-xl border-2 transition-all hover:scale-105",
                   allowWebSearch
-                    ? "border-primary bg-primary/10 shadow-md"
-                    : "border-gray-200 bg-white/80 hover:border-primary/50"
+                    ? "border-[#2AABE2] bg-[#2AABE2]/10 shadow-md"
+                    : "border-gray-200 bg-white/80 hover:border-[#2AABE2]/50"
                 )}
               >
                 <span className="text-3xl">🌐</span>
-                <span className={cn("font-medium", allowWebSearch ? "text-primary" : "text-gray-700")}>ON</span>
+                <span className={cn("font-medium", allowWebSearch ? "text-[#2AABE2]" : "text-gray-700")}>ON</span>
               </button>
               <button
                 onClick={() => setAllowWebSearch(false)}
                 className={cn(
                   "flex flex-col items-center gap-2 px-8 py-4 rounded-xl border-2 transition-all hover:scale-105",
                   !allowWebSearch
-                    ? "border-primary bg-primary/10 shadow-md"
-                    : "border-gray-200 bg-white/80 hover:border-primary/50"
+                    ? "border-[#2AABE2] bg-[#2AABE2]/10 shadow-md"
+                    : "border-gray-200 bg-white/80 hover:border-[#2AABE2]/50"
                 )}
               >
                 <span className="text-3xl">🔒</span>
-                <span className={cn("font-medium", !allowWebSearch ? "text-primary" : "text-gray-700")}>OFF</span>
+                <span className={cn("font-medium", !allowWebSearch ? "text-[#2AABE2]" : "text-gray-700")}>OFF</span>
               </button>
             </div>
             <ChoiceButtons
@@ -599,35 +636,37 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
       // 설정: 다음 질문 추천
       case "settings-recommend":
         return (
-          <div className="flex flex-col items-center gap-6 py-6">
-            <MascotCharacter emotion="happy" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-300" />
-            <MessageBubble>
-              대화 중 다음 질문을 추천해드릴까요?
-            </MessageBubble>
+          <div className="flex flex-col items-center gap-6 py-6 h-full justify-center">
+            <div className="flex items-start gap-4">
+              <MascotCharacter emotion="happy" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-300 shrink-0" />
+              <SpeechBubble>
+                대화 중 <span className="text-[#2AABE2] font-bold">다음 질문</span>을 추천해드릴까요?
+              </SpeechBubble>
+            </div>
             <div className="flex gap-4 motion-safe:animate-in motion-safe:fade-in motion-safe:duration-300" style={{ animationDelay: "200ms" }}>
               <button
                 onClick={() => setAllowFollowUpQuestions(true)}
                 className={cn(
                   "flex flex-col items-center gap-2 px-8 py-4 rounded-xl border-2 transition-all hover:scale-105",
                   allowFollowUpQuestions
-                    ? "border-primary bg-primary/10 shadow-md"
-                    : "border-gray-200 bg-white/80 hover:border-primary/50"
+                    ? "border-[#A5CF4C] bg-[#A5CF4C]/10 shadow-md"
+                    : "border-gray-200 bg-white/80 hover:border-[#A5CF4C]/50"
                 )}
               >
                 <span className="text-3xl">💡</span>
-                <span className={cn("font-medium", allowFollowUpQuestions ? "text-primary" : "text-gray-700")}>ON</span>
+                <span className={cn("font-medium", allowFollowUpQuestions ? "text-[#A5CF4C]" : "text-gray-700")}>ON</span>
               </button>
               <button
                 onClick={() => setAllowFollowUpQuestions(false)}
                 className={cn(
                   "flex flex-col items-center gap-2 px-8 py-4 rounded-xl border-2 transition-all hover:scale-105",
                   !allowFollowUpQuestions
-                    ? "border-primary bg-primary/10 shadow-md"
-                    : "border-gray-200 bg-white/80 hover:border-primary/50"
+                    ? "border-[#A5CF4C] bg-[#A5CF4C]/10 shadow-md"
+                    : "border-gray-200 bg-white/80 hover:border-[#A5CF4C]/50"
                 )}
               >
                 <span className="text-3xl">🤫</span>
-                <span className={cn("font-medium", !allowFollowUpQuestions ? "text-primary" : "text-gray-700")}>OFF</span>
+                <span className={cn("font-medium", !allowFollowUpQuestions ? "text-[#A5CF4C]" : "text-gray-700")}>OFF</span>
               </button>
             </div>
             <ChoiceButtons
@@ -641,13 +680,15 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
       // 완료
       case "complete":
         return (
-          <div className="flex flex-col items-center gap-8 py-8">
-            <MascotCharacter emotion="excited" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-500" />
-            <MessageBubble>
-              설정이 완료됐어요! 🎉<br />
-              이제 이수 GPT를 사용하실 수 있어요.<br />
-              앞으로 <strong className="text-primary">{userName || initialUserName}님</strong>이 놓치는 업무가 없도록 최선을 다할게요!
-            </MessageBubble>
+          <div className="flex flex-col items-center gap-8 py-8 h-full justify-center">
+            <div className="flex items-start gap-4">
+              <MascotCharacter emotion="excited" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-500 shrink-0" />
+              <SpeechBubble>
+                설정이 완료됐어요! 🎉<br />
+                이제 <span className="text-[#2AABE2] font-bold">이수 GPT</span>를 사용하실 수 있어요.<br />
+                앞으로 <span className="text-[#A5CF4C] font-bold">{userName || initialUserName}님</span>이 놓치는 업무가 없도록 최선을 다할게요!
+              </SpeechBubble>
+            </div>
             <ChoiceButtons
               choices={[{ label: "시작하기 🚀", value: "start" }]}
               onSelect={handleComplete}
@@ -686,7 +727,7 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
   return (
     <Dialog open={open}>
       <DialogContent 
-        className="sm:max-w-2xl w-[95vw] max-h-[90vh] overflow-hidden p-0 border-none bg-gradient-to-b from-sky-50 via-sky-100/50 to-white [&>div[data-overlay]]:bg-black/40" 
+        className="sm:max-w-2xl w-[95vw] h-[550px] overflow-hidden p-0 border-none bg-gradient-to-b from-sky-50 via-sky-100/50 to-white" 
         aria-describedby={undefined}
         overlayClassName="bg-black/40"
       >
@@ -714,10 +755,10 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
           <X className="w-4 h-4" />
         </button>
         
-        {/* 메인 콘텐츠 영역 */}
+        {/* 메인 콘텐츠 영역 - 고정 높이 */}
         <div 
           ref={contentRef}
-          className="min-h-[500px] max-h-[80vh] overflow-y-auto px-6 py-4"
+          className="h-[550px] overflow-y-auto px-6 py-4 flex flex-col"
         >
           {renderStepContent()}
         </div>
@@ -734,8 +775,8 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
               <div
                 key={phase}
                 className={cn(
-                  "w-2 h-2 rounded-full transition-all duration-300",
-                  idx <= currentPhaseIndex ? "bg-primary" : "bg-gray-300"
+                  "w-2.5 h-2.5 rounded-full transition-all duration-300",
+                  idx <= currentPhaseIndex ? "bg-[#2AABE2]" : "bg-gray-300"
                 )}
               />
             );
