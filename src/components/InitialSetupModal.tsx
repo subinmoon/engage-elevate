@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import logoIcon from "@/assets/logo-icon.png";
-import { ChevronRight, Check } from "lucide-react";
+import { ChevronRight, Check, Sparkles } from "lucide-react";
+import confetti from "canvas-confetti";
 
 interface InitialSetupModalProps {
   open: boolean;
@@ -48,15 +49,44 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
   const [allowWebSearch, setAllowWebSearch] = useState(true);
   const [allowFollowUpQuestions, setAllowFollowUpQuestions] = useState(true);
 
-  const handleSubmit = () => {
-    onComplete({
-      userName,
-      assistantName,
-      toneStyle,
-      answerLength,
-      allowWebSearch,
-      allowFollowUpQuestions,
+  const fireConfetti = () => {
+    // 왼쪽에서 발사
+    confetti({
+      particleCount: 80,
+      spread: 60,
+      origin: { x: 0.2, y: 0.6 },
+      colors: ['#2AABE2', '#A5CF4C', '#FFD700', '#FF69B4'],
     });
+    // 오른쪽에서 발사
+    confetti({
+      particleCount: 80,
+      spread: 60,
+      origin: { x: 0.8, y: 0.6 },
+      colors: ['#2AABE2', '#A5CF4C', '#FFD700', '#FF69B4'],
+    });
+    // 중앙에서 큰 폭발
+    setTimeout(() => {
+      confetti({
+        particleCount: 120,
+        spread: 100,
+        origin: { x: 0.5, y: 0.5 },
+        colors: ['#2AABE2', '#A5CF4C', '#FFD700', '#FF69B4', '#9b87f5'],
+      });
+    }, 150);
+  };
+
+  const handleSubmit = () => {
+    fireConfetti();
+    setTimeout(() => {
+      onComplete({
+        userName,
+        assistantName,
+        toneStyle,
+        answerLength,
+        allowWebSearch,
+        allowFollowUpQuestions,
+      });
+    }, 600);
   };
 
   const nextStep = () => {
@@ -114,23 +144,40 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
   return (
     <Dialog open={open}>
       <DialogContent className="sm:max-w-[440px] max-h-[85vh] overflow-hidden p-0 border-none bg-background">
-        {/* Header */}
-        <div className="bg-card border-b border-border px-5 py-4">
-          <div className="flex items-center gap-3">
-            <img src={logoIcon} alt="Logo" className="w-10 h-10" />
-            <div>
-              <h2 className="text-sm font-bold text-foreground">이수 GPT</h2>
-              <p className="text-xs text-muted-foreground">대화 설정</p>
-            </div>
+        {/* Header with warm welcome */}
+        <div className="relative bg-gradient-to-r from-primary via-primary/90 to-primary/70 px-5 py-5 text-center overflow-hidden">
+          {/* Sparkle decorations */}
+          <div className="absolute top-2 left-4 animate-pulse">
+            <Sparkles className="w-4 h-4 text-primary-foreground/60" />
           </div>
+          <div className="absolute top-3 right-6 animate-pulse" style={{ animationDelay: '300ms' }}>
+            <Sparkles className="w-3 h-3 text-primary-foreground/40" />
+          </div>
+          <div className="absolute bottom-2 left-8 animate-pulse" style={{ animationDelay: '600ms' }}>
+            <Sparkles className="w-3 h-3 text-primary-foreground/50" />
+          </div>
+          
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <img src={logoIcon} alt="Logo" className="w-10 h-10 animate-[bounce_1s_ease-out]" />
+            <span className="text-2xl">✨</span>
+          </div>
+          <h2 className="text-base font-bold text-primary-foreground leading-relaxed">
+            놓치기 쉬운 업무까지 먼저 알려주는
+            <br />
+            <span className="text-primary-foreground/90">당신만의 업무 비서</span>가 될게요!
+          </h2>
+          <p className="text-xs text-primary-foreground/70 mt-2">
+            잠깐! 먼저 서로 알아가는 시간을 가져볼까요? 💬
+          </p>
+          
           {/* Progress dots */}
-          <div className="flex gap-1.5 mt-3">
+          <div className="flex gap-1.5 mt-4 px-4">
             {[1, 2, 3, 4, 5].map((s) => (
               <div
                 key={s}
                 className={cn(
-                  "h-1 rounded-full flex-1 transition-colors",
-                  s <= step ? "bg-primary" : "bg-muted"
+                  "h-1.5 rounded-full flex-1 transition-all duration-300",
+                  s <= step ? "bg-primary-foreground" : "bg-primary-foreground/30"
                 )}
               />
             ))}
@@ -138,12 +185,12 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
         </div>
 
         {/* Chat area */}
-        <div className="px-5 py-4 space-y-4 min-h-[320px] max-h-[400px] overflow-y-auto">
+        <div className="px-5 py-4 space-y-4 min-h-[280px] max-h-[350px] overflow-y-auto">
           {/* Step 1: User Name */}
           <AssistantMessage>
-            안녕하세요! 👋 저는 업무를 도와드리는 이수 GPT예요.
+            반가워요! 👋 저는 <strong>이수 GPT</strong>예요~
             <br /><br />
-            먼저 <strong>어떻게 불러드릴까요?</strong>
+            먼저, 제가 뭐라고 불러드리면 될까요? 😊
           </AssistantMessage>
           
           {step === 1 ? (
@@ -151,7 +198,7 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
               <Input
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
-                placeholder="이름 또는 닉네임을 입력해주세요"
+                placeholder="이름이나 닉네임을 알려주세요~"
                 className="max-w-[75%] bg-card border-primary/30 focus:border-primary rounded-2xl rounded-tr-md text-sm"
                 onKeyDown={(e) => e.key === "Enter" && canProceed() && nextStep()}
                 autoFocus
@@ -165,9 +212,9 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
           {step >= 2 && (
             <>
               <AssistantMessage>
-                반가워요, <strong>{userName}</strong>님! 😊
+                우와~ <strong>{userName}</strong>님이시군요! 이름 너무 예뻐요 🥰
                 <br /><br />
-                저를 뭐라고 부르실 건가요?
+                그럼 저는 뭐라고 불러주실 건가요~?
               </AssistantMessage>
               
               {step === 2 ? (
@@ -191,9 +238,9 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
           {step >= 3 && (
             <>
               <AssistantMessage>
-                좋아요! 앞으로 <strong>{assistantName}</strong>이라고 불러주세요 💕
+                헤헤~ 앞으로 <strong>{assistantName}</strong>이라고 불러주세요! 💕
                 <br /><br />
-                어떤 말투로 대화할까요?
+                저한테 어떤 느낌으로 말해줬으면 해요?
               </AssistantMessage>
               
               {step === 3 ? (
@@ -232,9 +279,9 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
           {step >= 4 && (
             <>
               <AssistantMessage>
-                알겠어요! 그렇게 말씀드릴게요 ✨
+                오케이! 그렇게 말씀드릴게요~ ✨
                 <br /><br />
-                답변은 얼마나 길게 드릴까요?
+                답변은 어느 정도 길이가 좋으세요?
               </AssistantMessage>
               
               {step === 4 ? (
@@ -266,7 +313,7 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
           {step >= 5 && (
             <>
               <AssistantMessage>
-                거의 다 됐어요! 마지막으로 몇 가지만 더 알려주세요 🙌
+                거의 다 왔어요~! 🎉 마지막으로 몇 가지만 더요!
               </AssistantMessage>
               
               <div className="space-y-2 animate-[fade-in_0.3s_ease-out_forwards] opacity-0" style={{ animationDelay: '200ms' }}>
@@ -284,7 +331,7 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
                     <span className="text-lg">🌐</span>
                     <div>
                       <p className="text-sm font-medium text-foreground">자동 검색</p>
-                      <p className="text-xs text-muted-foreground">필요할 때 인터넷 검색을 해요</p>
+                      <p className="text-xs text-muted-foreground">필요할 때 인터넷 검색해드려요~</p>
                     </div>
                   </div>
                   <Checkbox
@@ -307,7 +354,7 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
                     <span className="text-lg">💡</span>
                     <div>
                       <p className="text-sm font-medium text-foreground">질문 추천</p>
-                      <p className="text-xs text-muted-foreground">대화 중 다음 질문을 추천해드려요</p>
+                      <p className="text-xs text-muted-foreground">대화 중 다음 질문 추천해드릴게요!</p>
                     </div>
                   </div>
                   <Checkbox
@@ -328,15 +375,15 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
               disabled={!canProceed()}
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-5 text-sm font-semibold rounded-xl shadow-md transition-all hover:shadow-lg disabled:opacity-50"
             >
-              다음
+              다음으로~
               <ChevronRight className="w-4 h-4 ml-1" />
             </Button>
           ) : (
             <Button
               onClick={handleSubmit}
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-5 text-sm font-semibold rounded-xl shadow-md transition-all hover:shadow-lg hover:scale-[1.01]"
+              className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground py-5 text-sm font-semibold rounded-xl shadow-md transition-all hover:shadow-lg hover:scale-[1.02]"
             >
-              🚀 대화 시작하기
+              🚀 이제 시작해볼까요?
             </Button>
           )}
         </div>
