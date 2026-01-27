@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import { X, ChevronRight, Sparkles } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import confetti from "canvas-confetti";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
@@ -660,15 +660,50 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
     }
   };
 
+  // 뒤로가기 가능 여부 체크
+  const canGoBack = step !== "greeting";
+  
+  // 뒤로가기 핸들러
+  const handleGoBack = () => {
+    const backMap: Record<TutorialStep, TutorialStep> = {
+      "greeting": "greeting",
+      "intro-ask": "greeting",
+      "intro-skip": "intro-ask",
+      "intro-show": "intro-ask",
+      "user-info-ask": step === "intro-skip" ? "intro-skip" : "intro-show",
+      "user-info-skip": "user-info-ask",
+      "user-info-settings": "user-info-ask",
+      "settings-name": "user-info-settings",
+      "settings-tone": "settings-name",
+      "settings-length": "settings-tone",
+      "settings-websearch": "settings-length",
+      "settings-recommend": "settings-websearch",
+      "complete": "settings-recommend",
+    };
+    setStep(backMap[step] || "greeting");
+  };
+
   return (
     <Dialog open={open}>
       <DialogContent 
-        className="sm:max-w-2xl w-[95vw] max-h-[90vh] overflow-hidden p-0 border-none bg-gradient-to-b from-sky-50 via-sky-100/50 to-white" 
+        className="sm:max-w-2xl w-[95vw] max-h-[90vh] overflow-hidden p-0 border-none bg-gradient-to-b from-sky-50 via-sky-100/50 to-white [&>div[data-overlay]]:bg-black/40" 
         aria-describedby={undefined}
+        overlayClassName="bg-black/40"
       >
         <VisuallyHidden>
           <DialogTitle>이수 GPT 튜토리얼</DialogTitle>
         </VisuallyHidden>
+        
+        {/* 뒤로가기 버튼 */}
+        {canGoBack && (
+          <button
+            onClick={handleGoBack}
+            className="absolute top-4 left-4 z-10 flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/80 hover:bg-white text-gray-500 hover:text-gray-700 text-sm font-medium transition-all shadow-sm hover:shadow"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            이전
+          </button>
+        )}
         
         {/* 닫기/건너뛰기 버튼 */}
         <button
