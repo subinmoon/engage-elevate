@@ -74,30 +74,38 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
     }
   };
 
-  // Assistant message bubble
-  const AssistantMessage = ({ children }: { children: React.ReactNode }) => (
-    <div className="flex gap-3 items-start">
-      <img src={logoIcon} alt="Assistant" className="w-8 h-8 rounded-full flex-shrink-0" />
+  // Assistant message bubble with animation
+  const AssistantMessage = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
+    <div 
+      className="flex gap-3 items-start animate-[fade-in_0.4s_ease-out_forwards,scale-in_0.3s_ease-out_forwards] opacity-0"
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      <img 
+        src={logoIcon} 
+        alt="Assistant" 
+        className="w-8 h-8 rounded-full flex-shrink-0 animate-[bounce_0.5s_ease-out]" 
+        style={{ animationDelay: `${delay + 100}ms` }}
+      />
       <div className="bg-muted rounded-2xl rounded-tl-md px-4 py-3 max-w-[85%]">
         <p className="text-sm text-foreground leading-relaxed">{children}</p>
       </div>
     </div>
   );
 
-  // User response bubble
-  const UserResponse = ({ children }: { children: React.ReactNode }) => (
-    <div className="flex justify-end">
-      <div className="bg-primary text-primary-foreground rounded-2xl rounded-tr-md px-4 py-2 max-w-[85%]">
-        <p className="text-sm">{children}</p>
-      </div>
+  // User input area with animation
+  const AnimatedInputArea = ({ children, delay = 200 }: { children: React.ReactNode; delay?: number }) => (
+    <div 
+      className="flex justify-end animate-[fade-in_0.3s_ease-out_forwards] opacity-0"
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      {children}
     </div>
   );
 
-  // Completed step indicator
   const CompletedAnswer = ({ answer }: { answer: string }) => (
-    <div className="flex justify-end items-center gap-2">
-      <Check className="w-4 h-4 text-primary" />
-      <div className="bg-primary/10 text-primary rounded-full px-3 py-1.5">
+    <div className="flex justify-end items-center gap-2 animate-[scale-in_0.3s_ease-out_forwards]">
+      <Check className="w-4 h-4 text-primary animate-[bounce_0.4s_ease-out]" />
+      <div className="bg-primary/10 text-primary rounded-full px-3 py-1.5 animate-[fade-in_0.2s_ease-out]">
         <p className="text-sm font-medium">{answer}</p>
       </div>
     </div>
@@ -139,7 +147,7 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
           </AssistantMessage>
           
           {step === 1 ? (
-            <div className="flex justify-end">
+            <AnimatedInputArea>
               <Input
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
@@ -148,7 +156,7 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
                 onKeyDown={(e) => e.key === "Enter" && canProceed() && nextStep()}
                 autoFocus
               />
-            </div>
+            </AnimatedInputArea>
           ) : (
             <CompletedAnswer answer={userName} />
           )}
@@ -163,7 +171,7 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
               </AssistantMessage>
               
               {step === 2 ? (
-                <div className="flex justify-end">
+                <AnimatedInputArea>
                   <Input
                     value={assistantName}
                     onChange={(e) => setAssistantName(e.target.value)}
@@ -172,7 +180,7 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
                     onKeyDown={(e) => e.key === "Enter" && canProceed() && nextStep()}
                     autoFocus
                   />
-                </div>
+                </AnimatedInputArea>
               ) : (
                 <CompletedAnswer answer={assistantName} />
               )}
@@ -189,18 +197,19 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
               </AssistantMessage>
               
               {step === 3 ? (
-                <div className="space-y-2">
+                <div className="space-y-2 animate-[fade-in_0.3s_ease-out_forwards] opacity-0" style={{ animationDelay: '200ms' }}>
                   <div className="grid grid-cols-2 gap-2">
-                    {toneOptions.map((option) => (
+                    {toneOptions.map((option, idx) => (
                       <button
                         key={option.id}
                         onClick={() => setToneStyle(option.id)}
                         className={cn(
-                          "flex items-center gap-2 px-3 py-2.5 rounded-xl border-2 transition-all text-left",
+                          "flex items-center gap-2 px-3 py-2.5 rounded-xl border-2 transition-all text-left animate-[scale-in_0.25s_ease-out_forwards] opacity-0",
                           toneStyle === option.id
                             ? "border-primary bg-primary/10"
                             : "border-border bg-card hover:border-primary/50"
                         )}
+                        style={{ animationDelay: `${300 + idx * 80}ms` }}
                       >
                         <span className="text-base">{option.emoji}</span>
                         <span className={cn(
@@ -229,7 +238,7 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
               </AssistantMessage>
               
               {step === 4 ? (
-                <div className="flex justify-end">
+                <div className="flex justify-end animate-[fade-in_0.3s_ease-out_forwards] opacity-0" style={{ animationDelay: '200ms' }}>
                   <div className="flex bg-muted rounded-full p-1 gap-1">
                     {lengthOptions.map((option) => (
                       <button
@@ -260,15 +269,16 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
                 거의 다 됐어요! 마지막으로 몇 가지만 더 알려주세요 🙌
               </AssistantMessage>
               
-              <div className="space-y-2">
+              <div className="space-y-2 animate-[fade-in_0.3s_ease-out_forwards] opacity-0" style={{ animationDelay: '200ms' }}>
                 <button
                   onClick={() => setAllowWebSearch(!allowWebSearch)}
                   className={cn(
-                    "w-full flex items-center justify-between px-4 py-3 rounded-xl border-2 transition-all text-left",
+                    "w-full flex items-center justify-between px-4 py-3 rounded-xl border-2 transition-all text-left animate-[scale-in_0.25s_ease-out_forwards] opacity-0",
                     allowWebSearch
                       ? "border-primary bg-primary/10"
                       : "border-border bg-card"
                   )}
+                  style={{ animationDelay: '300ms' }}
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-lg">🌐</span>
@@ -286,11 +296,12 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
                 <button
                   onClick={() => setAllowFollowUpQuestions(!allowFollowUpQuestions)}
                   className={cn(
-                    "w-full flex items-center justify-between px-4 py-3 rounded-xl border-2 transition-all text-left",
+                    "w-full flex items-center justify-between px-4 py-3 rounded-xl border-2 transition-all text-left animate-[scale-in_0.25s_ease-out_forwards] opacity-0",
                     allowFollowUpQuestions
                       ? "border-primary bg-primary/10"
                       : "border-border bg-card"
                   )}
+                  style={{ animationDelay: '400ms' }}
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-lg">💡</span>
