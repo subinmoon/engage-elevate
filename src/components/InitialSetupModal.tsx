@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, forwardRef } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,7 @@ import { cn } from "@/lib/utils";
 import logoIcon from "@/assets/logo-icon.png";
 import { ChevronRight, Check, Sparkles } from "lucide-react";
 import confetti from "canvas-confetti";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface InitialSetupModalProps {
   open: boolean;
@@ -122,15 +124,19 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
     </div>
   );
 
-  // User input area with animation
-  const AnimatedInputArea = ({ children, delay = 200 }: { children: React.ReactNode; delay?: number }) => (
-    <div 
-      className="flex justify-end animate-[fade-in_0.3s_ease-out_forwards] opacity-0"
-      style={{ animationDelay: `${delay}ms` }}
-    >
-      {children}
-    </div>
+  // User input area with animation - using forwardRef to avoid ref warning
+  const AnimatedInputArea = forwardRef<HTMLDivElement, { children: React.ReactNode; delay?: number }>(
+    ({ children, delay = 200 }, ref) => (
+      <div 
+        ref={ref}
+        className="flex justify-end animate-[fade-in_0.3s_ease-out_forwards] opacity-0"
+        style={{ animationDelay: `${delay}ms` }}
+      >
+        {children}
+      </div>
+    )
   );
+  AnimatedInputArea.displayName = "AnimatedInputArea";
 
   const CompletedAnswer = ({ answer }: { answer: string }) => (
     <div className="flex justify-end items-center gap-2 animate-[scale-in_0.3s_ease-out_forwards]">
@@ -143,7 +149,10 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
 
   return (
     <Dialog open={open}>
-      <DialogContent className="sm:max-w-[440px] max-h-[85vh] overflow-hidden p-0 border-none bg-background">
+      <DialogContent className="sm:max-w-[440px] max-h-[85vh] overflow-hidden p-0 border-none bg-background" aria-describedby={undefined}>
+        <VisuallyHidden>
+          <DialogTitle>초기 설정</DialogTitle>
+        </VisuallyHidden>
         {/* Header with warm welcome */}
         <div className="relative bg-gradient-to-r from-primary via-primary/90 to-primary/70 px-5 py-5 text-center overflow-hidden">
           {/* Sparkle decorations */}
