@@ -11,7 +11,7 @@ import ChatInput from "@/components/ChatInput";
 import ChatView from "@/components/ChatView";
 import { generateScheduleResponse } from "@/data/scheduleData";
 import logoIcon from "@/assets/logo-icon.png";
-import { PanelLeftClose, ArrowLeft, Pencil, Check, X, MoreHorizontal, Share2, Pin, Trash2, Settings } from "lucide-react";
+import { PanelLeftClose, ArrowLeft, Pencil, Check, X, MoreHorizontal, Share2, Pin, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
@@ -316,32 +316,22 @@ const Index = () => {
           setPrefillMessage(prompt);
           setScheduleExpanded(false);
         }} />
-          {/* User Profile with Settings */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-2 p-1.5 hover:bg-muted/50 rounded-lg transition-colors">
-                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium text-primary">
-                  {userSettings?.assistantName?.[0] || "문"}
-                </div>
-                <span className="text-sm font-medium text-foreground hidden sm:block">
-                  {userSettings?.assistantName || "문수빈"}
-                </span>
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48 bg-card">
-              <DropdownMenuItem onClick={() => setShowSetupModal(true)}>
-                <Settings className="w-4 h-4 mr-2" />
-                대화 설정
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {/* User Profile */}
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium text-primary">
+              {userSettings?.assistantName?.[0] || "문"}
+            </div>
+            <span className="text-sm font-medium text-foreground hidden sm:block">
+              {userSettings?.assistantName || "문수빈"}
+            </span>
+          </div>
         </div>
       </div>
       
       {/* Main Area - Sidebar + Content */}
       <div className="flex flex-1">
         {/* Sidebar Body (without header) */}
-        <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(false)} chatHistory={chatHistory} currentChatId={currentChatId} onSelectChat={handleSelectChat} onNewChat={handleNewChat} onRenameChat={handleRenameChat} onShareChat={handleShareChat} onPinChat={handlePin} onArchiveChat={handleArchive} onDeleteChat={handleDelete} hideHeader />
+        <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(false)} chatHistory={chatHistory} currentChatId={currentChatId} onSelectChat={handleSelectChat} onNewChat={handleNewChat} onRenameChat={handleRenameChat} onShareChat={handleShareChat} onPinChat={handlePin} onArchiveChat={handleArchive} onDeleteChat={handleDelete} hideHeader onOpenSettings={() => setShowSetupModal(true)} />
         
         {/* Sidebar Trigger when closed */}
         {!sidebarOpen && <SidebarTrigger onClick={() => setSidebarOpen(true)} />}
