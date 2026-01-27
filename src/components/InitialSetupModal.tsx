@@ -26,7 +26,7 @@ interface UserSettings {
 const toneOptions = [
   { id: "professional", label: "전문적인 말투", emoji: "👔" },
   { id: "warm-formal", label: "따뜻함이 담긴 말투", emoji: "🤝" },
-  { id: "warm", label: "따뜻한 말투", emoji: "💜" },
+  { id: "default", label: "기본 말투", emoji: "💬" },
   { id: "friendly", label: "유쾌하고 친근함", emoji: "😊" },
 ];
 
@@ -39,7 +39,7 @@ const lengthOptions = [
 export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) {
   const [userName, setUserName] = useState("");
   const [assistantName, setAssistantName] = useState("");
-  const [toneStyle, setToneStyle] = useState("warm");
+  const [toneStyle, setToneStyle] = useState("default");
   const [answerLength, setAnswerLength] = useState("default");
   const [allowWebSearch, setAllowWebSearch] = useState(false);
   const [allowFollowUpQuestions, setAllowFollowUpQuestions] = useState(false);
@@ -57,18 +57,18 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
 
   return (
     <Dialog open={open}>
-      <DialogContent className="sm:max-w-[480px] max-h-[85vh] overflow-y-auto p-0 border-none bg-gradient-to-br from-purple-50/90 via-white to-pink-50/70">
-        {/* Header with balanced gradient */}
-        <div className="relative bg-gradient-to-r from-purple-500 via-purple-400 to-pink-400 px-6 py-5 text-center">
+      <DialogContent className="sm:max-w-[480px] max-h-[85vh] overflow-y-auto p-0 border-none bg-gradient-to-br from-secondary via-background to-secondary/50">
+        {/* Header with primary color gradient */}
+        <div className="relative bg-gradient-to-r from-primary via-primary/90 to-primary/70 px-6 py-5 text-center">
           <div className="relative">
             <div className="flex items-center justify-center gap-1.5 mb-2">
-              <Sparkles className="w-5 h-5 text-yellow-200 animate-pulse" />
+              <Sparkles className="w-5 h-5 text-primary-foreground/80 animate-pulse" />
               <span className="text-2xl">✨</span>
             </div>
-            <h2 className="text-base font-bold text-white leading-relaxed">
+            <h2 className="text-base font-bold text-primary-foreground leading-relaxed">
               놓치기 쉬운 업무까지 먼저 알려주는 업무 비서,
               <br />
-              <span className="text-yellow-100">이수 GPT</span>와 친해져봐요!
+              <span className="text-primary-foreground/90">이수 GPT</span>와 친해져봐요!
             </h2>
           </div>
         </div>
@@ -84,7 +84,7 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
                 placeholder="닉네임 입력"
-                className="bg-white/80 border-purple-200 focus:border-purple-400 h-9 text-sm"
+                className="bg-card border-border focus:border-primary h-9 text-sm"
               />
             </div>
             <div className="space-y-1.5">
@@ -95,7 +95,7 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
                 value={assistantName}
                 onChange={(e) => setAssistantName(e.target.value)}
                 placeholder="호칭 입력"
-                className="bg-white/80 border-purple-200 focus:border-purple-400 h-9 text-sm"
+                className="bg-card border-border focus:border-primary h-9 text-sm"
               />
             </div>
           </div>
@@ -113,14 +113,14 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
                   className={cn(
                     "flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 transition-all text-left",
                     toneStyle === option.id
-                      ? "border-purple-500 bg-purple-50 shadow-sm"
-                      : "border-gray-200 bg-white hover:border-purple-300"
+                      ? "border-primary bg-secondary shadow-sm"
+                      : "border-border bg-card hover:border-primary/50"
                   )}
                 >
                   <span className="text-sm">{option.emoji}</span>
                   <span className={cn(
                     "text-xs font-medium",
-                    toneStyle === option.id ? "text-purple-700" : "text-gray-600"
+                    toneStyle === option.id ? "text-primary" : "text-muted-foreground"
                   )}>
                     {option.label}
                   </span>
@@ -130,12 +130,12 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
           </div>
 
           {/* Answer Length Selection */}
-          <div className="bg-white/60 rounded-lg p-3 border border-purple-100 space-y-2">
+          <div className="bg-card rounded-lg p-3 border border-border space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-xs font-medium text-foreground flex items-center gap-1.5">
                 <span>📏</span> 답변 길이
               </label>
-              <div className="flex bg-purple-100 rounded-full p-0.5">
+              <div className="flex bg-secondary rounded-full p-0.5">
                 {lengthOptions.map((option) => (
                   <button
                     key={option.id}
@@ -143,8 +143,8 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
                     className={cn(
                       "px-3 py-1 text-xs font-medium rounded-full transition-all",
                       answerLength === option.id
-                        ? "bg-gradient-to-r from-purple-500 to-pink-400 text-white shadow-sm"
-                        : "text-purple-500 hover:bg-purple-100"
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "text-secondary-foreground hover:bg-secondary/80"
                     )}
                   >
                     {option.label}
@@ -159,7 +159,7 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
 
           {/* Toggle Options */}
           <div className="grid grid-cols-2 gap-2">
-            <div className="bg-white/60 rounded-lg p-3 border border-purple-100 space-y-1.5">
+            <div className="bg-card rounded-lg p-3 border border-border space-y-1.5">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-medium text-foreground flex items-center gap-1.5">
                   <span>🌐</span> 자동 검색
@@ -167,14 +167,14 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
                 <Checkbox
                   checked={allowWebSearch}
                   onCheckedChange={(checked) => setAllowWebSearch(checked as boolean)}
-                  className="border-purple-400 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
+                  className="border-primary/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                 />
               </div>
               <p className="text-[10px] text-muted-foreground leading-tight">
                 필요시 인터넷 검색을 자동으로 해요
               </p>
             </div>
-            <div className="bg-white/60 rounded-lg p-3 border border-purple-100 space-y-1.5">
+            <div className="bg-card rounded-lg p-3 border border-border space-y-1.5">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-medium text-foreground flex items-center gap-1.5">
                   <span>💡</span> 질문 추천
@@ -182,7 +182,7 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
                 <Checkbox
                   checked={allowFollowUpQuestions}
                   onCheckedChange={(checked) => setAllowFollowUpQuestions(checked as boolean)}
-                  className="border-purple-400 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
+                  className="border-primary/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                 />
               </div>
               <p className="text-[10px] text-muted-foreground leading-tight">
@@ -194,7 +194,7 @@ export function InitialSetupModal({ open, onComplete }: InitialSetupModalProps) 
           {/* Submit Button */}
           <Button
             onClick={handleSubmit}
-            className="w-full bg-gradient-to-r from-purple-500 to-pink-400 hover:from-purple-600 hover:to-pink-500 text-white py-5 text-sm font-semibold rounded-lg shadow-md shadow-purple-300/40 transition-all hover:shadow-lg hover:scale-[1.01]"
+            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-5 text-sm font-semibold rounded-lg shadow-md transition-all hover:shadow-lg hover:scale-[1.01]"
           >
             🚀 대화 시작하기
           </Button>
