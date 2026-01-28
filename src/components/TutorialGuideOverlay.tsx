@@ -154,8 +154,13 @@ export function TutorialGuideOverlay({ onComplete, onSkip }: TutorialGuideOverla
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  const step = guideSteps[currentStep];
-  const isLastStep = currentStep === guideSteps.length - 1;
+  // 안전한 step 접근 (범위 체크)
+  const safeCurrentStep = Math.min(currentStep, guideSteps.length - 1);
+  const step = guideSteps[safeCurrentStep];
+  const isLastStep = safeCurrentStep === guideSteps.length - 1;
+  
+  // step이 없으면 렌더링하지 않음
+  if (!step) return null;
 
   const handleNext = () => {
     if (isLastStep) {
