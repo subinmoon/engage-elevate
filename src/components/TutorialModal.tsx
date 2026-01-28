@@ -686,7 +686,7 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
   return (
     <Dialog open={open}>
       <DialogContent 
-        className="sm:max-w-2xl w-[95vw] max-h-[90vh] overflow-hidden p-0 border-none bg-gradient-to-b from-sky-50 via-sky-100/50 to-white [&>div[data-overlay]]:bg-black/40" 
+        className="sm:max-w-2xl w-[95vw] h-[480px] overflow-hidden p-0 border-none bg-gradient-to-b from-sky-50 via-sky-100/50 to-white" 
         aria-describedby={undefined}
         overlayClassName="bg-black/40"
       >
@@ -714,10 +714,10 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
           <X className="w-4 h-4" />
         </button>
         
-        {/* 메인 콘텐츠 영역 */}
+        {/* 메인 콘텐츠 영역 - 고정 높이 */}
         <div 
           ref={contentRef}
-          className="min-h-[500px] max-h-[80vh] overflow-y-auto px-6 py-4"
+          className="h-full overflow-y-auto px-6 py-4 flex flex-col"
         >
           {renderStepContent()}
         </div>
