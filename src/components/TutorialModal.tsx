@@ -61,124 +61,177 @@ function MascotCharacter({ className, emotion = "happy" }: { className?: string;
   return (
     <div className={cn("relative", className)}>
       {/* 그림자 */}
-      <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-28 h-4 bg-black/10 rounded-[100%] blur-md" />
+      <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-32 h-5 bg-black/15 rounded-[100%] blur-lg" />
       
       {/* 메인 캐릭터 컨테이너 */}
       <div className={cn(
         "relative transition-transform duration-300",
-        emotion === "wave" && "animate-[bounce_1s_ease-in-out_infinite]",
-        emotion === "excited" && "animate-[wiggle_0.5s_ease-in-out_infinite]"
+        emotion === "wave" && "animate-[float_2s_ease-in-out_infinite]",
+        emotion === "excited" && "animate-[wiggle_0.4s_ease-in-out_infinite]"
       )}>
-        {/* 캐릭터 몸통 */}
-        <div className="w-32 h-32 relative">
-          {/* 메인 바디 - 3D 효과 */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#3BB8E8] via-[#2AABE2] to-[#1A8BC2] rounded-3xl shadow-2xl overflow-hidden">
-            {/* 광택 하이라이트 */}
-            <div className="absolute top-3 left-3 w-10 h-10 bg-white/40 rounded-full blur-md" />
-            <div className="absolute top-4 left-5 w-4 h-4 bg-white/60 rounded-full" />
+        {/* 캐릭터 몸통 - 더 동글동글 */}
+        <div className="w-36 h-36 relative">
+          {/* 메인 바디 - 부드러운 그라데이션 */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#5EC8F0] via-[#2AABE2] to-[#1A8BC2] rounded-[40%_40%_45%_45%] shadow-2xl overflow-hidden">
+            {/* 광택 하이라이트 - 더 크고 부드럽게 */}
+            <div className="absolute top-2 left-2 w-16 h-16 bg-white/30 rounded-full blur-xl" />
+            <div className="absolute top-4 left-5 w-8 h-8 bg-white/50 rounded-full blur-md" />
+            <div className="absolute top-5 left-7 w-3 h-3 bg-white/70 rounded-full" />
             
             {/* 바디 하단 그라데이션 */}
-            <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-[#1A7BA8]/30 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-[#1A7BA8]/40 to-transparent" />
           </div>
           
-          {/* 눈 컨테이너 */}
-          <div className="absolute top-10 left-1/2 -translate-x-1/2 flex gap-5">
+          {/* 귀 (토끼처럼 귀여운 작은 귀) */}
+          <div className="absolute -top-3 left-5 w-5 h-8 bg-gradient-to-br from-[#5EC8F0] to-[#2AABE2] rounded-full rotate-[-15deg] shadow-md">
+            <div className="absolute inset-1 bg-pink-200/50 rounded-full" />
+          </div>
+          <div className="absolute -top-3 right-5 w-5 h-8 bg-gradient-to-bl from-[#5EC8F0] to-[#2AABE2] rounded-full rotate-[15deg] shadow-md">
+            <div className="absolute inset-1 bg-pink-200/50 rounded-full" />
+          </div>
+          
+          {/* 눈 컨테이너 - 더 크고 반짝이게 */}
+          <div className="absolute top-10 left-1/2 -translate-x-1/2 flex gap-6">
             {/* 왼쪽 눈 */}
             <div className="relative">
               <div className={cn(
-                "w-6 h-7 bg-white rounded-full shadow-inner flex items-center justify-center transition-all duration-200",
-                emotion === "thinking" && "h-5"
+                "w-8 h-9 bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 border-2 border-white/50",
+                emotion === "thinking" && "h-6",
+                emotion === "excited" && "scale-110"
               )}>
-                {/* 눈동자 */}
+                {/* 눈동자 - 더 크고 귀엽게 */}
                 <div className={cn(
-                  "w-3 h-3 bg-gray-800 rounded-full relative transition-all duration-300",
-                  emotion === "thinking" && "translate-y-0.5 translate-x-0.5",
-                  emotion === "excited" && "scale-110"
+                  "w-5 h-5 bg-gradient-to-br from-gray-700 to-gray-900 rounded-full relative transition-all duration-300",
+                  emotion === "thinking" && "translate-y-0.5 translate-x-1 w-4 h-4",
+                  emotion === "excited" && "scale-105"
                 )}>
-                  {/* 눈 반짝임 */}
-                  <div className="absolute top-0.5 left-0.5 w-1 h-1 bg-white rounded-full" />
+                  {/* 눈 반짝임 - 더 크게 */}
+                  <div className="absolute top-0.5 left-0.5 w-2 h-2 bg-white rounded-full" />
+                  <div className="absolute bottom-1 right-1 w-1 h-1 bg-white/60 rounded-full" />
                 </div>
               </div>
               {/* 눈썹 (thinking 상태) */}
               {emotion === "thinking" && (
-                <div className="absolute -top-2 left-0 w-6 h-1 bg-[#1A7BA8] rounded-full transform -rotate-6" />
+                <div className="absolute -top-3 left-0 w-7 h-1.5 bg-[#1A7BA8] rounded-full transform -rotate-6" />
               )}
+              {/* 속눈썹 */}
+              <div className="absolute -top-0.5 left-1 w-1.5 h-1.5 bg-gray-800 rounded-full transform rotate-[-30deg]" />
             </div>
             
             {/* 오른쪽 눈 */}
             <div className="relative">
               <div className={cn(
-                "w-6 h-7 bg-white rounded-full shadow-inner flex items-center justify-center transition-all duration-200",
-                emotion === "thinking" && "h-5"
+                "w-8 h-9 bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 border-2 border-white/50",
+                emotion === "thinking" && "h-6",
+                emotion === "excited" && "scale-110"
               )}>
                 <div className={cn(
-                  "w-3 h-3 bg-gray-800 rounded-full relative transition-all duration-300",
-                  emotion === "thinking" && "translate-y-0.5 -translate-x-0.5",
-                  emotion === "excited" && "scale-110"
+                  "w-5 h-5 bg-gradient-to-br from-gray-700 to-gray-900 rounded-full relative transition-all duration-300",
+                  emotion === "thinking" && "translate-y-0.5 -translate-x-1 w-4 h-4",
+                  emotion === "excited" && "scale-105"
                 )}>
-                  <div className="absolute top-0.5 left-0.5 w-1 h-1 bg-white rounded-full" />
+                  <div className="absolute top-0.5 left-0.5 w-2 h-2 bg-white rounded-full" />
+                  <div className="absolute bottom-1 right-1 w-1 h-1 bg-white/60 rounded-full" />
                 </div>
               </div>
               {emotion === "thinking" && (
-                <div className="absolute -top-2 right-0 w-6 h-1 bg-[#1A7BA8] rounded-full transform rotate-6" />
+                <div className="absolute -top-3 right-0 w-7 h-1.5 bg-[#1A7BA8] rounded-full transform rotate-6" />
               )}
+              <div className="absolute -top-0.5 right-1 w-1.5 h-1.5 bg-gray-800 rounded-full transform rotate-[30deg]" />
             </div>
           </div>
           
-          {/* 볼터치 */}
-          <div className="absolute top-[4.5rem] left-4 w-4 h-2.5 bg-pink-400/40 rounded-full blur-[2px]" />
-          <div className="absolute top-[4.5rem] right-4 w-4 h-2.5 bg-pink-400/40 rounded-full blur-[2px]" />
+          {/* 볼터치 - 더 강조 */}
+          <div className="absolute top-[5rem] left-2 w-6 h-4 bg-pink-400/50 rounded-full blur-sm animate-pulse" />
+          <div className="absolute top-[5rem] right-2 w-6 h-4 bg-pink-400/50 rounded-full blur-sm animate-pulse" />
+          
+          {/* 코 - 작고 귀엽게 */}
+          <div className="absolute top-[4.5rem] left-1/2 -translate-x-1/2 w-2 h-1.5 bg-[#1A7BA8]/40 rounded-full" />
           
           {/* 입 */}
-          <div className="absolute bottom-7 left-1/2 -translate-x-1/2">
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
             {emotion === "happy" && (
-              <div className="w-8 h-4 border-b-[3px] border-white rounded-b-full" />
+              <div className="relative">
+                <div className="w-10 h-5 border-b-[4px] border-white rounded-b-full" />
+              </div>
             )}
             {emotion === "wave" && (
-              <div className="w-10 h-5 bg-white/90 rounded-b-xl rounded-t-sm flex items-center justify-center">
-                <div className="w-4 h-2 bg-pink-300 rounded-full mt-1" />
+              <div className="w-12 h-6 bg-white/90 rounded-b-2xl rounded-t-lg flex items-end justify-center shadow-inner">
+                <div className="w-5 h-3 bg-pink-300 rounded-full mb-0.5" />
               </div>
             )}
             {emotion === "excited" && (
-              <div className="w-10 h-6 bg-white/90 rounded-full flex items-center justify-center">
-                <div className="w-5 h-3 bg-pink-300 rounded-full" />
+              <div className="w-12 h-7 bg-white/90 rounded-full flex items-center justify-center shadow-inner overflow-hidden">
+                <div className="w-6 h-4 bg-gradient-to-b from-pink-200 to-pink-400 rounded-full translate-y-0.5" />
               </div>
             )}
             {emotion === "thinking" && (
-              <div className="w-4 h-4 bg-white/70 rounded-full" />
+              <div className="w-5 h-5 bg-white/80 rounded-full shadow-inner flex items-center justify-center">
+                <div className="w-2 h-2 bg-pink-300 rounded-full" />
+              </div>
             )}
           </div>
         </div>
         
+        {/* 팔/손 - 양쪽에 */}
+        <div className="absolute -left-4 top-16 w-6 h-10 bg-gradient-to-br from-[#3BB8E8] to-[#1A8BC2] rounded-full shadow-md transform rotate-[20deg]">
+          <div className="absolute top-1 left-1 w-2 h-2 bg-white/30 rounded-full" />
+        </div>
+        
         {/* 손 (wave 상태) */}
-        {emotion === "wave" && (
-          <div className="absolute -right-6 top-8 origin-bottom-left animate-[wave-hand_0.6s_ease-in-out_infinite_alternate]">
-            <div className="w-7 h-12 bg-gradient-to-br from-[#3BB8E8] to-[#1A8BC2] rounded-xl shadow-lg relative">
-              <div className="absolute top-1 left-1 w-2 h-2 bg-white/30 rounded-full" />
+        {emotion === "wave" ? (
+          <div className="absolute -right-5 top-12 origin-bottom-left animate-[wave-hand_0.5s_ease-in-out_infinite_alternate]">
+            <div className="w-7 h-12 bg-gradient-to-br from-[#5EC8F0] to-[#1A8BC2] rounded-2xl shadow-lg relative">
+              <div className="absolute top-1 left-1 w-2.5 h-2.5 bg-white/40 rounded-full" />
+              {/* 손가락 */}
+              <div className="absolute -top-1 left-1 w-2 h-3 bg-gradient-to-br from-[#5EC8F0] to-[#2AABE2] rounded-full" />
+              <div className="absolute -top-2 left-3 w-2 h-3 bg-gradient-to-br from-[#5EC8F0] to-[#2AABE2] rounded-full" />
             </div>
           </div>
+        ) : (
+          <div className="absolute -right-4 top-16 w-6 h-10 bg-gradient-to-bl from-[#3BB8E8] to-[#1A8BC2] rounded-full shadow-md transform -rotate-[20deg]">
+            <div className="absolute top-1 right-1 w-2 h-2 bg-white/30 rounded-full" />
+          </div>
         )}
+        
+        {/* 발 */}
+        <div className="absolute -bottom-2 left-6 w-7 h-4 bg-gradient-to-b from-[#2AABE2] to-[#1A7BA8] rounded-full shadow-md" />
+        <div className="absolute -bottom-2 right-6 w-7 h-4 bg-gradient-to-b from-[#2AABE2] to-[#1A7BA8] rounded-full shadow-md" />
         
         {/* 반짝이 효과 (excited 상태) */}
         {emotion === "excited" && (
           <>
-            <div className="absolute -top-3 -right-3 animate-[sparkle_1s_ease-in-out_infinite]">
-              <Sparkles className="w-6 h-6 text-yellow-400 drop-shadow-lg" />
+            <div className="absolute -top-6 -right-4 animate-[sparkle_0.8s_ease-in-out_infinite]">
+              <Sparkles className="w-7 h-7 text-yellow-400 drop-shadow-lg" />
             </div>
-            <div className="absolute -top-2 -left-4 animate-[sparkle_1s_ease-in-out_infinite_0.3s]">
-              <Sparkles className="w-5 h-5 text-yellow-300 drop-shadow-lg" />
+            <div className="absolute -top-4 -left-5 animate-[sparkle_0.8s_ease-in-out_infinite_0.2s]">
+              <Sparkles className="w-6 h-6 text-yellow-300 drop-shadow-lg" />
             </div>
-            <div className="absolute top-0 right-2 animate-[sparkle_1s_ease-in-out_infinite_0.6s]">
-              <Sparkles className="w-4 h-4 text-orange-300 drop-shadow-lg" />
+            <div className="absolute top-2 right-0 animate-[sparkle_0.8s_ease-in-out_infinite_0.4s]">
+              <Sparkles className="w-5 h-5 text-orange-300 drop-shadow-lg" />
+            </div>
+            <div className="absolute -top-2 left-8 animate-[sparkle_0.8s_ease-in-out_infinite_0.6s]">
+              <Sparkles className="w-4 h-4 text-pink-300 drop-shadow-lg" />
             </div>
           </>
         )}
         
         {/* 물음표 (thinking 상태) */}
         {emotion === "thinking" && (
-          <div className="absolute -top-4 -right-2 animate-bounce">
-            <span className="text-2xl font-bold text-primary drop-shadow-md">?</span>
+          <div className="absolute -top-6 -right-2 animate-bounce">
+            <div className="bg-white/90 rounded-full p-2 shadow-lg">
+              <span className="text-xl font-bold text-primary">?</span>
+            </div>
           </div>
+        )}
+        
+        {/* 하트 이펙트 (happy 상태) */}
+        {emotion === "happy" && (
+          <>
+            <div className="absolute -top-4 -right-2 animate-[float_2s_ease-in-out_infinite]">
+              <span className="text-lg drop-shadow-md">💙</span>
+            </div>
+          </>
         )}
       </div>
     </div>
