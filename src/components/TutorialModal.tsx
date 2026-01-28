@@ -355,18 +355,20 @@ export function TutorialModal({ open, onComplete, onSkip, onStartGuide, userName
       // STEP 2-2: 알려줘 선택 - 이수 GPT 소개
       case "intro-show":
         return (
-          <div className="flex flex-col items-center gap-8 py-8">
+          <div className="flex flex-col items-center gap-6 py-8">
             <MascotCharacter emotion="excited" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-500" />
-            <MessageBubble>
-              저는 일반 상식뿐만 아니라<br />
-              <strong className="text-primary">사규와 생활 가이드</strong> 등 사내 정보까지 알고 있어요.<br />
-              그래서 업무 중 생기는 다양한 궁금증을 도와드릴 수 있어요.
-            </MessageBubble>
-            <MessageBubble delay={300}>
-              단순히 질문에 답만 하는 AI가 아니라,<br />
-              여러분을 먼저 생각하고 함께 소통하는<br />
-              <strong className="text-primary">친구 같은 업무 비서</strong>를 목표로 하고 있어요. 💙
-            </MessageBubble>
+            <div className="flex flex-col gap-4">
+              <MessageBubble>
+                저는 일반 상식뿐만 아니라<br />
+                <strong className="text-primary">사규와 생활 가이드</strong> 등 사내 정보까지 알고 있어요.<br />
+                그래서 업무 중 생기는 다양한 궁금증을 도와드릴 수 있어요.
+              </MessageBubble>
+              <MessageBubble delay={300}>
+                단순히 질문에 답만 하는 AI가 아니라,<br />
+                여러분을 먼저 생각하고 함께 소통하는<br />
+                <strong className="text-primary">친구 같은 업무 비서</strong>를 목표로 하고 있어요. 💙
+              </MessageBubble>
+            </div>
             <ChoiceButtons
               choices={[{ label: "화면 둘러보기 🚀", value: "start-guide" }]}
               onSelect={() => {
