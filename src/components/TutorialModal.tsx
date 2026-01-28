@@ -35,7 +35,8 @@ export type TutorialStep =
   | "greeting"           // STEP 1: 첫 인사
   | "intro-ask"          // STEP 2: 소개 여부 묻기
   | "intro-skip"         // STEP 2-1: 괜찮아 선택
-  | "intro-show"         // STEP 2-2: 알려줘 선택
+  | "intro-show-1"       // STEP 2-2: 알려줘 선택 - 첫번째 소개
+  | "intro-show-2"       // STEP 2-2: 알려줘 선택 - 두번째 소개
   | "user-info-ask"      // STEP 3: 사용자 정보 설정 여부
   | "user-info-skip"     // STEP 3-1: 싫어 선택
   | "user-info-settings" // STEP 3-2: 좋아 선택 - 설정 시작
@@ -45,6 +46,35 @@ export type TutorialStep =
   | "settings-websearch" // 자동 웹 검색
   | "settings-recommend" // 다음 질문 추천
   | "complete";          // 완료
+
+// 목차 정의 - 클릭으로 이동 가능한 주요 단계
+const stepPhases = [
+  { id: "greeting", label: "인사", steps: ["greeting"] },
+  { id: "intro", label: "소개", steps: ["intro-ask", "intro-skip", "intro-show-1", "intro-show-2"] },
+  { id: "user-info", label: "설정", steps: ["user-info-ask", "user-info-skip", "user-info-settings", "settings-name", "settings-tone", "settings-length", "settings-websearch", "settings-recommend"] },
+  { id: "complete", label: "완료", steps: ["complete"] },
+] as const;
+
+// 현재 스텝이 속한 phase index 찾기
+const getPhaseIndex = (step: TutorialStep): number => {
+  for (let i = 0; i < stepPhases.length; i++) {
+    if ((stepPhases[i].steps as readonly string[]).includes(step)) {
+      return i;
+    }
+  }
+  return 0;
+};
+
+// phase의 첫 번째 스텝 가져오기
+const getPhaseFirstStep = (phaseIndex: number): TutorialStep => {
+  const phaseSteps: Record<number, TutorialStep> = {
+    0: "greeting",
+    1: "intro-ask",
+    2: "user-info-ask",
+    3: "complete",
+  };
+  return phaseSteps[phaseIndex] || "greeting";
+};
 
 const toneOptions = [
   { id: "professional", label: "전문적인", emoji: "👔" },
@@ -331,7 +361,7 @@ export function TutorialModal({ open, onComplete, onSkip, onStartGuide, userName
                 { label: "괜찮아", value: "skip", variant: "secondary" },
                 { label: "알려줘", value: "show" },
               ]}
-              onSelect={(value) => setStep(value === "skip" ? "intro-skip" : "intro-show")}
+              onSelect={(value) => setStep(value === "skip" ? "intro-skip" : "intro-show-1")}
             />
           </div>
         );
@@ -352,38 +382,58 @@ export function TutorialModal({ open, onComplete, onSkip, onStartGuide, userName
           </div>
         );
       
-      // STEP 2-2: 알려줘 선택 - 이수 GPT 소개
-      case "intro-show":
+      // STEP 2-2: 알려줘 선택 - 이수 GPT 소개 (1/2)
+      case "intro-show-1":
         return (
           <div className="flex flex-col items-center gap-6 py-8">
             <MascotCharacter emotion="excited" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-500" />
-            <div className="flex flex-col gap-4">
-              <MessageBubble>
-                저는 일반 상식뿐만 아니라<br />
-                <strong className="text-primary">사규와 생활 가이드</strong> 등 사내 정보까지 알고 있어요.<br />
-                그래서 업무 중 생기는 다양한 궁금증을 도와드릴 수 있어요.
-              </MessageBubble>
-              <MessageBubble delay={300}>
-                단순히 질문에 답만 하는 AI가 아니라,<br />
-                여러분을 먼저 생각하고 함께 소통하는<br />
-                <strong className="text-primary">친구 같은 업무 비서</strong>를 목표로 하고 있어요. 💙
-              </MessageBubble>
-            </div>
+            <MessageBubble>
+              저는 일반 상식뿐만 아니라<br />
+              <strong className="text-primary">사규와 생활 가이드</strong> 등 사내 정보까지 알고 있어요.<br />
+              그래서 업무 중 생기는 다양한 궁금증을 도와드릴 수 있어요.
+            </MessageBubble>
             <ChoiceButtons
               choices={[
-                { label: "이전", value: "back" },
-                { label: "화면 둘러보기 🚀", value: "start-guide" }
+                { label: "이전", value: "back", variant: "secondary" },
+                { label: "다음", value: "next" }
               ]}
               onSelect={(value) => {
                 if (value === "back") {
                   setStep("intro-ask");
+                } else {
+                  setStep("intro-show-2");
+                }
+              }}
+              delay={300}
+            />
+          </div>
+        );
+      
+      // STEP 2-2: 알려줘 선택 - 이수 GPT 소개 (2/2)
+      case "intro-show-2":
+        return (
+          <div className="flex flex-col items-center gap-6 py-8">
+            <MascotCharacter emotion="happy" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-500" />
+            <MessageBubble>
+              단순히 질문에 답만 하는 AI가 아니라,<br />
+              여러분을 먼저 생각하고 함께 소통하는<br />
+              <strong className="text-primary">친구 같은 업무 비서</strong>를 목표로 하고 있어요. 💙
+            </MessageBubble>
+            <ChoiceButtons
+              choices={[
+                { label: "이전", value: "back", variant: "secondary" },
+                { label: "화면 둘러보기 🚀", value: "start-guide" }
+              ]}
+              onSelect={(value) => {
+                if (value === "back") {
+                  setStep("intro-show-1");
                 } else if (onStartGuide) {
                   onStartGuide();
                 } else {
                   setStep("user-info-ask");
                 }
               }}
-              delay={600}
+              delay={300}
             />
           </div>
         );
@@ -663,8 +713,9 @@ export function TutorialModal({ open, onComplete, onSkip, onStartGuide, userName
       "greeting": "greeting",
       "intro-ask": "greeting",
       "intro-skip": "intro-ask",
-      "intro-show": "intro-ask",
-      "user-info-ask": step === "intro-skip" ? "intro-skip" : "intro-show",
+      "intro-show-1": "intro-ask",
+      "intro-show-2": "intro-show-1",
+      "user-info-ask": step === "intro-skip" ? "intro-skip" : "intro-show-2",
       "user-info-skip": "user-info-ask",
       "user-info-settings": "user-info-ask",
       "settings-name": "user-info-settings",
@@ -716,22 +767,36 @@ export function TutorialModal({ open, onComplete, onSkip, onStartGuide, userName
           {renderStepContent()}
         </div>
         
-        {/* 진행 표시 */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
-          {["greeting", "intro", "user-info", "settings", "complete"].map((phase, idx) => {
-            const currentPhaseIndex = step === "greeting" ? 0 
-              : step.startsWith("intro") ? 1 
-              : step.startsWith("user-info") ? 2 
-              : step.startsWith("settings") ? 3 
-              : 4;
+        {/* 목차 네비게이션 */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-sm">
+          {stepPhases.map((phase, idx) => {
+            const currentPhaseIndex = getPhaseIndex(step);
+            const isActive = idx === currentPhaseIndex;
+            const isPast = idx < currentPhaseIndex;
+            const isClickable = idx <= currentPhaseIndex; // 이전 단계만 클릭 가능
+            
             return (
-              <div
-                key={phase}
+              <button
+                key={phase.id}
+                onClick={() => {
+                  if (isClickable && !isActive) {
+                    setStep(getPhaseFirstStep(idx));
+                  }
+                }}
+                disabled={!isClickable}
                 className={cn(
-                  "w-2 h-2 rounded-full transition-all duration-300",
-                  idx <= currentPhaseIndex ? "bg-primary" : "bg-gray-300"
+                  "flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium transition-all duration-300",
+                  isActive && "bg-primary text-white",
+                  isPast && "text-primary hover:bg-primary/10 cursor-pointer",
+                  !isClickable && "text-gray-300 cursor-not-allowed"
                 )}
-              />
+              >
+                <span className={cn(
+                  "w-1.5 h-1.5 rounded-full",
+                  isActive ? "bg-white" : isPast ? "bg-primary" : "bg-gray-300"
+                )} />
+                {phase.label}
+              </button>
             );
           })}
         </div>
