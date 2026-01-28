@@ -16,10 +16,12 @@ interface TutorialModalProps {
   open: boolean;
   onComplete: (settings: UserSettings) => void;
   onSkip: () => void;
+  onStartGuide?: () => void; // 화면 가이드 시작 콜백
   userName?: string; // 박경민 등 사전에 알고있는 이름
+  initialStep?: TutorialStep; // 초기 스텝 (가이드 완료 후 돌아올 때 사용)
 }
 
-interface UserSettings {
+export interface UserSettings {
   userName: string;
   assistantName: string;
   toneStyle: string;
@@ -29,7 +31,7 @@ interface UserSettings {
 }
 
 // 튜토리얼 스텝 타입
-type TutorialStep = 
+export type TutorialStep = 
   | "greeting"           // STEP 1: 첫 인사
   | "intro-ask"          // STEP 2: 소개 여부 묻기
   | "intro-skip"         // STEP 2-1: 괜찮아 선택
@@ -230,8 +232,15 @@ function ChoiceButtons({
   );
 }
 
-export function TutorialModal({ open, onComplete, onSkip, userName: initialUserName = "경민" }: TutorialModalProps) {
-  const [step, setStep] = useState<TutorialStep>("greeting");
+export function TutorialModal({ open, onComplete, onSkip, onStartGuide, userName: initialUserName = "경민", initialStep }: TutorialModalProps) {
+  const [step, setStep] = useState<TutorialStep>(initialStep || "greeting");
+  
+  // initialStep이 변경되면 스텝 업데이트
+  useEffect(() => {
+    if (initialStep) {
+      setStep(initialStep);
+    }
+  }, [initialStep]);
   const [userName, setUserName] = useState("");
   const [assistantName, setAssistantName] = useState("이수 GPT");
   const [toneStyle, setToneStyle] = useState("warm");
@@ -343,53 +352,24 @@ export function TutorialModal({ open, onComplete, onSkip, userName: initialUserN
           </div>
         );
       
-      // STEP 2-2: 알려줘 선택 - 기능 소개
+      // STEP 2-2: 알려줘 선택 - 화면 가이드 시작
       case "intro-show":
         return (
-          <div className="flex flex-col items-center gap-6 py-6">
+          <div className="flex flex-col items-center gap-8 py-8">
             <MascotCharacter emotion="excited" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-500" />
-            
-            {/* 기능 소개 카드들 */}
-            <div className="w-full max-w-lg space-y-4 px-4">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-md motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-left-4 motion-safe:duration-300" style={{ animationDelay: "100ms" }}>
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">📋</span>
-                  <div>
-                    <h4 className="font-semibold text-gray-800">메인 메뉴</h4>
-                    <p className="text-sm text-gray-600">자주 쓰는 기능들을 빠르게 찾아보세요</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-md motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-right-4 motion-safe:duration-300" style={{ animationDelay: "200ms" }}>
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">💬</span>
-                  <div>
-                    <h4 className="font-semibold text-gray-800">대화 창</h4>
-                    <p className="text-sm text-gray-600">무엇이든 물어보세요! 업무 도우미가 답해드려요</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-md motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-left-4 motion-safe:duration-300" style={{ animationDelay: "300ms" }}>
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">⚡</span>
-                  <div>
-                    <h4 className="font-semibold text-gray-800">사이드바</h4>
-                    <p className="text-sm text-gray-600">대화 기록과 즐겨찾기를 관리해요</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <MessageBubble delay={500}>
-              이수 GPT에 대해 궁금할 땐 언제든 다시 말씀해 주세요!
+            <MessageBubble>
+              좋아요! 제가 직접 화면을 돌아다니면서<br />
+              주요 기능들을 알려드릴게요! 🎯
             </MessageBubble>
-            
             <ChoiceButtons
-              choices={[{ label: "다음", value: "next" }]}
-              onSelect={() => setStep("user-info-ask")}
-              delay={600}
+              choices={[{ label: "화면 둘러보기 시작 🚀", value: "start-guide" }]}
+              onSelect={() => {
+                if (onStartGuide) {
+                  onStartGuide();
+                } else {
+                  setStep("user-info-ask");
+                }
+              }}
             />
           </div>
         );

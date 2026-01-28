@@ -16,7 +16,8 @@ import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { Source } from "@/components/ChatMessage";
-import { TutorialModal } from "@/components/TutorialModal";
+import { TutorialModal, TutorialStep } from "@/components/TutorialModal";
+import { TutorialGuideOverlay } from "@/components/TutorialGuideOverlay";
 
 interface Message {
   id: string;
@@ -55,12 +56,27 @@ const Index = () => {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [editTitleValue, setEditTitleValue] = useState("");
   
-  // Initial setup modal state - always show on page load
+  // Tutorial state
   const [showSetupModal, setShowSetupModal] = useState(true);
+  const [showGuideOverlay, setShowGuideOverlay] = useState(false);
+  const [tutorialStep, setTutorialStep] = useState<TutorialStep | undefined>(undefined);
   const [userSettings, setUserSettings] = useState<UserSettings | null>(() => {
     const saved = localStorage.getItem("userSettings");
     return saved ? JSON.parse(saved) : null;
   });
+
+  // 화면 가이드 시작 핸들러
+  const handleStartGuide = () => {
+    setShowSetupModal(false);
+    setShowGuideOverlay(true);
+  };
+
+  // 화면 가이드 완료 핸들러
+  const handleGuideComplete = () => {
+    setShowGuideOverlay(false);
+    setTutorialStep("user-info-ask"); // 다음 단계로 설정
+    setShowSetupModal(true); // 다시 모달로 돌아가기
+  };
 
   const handleSetupComplete = (settings: UserSettings) => {
     setUserSettings(settings);
@@ -257,8 +273,18 @@ const Index = () => {
       open={showSetupModal} 
       onComplete={handleSetupComplete} 
       onSkip={handleSetupSkip}
+      onStartGuide={handleStartGuide}
       userName="경민"
+      initialStep={tutorialStep}
     />
+    
+    {/* Tutorial Guide Overlay - 화면 위를 돌아다니는 가이드 */}
+    {showGuideOverlay && (
+      <TutorialGuideOverlay 
+        onComplete={handleGuideComplete}
+        onSkip={handleSetupSkip}
+      />
+    )}
     
     <div className="min-h-screen bg-background flex flex-col">
       {/* Top Header Area - spans full width */}
