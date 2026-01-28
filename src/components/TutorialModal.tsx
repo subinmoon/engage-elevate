@@ -370,9 +370,14 @@ export function TutorialModal({ open, onComplete, onSkip, onStartGuide, userName
               </MessageBubble>
             </div>
             <ChoiceButtons
-              choices={[{ label: "화면 둘러보기 🚀", value: "start-guide" }]}
-              onSelect={() => {
-                if (onStartGuide) {
+              choices={[
+                { label: "이전", value: "back" },
+                { label: "화면 둘러보기 🚀", value: "start-guide" }
+              ]}
+              onSelect={(value) => {
+                if (value === "back") {
+                  setStep("intro-ask");
+                } else if (onStartGuide) {
                   onStartGuide();
                 } else {
                   setStep("user-info-ask");
