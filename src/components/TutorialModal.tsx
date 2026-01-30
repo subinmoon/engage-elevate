@@ -758,10 +758,10 @@ export function TutorialModal({ open, onComplete, onSkip, onStartGuide, userName
           <X className="w-4 h-4" />
         </button>
         
-        {/* 메인 콘텐츠 영역 - 고정 높이 */}
+        {/* 메인 콘텐츠 영역 - 스크롤 없이 맞춤 */}
         <div 
           ref={contentRef}
-          className="h-full overflow-y-auto px-6 py-4 flex flex-col"
+          className="h-full px-6 py-4 flex flex-col justify-center"
         >
           {renderStepContent()}
         </div>
