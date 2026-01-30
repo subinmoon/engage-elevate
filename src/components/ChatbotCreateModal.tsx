@@ -179,21 +179,18 @@ export const ChatbotCreateModal = ({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto pt-4">
-        {/* 상단 버튼 줄: 뒤로 (왼쪽) / 닫기 (오른쪽, DialogContent 기본 X 버튼 사용) */}
-        <div className="flex items-center justify-start mb-2">
+      <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+        {/* 상단 헤더: 뒤로 / 제목 / X(기본) 한 줄 */}
+        <DialogHeader className="flex flex-row items-center gap-3 pr-8">
           <button
             onClick={handleClose}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground text-sm font-medium transition-all"
+            className="shrink-0 flex items-center gap-1 px-2 py-1 rounded-full bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground text-sm font-medium transition-all"
           >
             <ArrowLeft className="w-4 h-4" />
             뒤로
           </button>
-        </div>
-
-        <DialogHeader>
-          <DialogTitle className="text-xl font-bold">
-            {editingChatbot ? "챗봇 수정" : "새 챗봇 만들기"}
+          <DialogTitle className="text-lg font-bold flex-1 text-center">
+            {editingChatbot ? "✏️ 챗봇 수정" : "✨ 새 챗봇 만들기"}
           </DialogTitle>
         </DialogHeader>
 
