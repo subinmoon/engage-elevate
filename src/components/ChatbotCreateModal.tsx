@@ -22,16 +22,16 @@ const analyzePromptAndGenerate = (prompt: string) => {
   
   // 키워드 기반 카테고리 매핑
   const categoryMappings = [
-    { keywords: ["hr", "인사", "채용", "급여", "휴가", "복리후생", "인재"], icon: "👥", category: "HR" },
-    { keywords: ["코딩", "개발", "프로그래밍", "코드", "버그", "디버깅", "개발자"], icon: "💻", category: "개발" },
-    { keywords: ["ai", "인공지능", "머신러닝", "딥러닝", "gpt", "llm"], icon: "🤖", category: "AI" },
-    { keywords: ["데이터", "분석", "통계", "차트", "리포트", "대시보드"], icon: "📊", category: "데이터" },
-    { keywords: ["it", "기술", "시스템", "서버", "네트워크", "보안"], icon: "🔧", category: "IT" },
-    { keywords: ["문서", "매뉴얼", "가이드", "규정", "정책", "사규"], icon: "📚", category: "문서" },
-    { keywords: ["아이디어", "브레인스토밍", "창의", "기획", "전략"], icon: "💡", category: "기획" },
-    { keywords: ["목표", "kpi", "성과", "평가", "프로젝트"], icon: "🎯", category: "목표" },
-    { keywords: ["메모", "노트", "기록", "일지", "회의록"], icon: "📝", category: "기록" },
-    { keywords: ["회사", "조직", "부서", "팀", "경영", "비즈니스"], icon: "🏢", category: "경영" },
+    { keywords: ["hr", "인사", "채용", "급여", "휴가", "복리후생", "인재"], icon: "👥", category: "HR", role: "HR 전문가" },
+    { keywords: ["코딩", "개발", "프로그래밍", "코드", "버그", "디버깅", "개발자"], icon: "💻", category: "개발", role: "시니어 개발자" },
+    { keywords: ["ai", "인공지능", "머신러닝", "딥러닝", "gpt", "llm"], icon: "🤖", category: "AI", role: "AI 전문가" },
+    { keywords: ["데이터", "분석", "통계", "차트", "리포트", "대시보드"], icon: "📊", category: "데이터", role: "데이터 분석가" },
+    { keywords: ["it", "기술", "시스템", "서버", "네트워크", "보안"], icon: "🔧", category: "IT", role: "IT 엔지니어" },
+    { keywords: ["문서", "매뉴얼", "가이드", "규정", "정책", "사규"], icon: "📚", category: "문서", role: "문서 전문가" },
+    { keywords: ["아이디어", "브레인스토밍", "창의", "기획", "전략"], icon: "💡", category: "기획", role: "전략 기획자" },
+    { keywords: ["목표", "kpi", "성과", "평가", "프로젝트"], icon: "🎯", category: "목표", role: "프로젝트 매니저" },
+    { keywords: ["메모", "노트", "기록", "일지", "회의록"], icon: "📝", category: "기록", role: "비서" },
+    { keywords: ["회사", "조직", "부서", "팀", "경영", "비즈니스"], icon: "🏢", category: "경영", role: "경영 컨설턴트" },
   ];
 
   let matchedCategory = categoryMappings.find(cat => 
@@ -39,12 +39,11 @@ const analyzePromptAndGenerate = (prompt: string) => {
   );
 
   if (!matchedCategory) {
-    matchedCategory = { keywords: [], icon: "🤖", category: "일반" };
+    matchedCategory = { keywords: [], icon: "🤖", category: "일반", role: "AI 어시스턴트" };
   }
 
   // 프롬프트에서 핵심 주제 추출
   const extractMainTopic = (text: string) => {
-    // 첫 문장 또는 주요 명사구 추출
     const sentences = text.split(/[.!?]/);
     const firstSentence = sentences[0]?.trim() || text.slice(0, 50);
     return firstSentence.length > 30 ? firstSentence.slice(0, 30) + "..." : firstSentence;
@@ -60,10 +59,23 @@ const analyzePromptAndGenerate = (prompt: string) => {
     ? `${mainTopic}에 대해 답변하는 AI 어시스턴트입니다.`
     : `${matchedCategory.category} 관련 질문에 답변하는 AI 어시스턴트입니다.`;
 
+  // 시스템 프롬프트 생성 (사용자 입력과 다르게!)
+  const generatedSystemPrompt = `당신은 ${matchedCategory.role}입니다.
+
+## 역할
+${prompt}
+
+## 지침
+- 사용자의 질문에 친절하고 전문적으로 답변합니다.
+- 정확한 정보를 제공하고, 불확실한 경우 솔직하게 알려줍니다.
+- 복잡한 내용은 단계별로 쉽게 설명합니다.
+- 한국어로 답변합니다.`;
+
   return {
     name: generatedName,
     description: generatedDescription,
     icon: matchedCategory.icon,
+    systemPrompt: generatedSystemPrompt,
   };
 };
 
@@ -127,8 +139,7 @@ export const ChatbotCreateModal = ({
       setName(generated.name);
       setDescription(generated.description);
       setIcon(generated.icon);
-      // 시스템 프롬프트도 자동 생성
-      setSystemPrompt(generationPrompt);
+      setSystemPrompt(generated.systemPrompt);
       setIsGenerating(false);
       toast.success("AI가 챗봇 정보를 자동 생성했습니다!");
     }, 800);
