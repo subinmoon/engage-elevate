@@ -11,35 +11,56 @@ interface GuideStep {
   highlightArea?: { top: string; left: string; width: string; height: string };
 }
 
-// 가이드 스텝 데이터 (메시지는 나중에 수정 가능하도록 placeholder)
+// 가이드 스텝 데이터
 const guideSteps: GuideStep[] = [
   {
     id: "sidebar",
-    position: { x: "270px", y: "180px" },
+    position: { x: "270px", y: "200px" },
     bubblePosition: "right",
-    message: "사이드바 설명 (수정 예정)",
+    message: "여기는 사이드바예요! 🗂️\n새 채팅을 시작하거나\n이전 대화를 찾을 수 있어요.",
     highlightArea: { top: "48px", left: "0", width: "256px", height: "calc(100% - 48px)" },
   },
   {
     id: "header",
-    position: { x: "calc(50% + 128px)", y: "100px" },
+    position: { x: "calc(50% + 128px)", y: "80px" },
     bubblePosition: "bottom",
-    message: "상단 영역 설명 (수정 예정)",
+    message: "상단 헤더에서 홈으로 이동하거나\n즐겨찾기, 알림을 확인할 수 있어요! 🔔",
     highlightArea: { top: "0", left: "256px", width: "calc(100% - 256px)", height: "48px" },
   },
   {
-    id: "main-content",
-    position: { x: "calc(50% + 128px)", y: "50%" },
+    id: "quick-actions",
+    position: { x: "calc(50% + 128px)", y: "160px" },
+    bubblePosition: "bottom",
+    message: "⚡ 빠른 시작 버튼들이에요!\n자주 사용하는 작업을\n한 번의 클릭으로 시작할 수 있어요.",
+    highlightArea: { top: "100px", left: "280px", width: "calc(100% - 320px)", height: "80px" },
+  },
+  {
+    id: "popular-questions",
+    position: { x: "420px", y: "340px" },
     bubblePosition: "right",
-    message: "메인 콘텐츠 설명 (수정 예정)",
-    highlightArea: { top: "48px", left: "256px", width: "calc(100% - 256px)", height: "calc(100% - 160px)" },
+    message: "💬 다른 임직원들이 자주 묻는\n인기 질문들이에요!\n클릭하면 바로 질문할 수 있어요.",
+    highlightArea: { top: "200px", left: "280px", width: "340px", height: "200px" },
+  },
+  {
+    id: "work-life-helper",
+    position: { x: "calc(100% - 280px)", y: "340px" },
+    bubblePosition: "left",
+    message: "🏢 회사생활도우미예요!\n결재, 회의실, 식단 조회 등\n자주 쓰는 기능을 모아뒀어요.",
+    highlightArea: { top: "200px", left: "calc(100% - 380px)", width: "340px", height: "200px" },
+  },
+  {
+    id: "favorite-chatbots",
+    position: { x: "calc(50% + 128px)", y: "460px" },
+    bubblePosition: "top",
+    message: "⭐ 즐겨찾는 챗봇들이에요!\n나만의 챗봇을 만들거나\n자주 쓰는 챗봇을 추가해보세요.",
+    highlightArea: { top: "420px", left: "280px", width: "calc(100% - 320px)", height: "80px" },
   },
   {
     id: "chat-input",
-    position: { x: "calc(50% + 128px)", y: "calc(100% - 140px)" },
+    position: { x: "calc(50% + 128px)", y: "calc(100% - 160px)" },
     bubblePosition: "top",
-    message: "채팅 입력창 설명 (수정 예정)",
-    highlightArea: { top: "calc(100% - 100px)", left: "256px", width: "calc(100% - 256px)", height: "100px" },
+    message: "💬 여기에 질문을 입력하세요!\nAI 모델을 선택하고\n답변 길이도 조절할 수 있어요.",
+    highlightArea: { top: "calc(100% - 120px)", left: "280px", width: "calc(100% - 320px)", height: "100px" },
   },
 ];
 
