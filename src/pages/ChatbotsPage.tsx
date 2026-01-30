@@ -278,19 +278,21 @@ const ChatbotsPage = () => {
         )}
 
         {/* Right side header content */}
-        <div className="flex-1 flex items-center gap-3 px-4 py-2">
-          <button
-            onClick={() => navigate("/")}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground text-sm font-medium transition-all"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            뒤로
-          </button>
-          <h1 className="text-xl font-bold flex-1">🤖 챗봇 서비스 관리</h1>
-          <Button onClick={() => setIsCreateModalOpen(true)} className="gap-2">
-            <Plus className="w-4 h-4" />
-            챗봇 생성
-          </Button>
+        <div className="flex-1 px-4 py-2">
+          <div className="max-w-3xl mx-auto flex items-center gap-3">
+            <button
+              onClick={() => navigate("/")}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground text-sm font-medium transition-all"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              뒤로
+            </button>
+            <h1 className="text-xl font-bold flex-1">🤖 챗봇 서비스 관리</h1>
+            <Button onClick={() => setIsCreateModalOpen(true)} className="gap-2">
+              <Plus className="w-4 h-4" />
+              챗봇 생성
+            </Button>
+          </div>
         </div>
       </div>
 
