@@ -284,14 +284,9 @@ const ChatbotsPage = () => {
           </div>
         )}
 
-        {/* Right side header content */}
+        {/* Right side header content - same as Index */}
         <div className="flex-1 flex items-center gap-3 px-4 py-2">
-          <h1 className="text-xl font-bold">🤖 챗봇 서비스 관리</h1>
           <div className="flex-1" />
-          <Button onClick={() => setIsCreateModalOpen(true)} className="gap-2">
-            <Plus className="w-4 h-4" />
-            챗봇 생성
-          </Button>
           <HeaderNav isChatMode={false} currentChatId={null} chatHistory={[]} onShare={() => {}} onPin={() => {}} onDelete={() => {}} />
           <UpcomingSchedule 
             isExpanded={scheduleExpanded} 
@@ -323,61 +318,70 @@ const ChatbotsPage = () => {
         {/* 메인 콘텐츠 */}
         <main className="flex-1 overflow-y-auto">
           <div className="max-w-3xl mx-auto px-4 py-8">
-          {/* 필터 + 검색 */}
-          <div className="flex items-center justify-between gap-4 mb-6">
-          {/* 필터 버튼들 */}
-          <div className="flex gap-2">
-            {filters.map((filter) => (
-              <button
-                key={filter.key}
-                onClick={() => setActiveFilter(filter.key)}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  activeFilter === filter.key
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted hover:bg-muted/80 text-muted-foreground"
-                }`}
-              >
-                {filter.icon}
-                {filter.label}
-                {counts[filter.key] > 0 && (
-                  <span
-                    className={`text-xs px-1.5 py-0.5 rounded-full ${
+            {/* 페이지 제목 + 생성 버튼 */}
+            <div className="flex items-center justify-between mb-8">
+              <h1 className="text-2xl font-bold">🤖 챗봇 서비스 관리</h1>
+              <Button onClick={() => setIsCreateModalOpen(true)} className="gap-2">
+                <Plus className="w-4 h-4" />
+                챗봇 생성
+              </Button>
+            </div>
+
+            {/* 필터 + 검색 */}
+            <div className="flex items-center justify-between gap-4 mb-6">
+              {/* 필터 버튼들 */}
+              <div className="flex gap-2">
+                {filters.map((filter) => (
+                  <button
+                    key={filter.key}
+                    onClick={() => setActiveFilter(filter.key)}
+                    className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                       activeFilter === filter.key
-                        ? "bg-primary-foreground/20"
-                        : "bg-background"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted hover:bg-muted/80 text-muted-foreground"
                     }`}
                   >
-                    {counts[filter.key]}
-                  </span>
-                )}
-              </button>
-            ))}
-          </div>
+                    {filter.icon}
+                    {filter.label}
+                    {counts[filter.key] > 0 && (
+                      <span
+                        className={`text-xs px-1.5 py-0.5 rounded-full ${
+                          activeFilter === filter.key
+                            ? "bg-primary-foreground/20"
+                            : "bg-background"
+                        }`}
+                      >
+                        {counts[filter.key]}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
 
-          {/* 검색창 */}
-          <div className="relative w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              placeholder="챗봇 검색..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-        </div>
-
-        {/* 챗봇 목록 */}
-        <div className="space-y-4">
-          {filteredChatbots.length === 0 ? (
-            <div className="text-center py-20 text-muted-foreground">
-              {getEmptyMessage().icon}
-              <p className="text-lg font-medium">{getEmptyMessage().title}</p>
-              <p className="text-sm mt-2">{getEmptyMessage().desc}</p>
+              {/* 검색창 */}
+              <div className="relative w-64">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="챗봇 검색..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
             </div>
-          ) : (
-            filteredChatbots.map((chatbot) => renderChatbotItem(chatbot))
-          )}
-          </div>
+
+            {/* 챗봇 목록 */}
+            <div className="space-y-4">
+              {filteredChatbots.length === 0 ? (
+                <div className="text-center py-20 text-muted-foreground">
+                  {getEmptyMessage().icon}
+                  <p className="text-lg font-medium">{getEmptyMessage().title}</p>
+                  <p className="text-sm mt-2">{getEmptyMessage().desc}</p>
+                </div>
+              ) : (
+                filteredChatbots.map((chatbot) => renderChatbotItem(chatbot))
+              )}
+            </div>
           </div>
         </main>
       </div>
