@@ -74,8 +74,11 @@ const Index = () => {
   // 화면 가이드 완료 핸들러
   const handleGuideComplete = () => {
     setShowGuideOverlay(false);
-    setTutorialStep("user-info-ask"); // 다음 단계로 설정
-    setShowSetupModal(true); // 다시 모달로 돌아가기
+    // 먼저 스텝을 설정한 후 모달 열기 (순서 중요)
+    setTimeout(() => {
+      setTutorialStep("user-info-ask"); // 다음 단계로 설정
+      setShowSetupModal(true); // 다시 모달로 돌아가기
+    }, 100);
   };
 
   const handleSetupComplete = (settings: UserSettings) => {

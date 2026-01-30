@@ -265,12 +265,12 @@ function ChoiceButtons({
 export function TutorialModal({ open, onComplete, onSkip, onStartGuide, userName: initialUserName = "경민", initialStep }: TutorialModalProps) {
   const [step, setStep] = useState<TutorialStep>(initialStep || "greeting");
   
-  // initialStep이 변경되면 스텝 업데이트
+  // initialStep이 변경되거나 모달이 열릴 때 스텝 업데이트
   useEffect(() => {
-    if (initialStep) {
+    if (open && initialStep) {
       setStep(initialStep);
     }
-  }, [initialStep]);
+  }, [initialStep, open]);
   const [userName, setUserName] = useState("");
   const [assistantName, setAssistantName] = useState("이수 GPT");
   const [toneStyle, setToneStyle] = useState("warm");
