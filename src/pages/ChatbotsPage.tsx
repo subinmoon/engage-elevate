@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Star, MoreHorizontal, Pencil, Trash2, Users, User, Search, ArrowLeft, PanelLeftClose } from "lucide-react";
+import { Plus, Star, MoreHorizontal, Pencil, Trash2, Users, User, Search, PanelLeftClose } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +13,8 @@ import { toast } from "sonner";
 import { ChatbotCreateModal } from "@/components/ChatbotCreateModal";
 import Sidebar from "@/components/Sidebar";
 import SidebarTrigger from "@/components/SidebarTrigger";
+import HeaderNav from "@/components/HeaderNav";
+import UpcomingSchedule from "@/components/UpcomingSchedule";
 import logoIcon from "@/assets/logo-icon.png";
 export interface Chatbot {
   id: string;
@@ -65,6 +67,11 @@ const ChatbotsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingChatbot, setEditingChatbot] = useState<Chatbot | null>(null);
+  const [scheduleExpanded, setScheduleExpanded] = useState(false);
+  const [userSettings] = useState(() => {
+    const saved = localStorage.getItem("userSettings");
+    return saved ? JSON.parse(saved) : null;
+  });
   // 필터별 챗봇 목록
   const getFilteredChatbots = () => {
     let filtered: Chatbot[];
@@ -278,20 +285,27 @@ const ChatbotsPage = () => {
         )}
 
         {/* Right side header content */}
-        <div className="flex-1 px-4 py-2">
-          <div className="max-w-3xl mx-auto flex items-center gap-3">
-            <button
-              onClick={() => navigate("/")}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground text-sm font-medium transition-all"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              뒤로
-            </button>
-            <h1 className="text-xl font-bold flex-1">🤖 챗봇 서비스 관리</h1>
-            <Button onClick={() => setIsCreateModalOpen(true)} className="gap-2">
-              <Plus className="w-4 h-4" />
-              챗봇 생성
-            </Button>
+        <div className="flex-1 flex items-center gap-3 px-4 py-2">
+          <h1 className="text-xl font-bold">🤖 챗봇 서비스 관리</h1>
+          <div className="flex-1" />
+          <Button onClick={() => setIsCreateModalOpen(true)} className="gap-2">
+            <Plus className="w-4 h-4" />
+            챗봇 생성
+          </Button>
+          <HeaderNav isChatMode={false} currentChatId={null} chatHistory={[]} onShare={() => {}} onPin={() => {}} onDelete={() => {}} />
+          <UpcomingSchedule 
+            isExpanded={scheduleExpanded} 
+            onToggle={() => setScheduleExpanded(!scheduleExpanded)} 
+            onGetHelp={() => {}} 
+          />
+          {/* User Profile */}
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium text-primary">
+              {userSettings?.assistantName?.[0] || "문"}
+            </div>
+            <span className="text-sm font-medium text-foreground hidden sm:block">
+              {userSettings?.assistantName || "문수빈"}
+            </span>
           </div>
         </div>
       </div>
