@@ -95,7 +95,7 @@ const WelcomeHeader = ({ userName = "현민", onSelectAction }: WelcomeHeaderPro
       </div>
 
       {/* Quick Actions */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2" data-guide="quick-actions">
         {actions.map((action) => (
           <button
             key={action.id}

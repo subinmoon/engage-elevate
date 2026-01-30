@@ -129,6 +129,7 @@ const Sidebar = ({
 
   return (
     <aside 
+      data-guide="sidebar"
       className={`${
         isOpen ? "w-64" : "w-0"
       } bg-card flex flex-col transition-all duration-300 overflow-hidden shrink-0`}

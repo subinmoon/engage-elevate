@@ -396,7 +396,7 @@ const Index = () => {
     
     <div className="min-h-screen bg-background flex flex-col">
       {/* Top Header Area - spans full width */}
-      <div className="flex items-center">
+      <div className="flex items-center" data-guide="header">
         {/* Logo area - matches sidebar background, hidden when sidebar closed */}
         {sidebarOpen && <div className="flex items-center gap-2 shrink-0 px-4 py-2 w-64 bg-card">
             <img src={logoIcon} alt="Logo" className="w-8 h-8" />
@@ -490,28 +490,30 @@ const Index = () => {
               
               {/* Main Content Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
-                <div className="lg:col-span-3">
+                <div className="lg:col-span-3" data-guide="popular-questions">
                   <RecentInterests hasHistory={chatHistory.length > 0} onQuestionClick={question => {
                   setPrefillMessage(question);
                 }} />
                 </div>
-                <div className="lg:col-span-2">
+                <div className="lg:col-span-2" data-guide="work-life-helper">
                   <HRHelper />
                 </div>
               </div>
               
               {/* Favorite Chatbots */}
-              <div className="mb-6">
+              <div className="mb-6" data-guide="favorite-chatbots">
                 <FavoriteChatbots hasHistory={chatHistory.length > 0} onSelectChatbot={chatbot => {
                 setPrefillMessage(`${chatbot.name}에게 질문하기: `);
               }} />
               </div>
               
               {/* Chat Input - Bottom */}
-              <ChatInput onSendMessage={msg => {
-              handleSendMessage(msg);
-              setPrefillMessage("");
-            }} initialMessage={prefillMessage} onMessageChange={() => setPrefillMessage("")} />
+              <div data-guide="chat-input">
+                <ChatInput onSendMessage={msg => {
+                handleSendMessage(msg);
+                setPrefillMessage("");
+              }} initialMessage={prefillMessage} onMessageChange={() => setPrefillMessage("")} />
+              </div>
             </>}
           </div>
         </main>
