@@ -12,9 +12,60 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Upload, User, Users, Globe, Lock } from "lucide-react";
+import { Upload, Users, Globe, Lock, Sparkles, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import type { Chatbot } from "./ChatbotManagementModal";
+
+// 프롬프트 분석을 통한 자동 생성 함수
+const analyzePromptAndGenerate = (prompt: string) => {
+  const promptLower = prompt.toLowerCase();
+  
+  // 키워드 기반 카테고리 매핑
+  const categoryMappings = [
+    { keywords: ["hr", "인사", "채용", "급여", "휴가", "복리후생", "인재"], icon: "👥", category: "HR" },
+    { keywords: ["코딩", "개발", "프로그래밍", "코드", "버그", "디버깅", "개발자"], icon: "💻", category: "개발" },
+    { keywords: ["ai", "인공지능", "머신러닝", "딥러닝", "gpt", "llm"], icon: "🤖", category: "AI" },
+    { keywords: ["데이터", "분석", "통계", "차트", "리포트", "대시보드"], icon: "📊", category: "데이터" },
+    { keywords: ["it", "기술", "시스템", "서버", "네트워크", "보안"], icon: "🔧", category: "IT" },
+    { keywords: ["문서", "매뉴얼", "가이드", "규정", "정책", "사규"], icon: "📚", category: "문서" },
+    { keywords: ["아이디어", "브레인스토밍", "창의", "기획", "전략"], icon: "💡", category: "기획" },
+    { keywords: ["목표", "kpi", "성과", "평가", "프로젝트"], icon: "🎯", category: "목표" },
+    { keywords: ["메모", "노트", "기록", "일지", "회의록"], icon: "📝", category: "기록" },
+    { keywords: ["회사", "조직", "부서", "팀", "경영", "비즈니스"], icon: "🏢", category: "경영" },
+  ];
+
+  let matchedCategory = categoryMappings.find(cat => 
+    cat.keywords.some(keyword => promptLower.includes(keyword))
+  );
+
+  if (!matchedCategory) {
+    matchedCategory = { keywords: [], icon: "🤖", category: "일반" };
+  }
+
+  // 프롬프트에서 핵심 주제 추출
+  const extractMainTopic = (text: string) => {
+    // 첫 문장 또는 주요 명사구 추출
+    const sentences = text.split(/[.!?]/);
+    const firstSentence = sentences[0]?.trim() || text.slice(0, 50);
+    return firstSentence.length > 30 ? firstSentence.slice(0, 30) + "..." : firstSentence;
+  };
+
+  const mainTopic = extractMainTopic(prompt);
+  
+  // 이름 생성
+  const generatedName = `${matchedCategory.category} 도우미`;
+  
+  // 설명 생성
+  const generatedDescription = prompt.length > 10 
+    ? `${mainTopic}에 대해 답변하는 AI 어시스턴트입니다.`
+    : `${matchedCategory.category} 관련 질문에 답변하는 AI 어시스턴트입니다.`;
+
+  return {
+    name: generatedName,
+    description: generatedDescription,
+    icon: matchedCategory.icon,
+  };
+};
 
 const ICON_OPTIONS = [
   { value: "📊", label: "📊 차트" },
@@ -59,6 +110,26 @@ export const ChatbotCreateModal = ({
   const [visibility, setVisibility] = useState<VisibilityType>(
     editingChatbot?.visibility || "personal"
   );
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const handleAIGenerate = () => {
+    if (!prompt.trim()) {
+      toast.error("프롬프트를 먼저 입력해주세요");
+      return;
+    }
+
+    setIsGenerating(true);
+    
+    // 자연스러운 UX를 위한 딜레이
+    setTimeout(() => {
+      const generated = analyzePromptAndGenerate(prompt);
+      setName(generated.name);
+      setDescription(generated.description);
+      setIcon(generated.icon);
+      setIsGenerating(false);
+      toast.success("AI가 챗봇 정보를 자동 생성했습니다!");
+    }, 800);
+  };
 
   const handleSubmit = () => {
     if (!name.trim()) {
@@ -160,10 +231,27 @@ export const ChatbotCreateModal = ({
 
           {/* 프롬프트 */}
           <div className="space-y-2">
-            <Label htmlFor="prompt">프롬프트</Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="prompt">프롬프트</Label>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleAIGenerate}
+                disabled={isGenerating || !prompt.trim()}
+                className="gap-1.5 text-primary hover:text-primary"
+              >
+                {isGenerating ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Sparkles className="w-4 h-4" />
+                )}
+                AI 자동 생성
+              </Button>
+            </div>
             <Textarea
               id="prompt"
-              placeholder="프롬프트를 작성해주세요"
+              placeholder="프롬프트를 작성하면 AI가 챗봇 이름, 설명, 아이콘을 자동으로 생성해줍니다"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               className="min-h-[120px]"
