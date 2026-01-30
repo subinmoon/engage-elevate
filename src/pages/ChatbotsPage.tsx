@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Star, MoreHorizontal, Pencil, Trash2, Users, User, Search, ArrowLeft } from "lucide-react";
+import { Plus, Star, MoreHorizontal, Pencil, Trash2, Users, User, Search, ArrowLeft, PanelLeftClose } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +11,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { ChatbotCreateModal } from "@/components/ChatbotCreateModal";
-
+import Sidebar from "@/components/Sidebar";
+import SidebarTrigger from "@/components/SidebarTrigger";
+import logoIcon from "@/assets/logo-icon.png";
 export interface Chatbot {
   id: string;
   name: string;
@@ -57,12 +59,12 @@ const initialChatbots: Chatbot[] = [
 
 const ChatbotsPage = () => {
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [chatbots, setChatbots] = useState<Chatbot[]>(initialChatbots);
   const [activeFilter, setActiveFilter] = useState<FilterType>("favorites");
   const [searchQuery, setSearchQuery] = useState("");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingChatbot, setEditingChatbot] = useState<Chatbot | null>(null);
-
   // 필터별 챗봇 목록
   const getFilteredChatbots = () => {
     let filtered: Chatbot[];
@@ -255,10 +257,28 @@ const ChatbotsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* 헤더 */}
-      <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b border-border">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center gap-4">
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Sidebar Trigger - visible when sidebar closed */}
+      {!sidebarOpen && <SidebarTrigger onClick={() => setSidebarOpen(true)} />}
+
+      {/* Top Header Area - spans full width */}
+      <div className="flex items-center">
+        {/* Logo area - matches sidebar background, hidden when sidebar closed */}
+        {sidebarOpen && (
+          <div className="flex items-center gap-2 shrink-0 px-4 py-2 w-64 bg-card">
+            <img src={logoIcon} alt="Logo" className="w-8 h-8" />
+            <span className="font-bold text-foreground">ISU GPT</span>
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="ml-auto p-1.5 hover:bg-muted rounded-lg transition-colors"
+            >
+              <PanelLeftClose className="w-4 h-4 text-muted-foreground" />
+            </button>
+          </div>
+        )}
+
+        {/* Right side header content */}
+        <div className="flex-1 flex items-center gap-3 px-4 py-2">
           <button
             onClick={() => navigate("/")}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground text-sm font-medium transition-all"
@@ -272,11 +292,21 @@ const ChatbotsPage = () => {
             챗봇 생성
           </Button>
         </div>
-      </header>
+      </div>
 
-      {/* 메인 콘텐츠 */}
-      <main className="max-w-5xl mx-auto px-6 py-8">
-        {/* 필터 + 검색 */}
+      {/* Main Area - Sidebar + Content */}
+      <div className="flex flex-1">
+        {/* Sidebar Body (without header) */}
+        <Sidebar
+          isOpen={sidebarOpen}
+          onToggle={() => setSidebarOpen(!sidebarOpen)}
+          hideHeader={true}
+          onNewChat={() => navigate("/")}
+        />
+
+        {/* 메인 콘텐츠 */}
+        <main className="flex-1 overflow-y-auto p-6">
+          {/* 필터 + 검색 */}
         <div className="flex items-center justify-between gap-4 mb-6">
           {/* 필터 버튼들 */}
           <div className="flex gap-2">
@@ -331,7 +361,8 @@ const ChatbotsPage = () => {
             filteredChatbots.map((chatbot) => renderChatbotItem(chatbot))
           )}
         </div>
-      </main>
+        </main>
+      </div>
 
       {/* 챗봇 생성/수정 모달 */}
       <ChatbotCreateModal
