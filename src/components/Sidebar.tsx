@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { 
   MessageSquarePlus, 
   Search, 
@@ -45,7 +46,6 @@ interface SidebarProps {
   onDeleteChat?: (chatId: string) => void;
   hideHeader?: boolean;
   onOpenSettings?: () => void;
-  onOpenChatbotManagement?: () => void;
 }
 
 const defaultChatHistory = [
@@ -74,8 +74,8 @@ const Sidebar = ({
   onDeleteChat,
   hideHeader = false,
   onOpenSettings,
-  onOpenChatbotManagement
 }: SidebarProps) => {
+  const navigate = useNavigate();
   const [historyOpen, setHistoryOpen] = useState(true);
   const [chatbotOpen, setChatbotOpen] = useState(true);
   const [shortcutsOpen, setShortcutsOpen] = useState(true);
@@ -270,7 +270,7 @@ const Sidebar = ({
                   이수시스템 사규 챗봇
                 </button>
                 <button 
-                  onClick={onOpenChatbotManagement}
+                  onClick={() => navigate("/chatbots")}
                   className="w-full flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
                 >
                   챗봇 서비스 관리
