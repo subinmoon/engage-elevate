@@ -106,14 +106,15 @@ export const ChatbotCreateModal = ({
   const [description, setDescription] = useState(editingChatbot?.description || "");
   const [icon, setIcon] = useState(editingChatbot?.icon || "🤖");
   const [llmModel, setLlmModel] = useState("gpt-4o");
-  const [prompt, setPrompt] = useState("");
+  const [generationPrompt, setGenerationPrompt] = useState("");
+  const [systemPrompt, setSystemPrompt] = useState("");
   const [visibility, setVisibility] = useState<VisibilityType>(
     editingChatbot?.visibility || "personal"
   );
   const [isGenerating, setIsGenerating] = useState(false);
 
   const handleAIGenerate = () => {
-    if (!prompt.trim()) {
+    if (!generationPrompt.trim()) {
       toast.error("프롬프트를 먼저 입력해주세요");
       return;
     }
@@ -122,10 +123,12 @@ export const ChatbotCreateModal = ({
     
     // 자연스러운 UX를 위한 딜레이
     setTimeout(() => {
-      const generated = analyzePromptAndGenerate(prompt);
+      const generated = analyzePromptAndGenerate(generationPrompt);
       setName(generated.name);
       setDescription(generated.description);
       setIcon(generated.icon);
+      // 시스템 프롬프트도 자동 생성
+      setSystemPrompt(generationPrompt);
       setIsGenerating(false);
       toast.success("AI가 챗봇 정보를 자동 생성했습니다!");
     }, 800);
@@ -157,7 +160,8 @@ export const ChatbotCreateModal = ({
     setDescription("");
     setIcon("🤖");
     setLlmModel("gpt-4o");
-    setPrompt("");
+    setGenerationPrompt("");
+    setSystemPrompt("");
     setVisibility("personal");
     onClose();
   };
@@ -184,16 +188,16 @@ export const ChatbotCreateModal = ({
               원하는 챗봇의 역할을 설명하면 AI가 이름, 설명, 아이콘을 자동으로 생성합니다
             </p>
             <Textarea
-              id="prompt"
+              id="generationPrompt"
               placeholder="예: HR 관련 질문에 답변하고 휴가 신청 방법을 안내하는 챗봇을 만들어줘"
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
+              value={generationPrompt}
+              onChange={(e) => setGenerationPrompt(e.target.value)}
               className="min-h-[100px] bg-background"
             />
             <Button
               type="button"
               onClick={handleAIGenerate}
-              disabled={isGenerating || !prompt.trim()}
+              disabled={isGenerating || !generationPrompt.trim()}
               className="w-full gap-2"
             >
               {isGenerating ? (
@@ -272,6 +276,21 @@ export const ChatbotCreateModal = ({
                 </SelectContent>
               </Select>
             </div>
+          </div>
+
+          {/* 시스템 프롬프트 */}
+          <div className="space-y-2">
+            <Label htmlFor="systemPrompt">시스템 프롬프트</Label>
+            <Textarea
+              id="systemPrompt"
+              placeholder="챗봇이 응답할 때 사용할 시스템 프롬프트를 입력하세요"
+              value={systemPrompt}
+              onChange={(e) => setSystemPrompt(e.target.value)}
+              className="min-h-[120px]"
+            />
+            <p className="text-xs text-muted-foreground">
+              AI 자동 생성 시 위에서 입력한 프롬프트가 자동으로 채워집니다
+            </p>
           </div>
 
           {/* 공개 범위 */}
