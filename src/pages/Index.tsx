@@ -19,6 +19,8 @@ import { Source } from "@/components/ChatMessage";
 import { TutorialModal, TutorialStep } from "@/components/TutorialModal";
 import { TutorialGuideOverlay } from "@/components/TutorialGuideOverlay";
 import { SettingsModal } from "@/components/SettingsModal";
+import { ChatbotManagementModal, Chatbot } from "@/components/ChatbotManagementModal";
+import { ChatbotCreateModal } from "@/components/ChatbotCreateModal";
 
 interface Message {
   id: string;
@@ -66,6 +68,67 @@ const Index = () => {
     const saved = localStorage.getItem("userSettings");
     return saved ? JSON.parse(saved) : null;
   });
+
+  // Chatbot management state
+  const [showChatbotManagement, setShowChatbotManagement] = useState(false);
+  const [showChatbotCreate, setShowChatbotCreate] = useState(false);
+  const [editingChatbot, setEditingChatbot] = useState<Chatbot | null>(null);
+  const [chatbots, setChatbots] = useState<Chatbot[]>(() => {
+    const saved = localStorage.getItem("chatbots");
+    if (saved) return JSON.parse(saved);
+    // Default chatbots
+    return [
+      {
+        id: "default-1",
+        name: "이수시스템 사규 챗봇",
+        description: "이수시스템 사규에 대해 질문하고 회사 생활에 필요한 정보를 얻으세요.",
+        icon: "🏢",
+        isFavorite: true,
+        visibility: "public" as const,
+        isOwner: false,
+      },
+    ];
+  });
+
+  // Save chatbots to localStorage
+  useEffect(() => {
+    localStorage.setItem("chatbots", JSON.stringify(chatbots));
+  }, [chatbots]);
+
+  const handleToggleChatbotFavorite = (id: string) => {
+    setChatbots((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, isFavorite: !c.isFavorite } : c))
+    );
+  };
+
+  const handleDeleteChatbot = (id: string) => {
+    setChatbots((prev) => prev.filter((c) => c.id !== id));
+  };
+
+  const handleEditChatbot = (chatbot: Chatbot) => {
+    setEditingChatbot(chatbot);
+    setShowChatbotManagement(false);
+    setShowChatbotCreate(true);
+  };
+
+  const handleSaveChatbot = (data: Omit<Chatbot, "id" | "isFavorite" | "isOwner">) => {
+    if (editingChatbot) {
+      setChatbots((prev) =>
+        prev.map((c) =>
+          c.id === editingChatbot.id ? { ...c, ...data } : c
+        )
+      );
+    } else {
+      const newChatbot: Chatbot = {
+        ...data,
+        id: Date.now().toString(),
+        isFavorite: false,
+        isOwner: true,
+      };
+      setChatbots((prev) => [...prev, newChatbot]);
+    }
+    setEditingChatbot(null);
+  };
 
   // 화면 가이드 시작 핸들러
   const handleStartGuide = () => {
@@ -304,6 +367,32 @@ const Index = () => {
       settings={userSettings}
       onSave={handleSettingsSave}
     />
+
+    {/* 챗봇 관리 모달 */}
+    <ChatbotManagementModal
+      open={showChatbotManagement}
+      onClose={() => setShowChatbotManagement(false)}
+      onCreateClick={() => {
+        setEditingChatbot(null);
+        setShowChatbotManagement(false);
+        setShowChatbotCreate(true);
+      }}
+      chatbots={chatbots}
+      onToggleFavorite={handleToggleChatbotFavorite}
+      onDelete={handleDeleteChatbot}
+      onEdit={handleEditChatbot}
+    />
+
+    {/* 챗봇 생성/수정 모달 */}
+    <ChatbotCreateModal
+      open={showChatbotCreate}
+      onClose={() => {
+        setShowChatbotCreate(false);
+        setEditingChatbot(null);
+      }}
+      onSave={handleSaveChatbot}
+      editingChatbot={editingChatbot}
+    />
     
     <div className="min-h-screen bg-background flex flex-col">
       {/* Top Header Area - spans full width */}
@@ -385,7 +474,7 @@ const Index = () => {
       {/* Main Area - Sidebar + Content */}
       <div className="flex flex-1">
         {/* Sidebar Body (without header) */}
-        <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(false)} chatHistory={chatHistory} currentChatId={currentChatId} onSelectChat={handleSelectChat} onNewChat={handleNewChat} onRenameChat={handleRenameChat} onShareChat={handleShareChat} onPinChat={handlePin} onArchiveChat={handleArchive} onDeleteChat={handleDelete} hideHeader onOpenSettings={() => setShowSettingsModal(true)} />
+        <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(false)} chatHistory={chatHistory} currentChatId={currentChatId} onSelectChat={handleSelectChat} onNewChat={handleNewChat} onRenameChat={handleRenameChat} onShareChat={handleShareChat} onPinChat={handlePin} onArchiveChat={handleArchive} onDeleteChat={handleDelete} hideHeader onOpenSettings={() => setShowSettingsModal(true)} onOpenChatbotManagement={() => setShowChatbotManagement(true)} />
         
         {/* Sidebar Trigger when closed */}
         {!sidebarOpen && <SidebarTrigger onClick={() => setSidebarOpen(true)} />}
