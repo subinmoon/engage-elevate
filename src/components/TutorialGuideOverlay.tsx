@@ -1,14 +1,14 @@
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useLayoutEffect, useRef, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Sparkles, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface GuideStep {
   id: string;
-  position: { x: string; y: string }; // 캐릭터 위치
+  selector: string; // DOM 선택자
   bubblePosition: "top" | "bottom" | "left" | "right";
   message: string;
-  highlightArea?: { top: string; left: string; width: string; height: string };
+  padding?: number; // 하이라이트 패딩
 }
 
 type Placement = "left" | "right" | "top" | "bottom";
@@ -16,7 +16,6 @@ type Placement = "left" | "right" | "top" | "bottom";
 const clamp = (n: number, min: number, max: number) => Math.min(Math.max(n, min), max);
 
 const getPreferredPlacement = (bubblePosition: GuideStep["bubblePosition"]): Placement => {
-  // 말풍선이 놓인 방향의 반대쪽(=하이라이트 밖)으로 기본 배치
   switch (bubblePosition) {
     case "left":
       return "right";
@@ -31,56 +30,56 @@ const getPreferredPlacement = (bubblePosition: GuideStep["bubblePosition"]): Pla
   }
 };
 
-// 가이드 스텝 데이터 - 반응형을 위해 calc() 사용
+// 가이드 스텝 - DOM 선택자 기반
 const guideSteps: GuideStep[] = [
   {
     id: "sidebar",
-    position: { x: "270px", y: "50%" },
+    selector: "[data-guide='sidebar']",
     bubblePosition: "right",
     message: "여기는 사이드바예요! 🗂️\n새 채팅을 시작하거나\n이전 대화를 찾을 수 있어요.",
-    highlightArea: { top: "0", left: "0", width: "256px", height: "100%" },
+    padding: 0,
   },
   {
     id: "header",
-    position: { x: "calc(50% + 128px)", y: "80px" },
+    selector: "[data-guide='header']",
     bubblePosition: "bottom",
     message: "상단 헤더에서 홈으로 이동하거나\n즐겨찾기, 알림을 확인할 수 있어요! 🔔",
-    highlightArea: { top: "0", left: "256px", width: "calc(100% - 256px)", height: "56px" },
+    padding: 4,
   },
   {
     id: "quick-actions",
-    position: { x: "calc(50% + 128px)", y: "180px" },
+    selector: "[data-guide='quick-actions']",
     bubblePosition: "bottom",
     message: "⚡ 빠른 시작 버튼들이에요!\n자주 사용하는 작업을\n한 번의 클릭으로 시작할 수 있어요.",
-    highlightArea: { top: "56px", left: "280px", width: "calc(100% - 320px)", height: "130px" },
+    padding: 8,
   },
   {
     id: "popular-questions",
-    position: { x: "380px", y: "380px" },
+    selector: "[data-guide='popular-questions']",
     bubblePosition: "right",
     message: "💬 다른 임직원들이 자주 묻는\n인기 질문들이에요!\n클릭하면 바로 질문할 수 있어요.",
-    highlightArea: { top: "200px", left: "280px", width: "calc(60% - 180px)", height: "260px" },
+    padding: 8,
   },
   {
     id: "work-life-helper",
-    position: { x: "calc(100% - 200px)", y: "380px" },
+    selector: "[data-guide='work-life-helper']",
     bubblePosition: "left",
     message: "🏢 회사생활도우미예요!\n결재, 회의실, 식단 조회 등\n자주 쓰는 기능을 모아뒀어요.",
-    highlightArea: { top: "200px", left: "calc(60% + 100px)", width: "calc(40% - 140px)", height: "260px" },
+    padding: 8,
   },
   {
     id: "favorite-chatbots",
-    position: { x: "calc(50% + 128px)", y: "480px" },
+    selector: "[data-guide='favorite-chatbots']",
     bubblePosition: "top",
     message: "⭐ 즐겨찾는 챗봇들이에요!\n나만의 챗봇을 만들거나\n자주 쓰는 챗봇을 추가해보세요.",
-    highlightArea: { top: "460px", left: "280px", width: "calc(100% - 320px)", height: "60px" },
+    padding: 8,
   },
   {
     id: "chat-input",
-    position: { x: "calc(50% + 128px)", y: "590px" },
+    selector: "[data-guide='chat-input']",
     bubblePosition: "top",
     message: "💬 여기에 질문을 입력하세요!\nAI 모델을 선택하고\n답변 길이도 조절할 수 있어요.",
-    highlightArea: { top: "535px", left: "280px", width: "calc(100% - 320px)", height: "150px" },
+    padding: 8,
   },
 ];
 
@@ -195,8 +194,9 @@ export function TutorialGuideOverlay({ onComplete, onSkip }: TutorialGuideOverla
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [anchoredPos, setAnchoredPos] = useState<{ left: number; top: number } | null>(null);
-  const highlightRef = useRef<HTMLDivElement | null>(null);
+  const [highlightRect, setHighlightRect] = useState<{ top: number; left: number; width: number; height: number } | null>(null);
   const floatingRef = useRef<HTMLDivElement | null>(null);
+  const highlightRef = useRef<HTMLDivElement | null>(null);
 
   // 안전한 step 접근 (범위 체크)
   const safeCurrentStep = Math.min(currentStep, guideSteps.length - 1);
@@ -208,15 +208,29 @@ export function TutorialGuideOverlay({ onComplete, onSkip }: TutorialGuideOverla
 
   const preferredPlacement = getPreferredPlacement(step.bubblePosition);
 
-  const computeAnchoredPos = useCallback(() => {
-    const highlightEl = highlightRef.current;
-    const floatingEl = floatingRef.current;
-    if (!highlightEl || !floatingEl) return;
+  // DOM 요소의 위치를 계산하는 함수
+  const computeHighlightRect = useCallback(() => {
+    const targetEl = document.querySelector(step.selector);
+    if (!targetEl) return;
 
-    const highlightRect = highlightEl.getBoundingClientRect();
+    const rect = targetEl.getBoundingClientRect();
+    const padding = step.padding ?? 0;
+    
+    setHighlightRect({
+      top: rect.top - padding,
+      left: rect.left - padding,
+      width: rect.width + padding * 2,
+      height: rect.height + padding * 2,
+    });
+  }, [step.selector, step.padding]);
+
+  const computeAnchoredPos = useCallback(() => {
+    const floatingEl = floatingRef.current;
+    const highlightEl = highlightRef.current;
+    if (!floatingEl || !highlightEl || !highlightRect) return;
+
     const floatingRect = floatingEl.getBoundingClientRect();
 
-    // placement
     const gap = 16;
     const pad = 12;
     const vw = window.innerWidth;
@@ -238,7 +252,7 @@ export function TutorialGuideOverlay({ onComplete, onSkip }: TutorialGuideOverla
 
       switch (placement) {
         case "right":
-          left = highlightRect.right + gap;
+          left = highlightRect.left + highlightRect.width + gap;
           top = centerY - floatingRect.height / 2;
           break;
         case "left":
@@ -247,7 +261,7 @@ export function TutorialGuideOverlay({ onComplete, onSkip }: TutorialGuideOverla
           break;
         case "bottom":
           left = centerX - floatingRect.width / 2;
-          top = highlightRect.bottom + gap;
+          top = highlightRect.top + highlightRect.height + gap;
           break;
         case "top":
           left = centerX - floatingRect.width / 2;
@@ -269,13 +283,30 @@ export function TutorialGuideOverlay({ onComplete, onSkip }: TutorialGuideOverla
     const top = clamp(best.top, pad, vh - pad - floatingRect.height);
 
     setAnchoredPos({ left, top });
-  }, [preferredPlacement]);
+  }, [preferredPlacement, highlightRect]);
 
-  // 하이라이트 위치(transition 포함)에 맞춰 마스코트/말풍선을 "하이라이트 밖"으로 자동 배치
-  useLayoutEffect(() => {
-    if (!step.highlightArea) return;
-
+  // 하이라이트 영역 계산
+  useEffect(() => {
+    setHighlightRect(null);
     setAnchoredPos(null);
+
+    // DOM이 렌더링된 후 위치 계산
+    const raf = requestAnimationFrame(() => {
+      computeHighlightRect();
+    });
+
+    const onResize = () => computeHighlightRect();
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [safeCurrentStep, computeHighlightRect]);
+
+  // 하이라이트 위치가 계산된 후 마스코트 위치 계산
+  useLayoutEffect(() => {
+    if (!highlightRect) return;
 
     let raf1 = 0;
     let raf2 = 0;
@@ -291,7 +322,10 @@ export function TutorialGuideOverlay({ onComplete, onSkip }: TutorialGuideOverla
     // 하이라이트 transition(500ms) 종료 이후 한번 더
     timeoutId = window.setTimeout(run, 520);
 
-    const onResize = () => run();
+    const onResize = () => {
+      computeHighlightRect();
+      run();
+    };
     window.addEventListener("resize", onResize);
 
     return () => {
@@ -300,7 +334,7 @@ export function TutorialGuideOverlay({ onComplete, onSkip }: TutorialGuideOverla
       if (timeoutId) window.clearTimeout(timeoutId);
       window.removeEventListener("resize", onResize);
     };
-  }, [safeCurrentStep, step.highlightArea, computeAnchoredPos]);
+  }, [highlightRect, computeAnchoredPos, computeHighlightRect]);
 
   const handleNext = () => {
     if (isLastStep) {
@@ -352,15 +386,15 @@ export function TutorialGuideOverlay({ onComplete, onSkip }: TutorialGuideOverla
       <div className="absolute inset-0 bg-black/50" />
       
       {/* 하이라이트 영역 */}
-      {step.highlightArea && (
+      {highlightRect && (
         <div 
           ref={highlightRef}
           className="absolute bg-transparent border-2 border-primary/60 rounded-lg shadow-[0_0_0_9999px_rgba(0,0,0,0.5)] transition-all duration-500 ease-out z-[101]"
           style={{
-            top: step.highlightArea.top,
-            left: step.highlightArea.left,
-            width: step.highlightArea.width,
-            height: step.highlightArea.height,
+            top: highlightRect.top,
+            left: highlightRect.left,
+            width: highlightRect.width,
+            height: highlightRect.height,
           }}
         />
       )}
@@ -372,13 +406,12 @@ export function TutorialGuideOverlay({ onComplete, onSkip }: TutorialGuideOverla
           "absolute z-[102] flex items-center gap-3 transition-all duration-500 ease-out",
           getFlexDirection(),
           // anchoredPos 계산 전에는 잠깐 숨겨서 하이라이트를 가리는 플래시를 방지
-          step.highlightArea && !anchoredPos && "opacity-0",
-          isAnimating && "opacity-0 scale-90",
-          !anchoredPos && "-translate-x-1/2 -translate-y-1/2"
+          !anchoredPos && "opacity-0",
+          isAnimating && "opacity-0 scale-90"
         )}
         style={{
-          left: anchoredPos ? anchoredPos.left : step.position.x,
-          top: anchoredPos ? anchoredPos.top : step.position.y,
+          left: anchoredPos?.left ?? 0,
+          top: anchoredPos?.top ?? 0,
         }}
       >
         <MascotCharacter emotion={isLastStep ? "excited" : "happy"} />
