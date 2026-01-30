@@ -479,8 +479,7 @@ export function TutorialModal({ open, onComplete, onSkip, onStartGuide, userName
           <div className="flex flex-col items-center gap-8 py-8">
             <MascotCharacter emotion="excited" className="motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:duration-500" />
             <MessageBubble>
-              좋아요! 몇 가지만 알려주시면<br />
-              더 잘 도와드릴 수 있어요 😊
+              좋아요! 몇 가지만 알려주시면 더 잘 도와드릴 수 있어요 😊
             </MessageBubble>
             <ChoiceButtons
               choices={[{ label: "시작하기", value: "next" }]}
