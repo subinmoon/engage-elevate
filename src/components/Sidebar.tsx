@@ -45,6 +45,7 @@ interface SidebarProps {
   onDeleteChat?: (chatId: string) => void;
   hideHeader?: boolean;
   onOpenSettings?: () => void;
+  onOpenChatbotManagement?: () => void;
 }
 
 const defaultChatHistory = [
@@ -72,7 +73,8 @@ const Sidebar = ({
   onArchiveChat,
   onDeleteChat,
   hideHeader = false,
-  onOpenSettings
+  onOpenSettings,
+  onOpenChatbotManagement
 }: SidebarProps) => {
   const [historyOpen, setHistoryOpen] = useState(true);
   const [chatbotOpen, setChatbotOpen] = useState(true);
@@ -267,7 +269,10 @@ const Sidebar = ({
                   <span className="text-primary">📊</span>
                   이수시스템 사규 챗봇
                 </button>
-                <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors">
+                <button 
+                  onClick={onOpenChatbotManagement}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+                >
                   챗봇 서비스 관리
                 </button>
               </div>
