@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Sparkles, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,26 @@ interface GuideStep {
   message: string;
   highlightArea?: { top: string; left: string; width: string; height: string };
 }
+
+type Placement = "left" | "right" | "top" | "bottom";
+
+const clamp = (n: number, min: number, max: number) => Math.min(Math.max(n, min), max);
+
+const getPreferredPlacement = (bubblePosition: GuideStep["bubblePosition"]): Placement => {
+  // 말풍선이 놓인 방향의 반대쪽(=하이라이트 밖)으로 기본 배치
+  switch (bubblePosition) {
+    case "left":
+      return "right";
+    case "right":
+      return "left";
+    case "top":
+      return "bottom";
+    case "bottom":
+      return "top";
+    default:
+      return "bottom";
+  }
+};
 
 // 가이드 스텝 데이터 - 반응형을 위해 calc() 사용
 const guideSteps: GuideStep[] = [
@@ -174,6 +194,9 @@ function SpeechBubble({
 export function TutorialGuideOverlay({ onComplete, onSkip }: TutorialGuideOverlayProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [anchoredPos, setAnchoredPos] = useState<{ left: number; top: number } | null>(null);
+  const highlightRef = useRef<HTMLDivElement | null>(null);
+  const floatingRef = useRef<HTMLDivElement | null>(null);
 
   // 안전한 step 접근 (범위 체크)
   const safeCurrentStep = Math.min(currentStep, guideSteps.length - 1);
@@ -182,6 +205,102 @@ export function TutorialGuideOverlay({ onComplete, onSkip }: TutorialGuideOverla
   
   // step이 없으면 렌더링하지 않음
   if (!step) return null;
+
+  const preferredPlacement = getPreferredPlacement(step.bubblePosition);
+
+  const computeAnchoredPos = useCallback(() => {
+    const highlightEl = highlightRef.current;
+    const floatingEl = floatingRef.current;
+    if (!highlightEl || !floatingEl) return;
+
+    const highlightRect = highlightEl.getBoundingClientRect();
+    const floatingRect = floatingEl.getBoundingClientRect();
+
+    // placement
+    const gap = 16;
+    const pad = 12;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    const centerX = highlightRect.left + highlightRect.width / 2;
+    const centerY = highlightRect.top + highlightRect.height / 2;
+
+    const placements: Placement[] = [
+      preferredPlacement,
+      ...(["left", "right", "top", "bottom"] as const).filter(
+        (p) => p !== preferredPlacement
+      ),
+    ];
+
+    const candidates = placements.map((placement) => {
+      let left = centerX;
+      let top = centerY;
+
+      switch (placement) {
+        case "right":
+          left = highlightRect.right + gap;
+          top = centerY - floatingRect.height / 2;
+          break;
+        case "left":
+          left = highlightRect.left - gap - floatingRect.width;
+          top = centerY - floatingRect.height / 2;
+          break;
+        case "bottom":
+          left = centerX - floatingRect.width / 2;
+          top = highlightRect.bottom + gap;
+          break;
+        case "top":
+          left = centerX - floatingRect.width / 2;
+          top = highlightRect.top - gap - floatingRect.height;
+          break;
+      }
+
+      const fits =
+        left >= pad &&
+        top >= pad &&
+        left + floatingRect.width <= vw - pad &&
+        top + floatingRect.height <= vh - pad;
+
+      return { placement, left, top, fits };
+    });
+
+    const best = candidates.find((c) => c.fits) ?? candidates[0];
+    const left = clamp(best.left, pad, vw - pad - floatingRect.width);
+    const top = clamp(best.top, pad, vh - pad - floatingRect.height);
+
+    setAnchoredPos({ left, top });
+  }, [preferredPlacement]);
+
+  // 하이라이트 위치(transition 포함)에 맞춰 마스코트/말풍선을 "하이라이트 밖"으로 자동 배치
+  useLayoutEffect(() => {
+    if (!step.highlightArea) return;
+
+    setAnchoredPos(null);
+
+    let raf1 = 0;
+    let raf2 = 0;
+    let timeoutId: number | undefined;
+
+    const run = () => computeAnchoredPos();
+
+    raf1 = window.requestAnimationFrame(() => {
+      run();
+      raf2 = window.requestAnimationFrame(run);
+    });
+
+    // 하이라이트 transition(500ms) 종료 이후 한번 더
+    timeoutId = window.setTimeout(run, 520);
+
+    const onResize = () => run();
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      window.cancelAnimationFrame(raf1);
+      window.cancelAnimationFrame(raf2);
+      if (timeoutId) window.clearTimeout(timeoutId);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [safeCurrentStep, step.highlightArea, computeAnchoredPos]);
 
   const handleNext = () => {
     if (isLastStep) {
@@ -235,6 +354,7 @@ export function TutorialGuideOverlay({ onComplete, onSkip }: TutorialGuideOverla
       {/* 하이라이트 영역 */}
       {step.highlightArea && (
         <div 
+          ref={highlightRef}
           className="absolute bg-transparent border-2 border-primary/60 rounded-lg shadow-[0_0_0_9999px_rgba(0,0,0,0.5)] transition-all duration-500 ease-out z-[101]"
           style={{
             top: step.highlightArea.top,
@@ -247,15 +367,18 @@ export function TutorialGuideOverlay({ onComplete, onSkip }: TutorialGuideOverla
       
       {/* 캐릭터 + 말풍선 */}
       <div 
+        ref={floatingRef}
         className={cn(
           "absolute z-[102] flex items-center gap-3 transition-all duration-500 ease-out",
           getFlexDirection(),
-          isAnimating && "opacity-0 scale-90"
+          // anchoredPos 계산 전에는 잠깐 숨겨서 하이라이트를 가리는 플래시를 방지
+          step.highlightArea && !anchoredPos && "opacity-0",
+          isAnimating && "opacity-0 scale-90",
+          !anchoredPos && "-translate-x-1/2 -translate-y-1/2"
         )}
         style={{
-          left: step.position.x,
-          top: step.position.y,
-          transform: "translate(-50%, -50%)",
+          left: anchoredPos ? anchoredPos.left : step.position.x,
+          top: anchoredPos ? anchoredPos.top : step.position.y,
         }}
       >
         <MascotCharacter emotion={isLastStep ? "excited" : "happy"} />
