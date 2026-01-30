@@ -730,7 +730,7 @@ export function TutorialModal({ open, onComplete, onSkip, onStartGuide, userName
   return (
     <Dialog open={open}>
       <DialogContent 
-        className="sm:max-w-2xl w-[95vw] h-[480px] overflow-hidden p-0 border-none bg-gradient-to-b from-sky-50 via-sky-100/50 to-white" 
+        className="sm:max-w-2xl w-[95vw] h-[560px] overflow-hidden p-0 border-none bg-gradient-to-b from-sky-50 via-sky-100/50 to-white" 
         aria-describedby={undefined}
         overlayClassName="bg-black/40"
       >
