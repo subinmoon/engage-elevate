@@ -221,21 +221,10 @@ export const ChatbotManagementModal = ({
           </Button>
         </DialogHeader>
 
-        {/* 검색 + 필터 */}
-        <div className="space-y-3">
-          {/* 검색창 */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              placeholder="챗봇 이름 또는 설명으로 검색..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9"
-            />
-          </div>
-          
+        {/* 필터 + 검색 (한 줄에) */}
+        <div className="flex items-center justify-between gap-3">
           {/* 필터 버튼들 */}
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex gap-2">
             {filters.map((filter) => (
               <button
                 key={filter.key}
@@ -261,6 +250,17 @@ export const ChatbotManagementModal = ({
                 )}
               </button>
             ))}
+          </div>
+
+          {/* 검색창 */}
+          <div className="relative w-48">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="검색..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 h-8 text-sm"
+            />
           </div>
         </div>
 
