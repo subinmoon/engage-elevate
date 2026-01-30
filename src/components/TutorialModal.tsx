@@ -676,8 +676,8 @@ export function TutorialModal({
           </div>
 
           {/* 목차 네비게이션 (footer로 분리: 스크롤 영역과 겹치지 않게) */}
-          <div className="shrink-0 pb-4">
-            <div className="mx-auto w-fit flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-sm">
+          <div className="shrink-0 pb-4 flex justify-center">
+            <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-sm">
               {stepPhases.map((phase, idx) => {
                 const currentPhaseIndex = getPhaseIndex(step);
                 const isActive = idx === currentPhaseIndex;
