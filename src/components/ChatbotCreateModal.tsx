@@ -172,6 +172,50 @@ export const ChatbotCreateModal = ({
         </DialogHeader>
 
         <div className="space-y-5 py-2">
+          {/* 프롬프트 - 가장 먼저! */}
+          <div className="space-y-3 p-4 rounded-lg bg-primary/5 border border-primary/20">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-primary" />
+              <Label htmlFor="prompt" className="text-base font-semibold">
+                프롬프트로 챗봇 만들기
+              </Label>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              원하는 챗봇의 역할을 설명하면 AI가 이름, 설명, 아이콘을 자동으로 생성합니다
+            </p>
+            <Textarea
+              id="prompt"
+              placeholder="예: HR 관련 질문에 답변하고 휴가 신청 방법을 안내하는 챗봇을 만들어줘"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              className="min-h-[100px] bg-background"
+            />
+            <Button
+              type="button"
+              onClick={handleAIGenerate}
+              disabled={isGenerating || !prompt.trim()}
+              className="w-full gap-2"
+            >
+              {isGenerating ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Sparkles className="w-4 h-4" />
+              )}
+              {isGenerating ? "생성 중..." : "AI로 챗봇 정보 생성하기"}
+            </Button>
+          </div>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-border" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                또는 직접 입력
+              </span>
+            </div>
+          </div>
+
           {/* 챗봇 이름 */}
           <div className="space-y-2">
             <Label htmlFor="name">챗봇 이름</Label>
@@ -195,67 +239,39 @@ export const ChatbotCreateModal = ({
             />
           </div>
 
-          {/* 챗봇 아이콘 */}
-          <div className="space-y-2">
-            <Label>챗봇 아이콘</Label>
-            <Select value={icon} onValueChange={setIcon}>
-              <SelectTrigger>
-                <SelectValue placeholder="챗봇 아이콘을 선택해주세요." />
-              </SelectTrigger>
-              <SelectContent>
-                {ICON_OPTIONS.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* LLM 모델선택 */}
-          <div className="space-y-2">
-            <Label>LLM 모델선택</Label>
-            <Select value={llmModel} onValueChange={setLlmModel}>
-              <SelectTrigger>
-                <SelectValue placeholder="LLM 모델을 선택해주세요" />
-              </SelectTrigger>
-              <SelectContent>
-                {LLM_OPTIONS.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* 프롬프트 */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="prompt">프롬프트</Label>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={handleAIGenerate}
-                disabled={isGenerating || !prompt.trim()}
-                className="gap-1.5 text-primary hover:text-primary"
-              >
-                {isGenerating ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <Sparkles className="w-4 h-4" />
-                )}
-                AI 자동 생성
-              </Button>
+          {/* 챗봇 아이콘 & LLM 모델 - 한 줄에 */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label>챗봇 아이콘</Label>
+              <Select value={icon} onValueChange={setIcon}>
+                <SelectTrigger>
+                  <SelectValue placeholder="아이콘 선택" />
+                </SelectTrigger>
+                <SelectContent>
+                  {ICON_OPTIONS.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-            <Textarea
-              id="prompt"
-              placeholder="프롬프트를 작성하면 AI가 챗봇 이름, 설명, 아이콘을 자동으로 생성해줍니다"
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              className="min-h-[120px]"
-            />
+
+            <div className="space-y-2">
+              <Label>LLM 모델</Label>
+              <Select value={llmModel} onValueChange={setLlmModel}>
+                <SelectTrigger>
+                  <SelectValue placeholder="모델 선택" />
+                </SelectTrigger>
+                <SelectContent>
+                  {LLM_OPTIONS.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {/* 공개 범위 */}
