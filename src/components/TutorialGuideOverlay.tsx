@@ -174,6 +174,16 @@ export function TutorialGuideOverlay({ onComplete, onSkip }: TutorialGuideOverla
     }
   };
 
+  const handlePrev = () => {
+    if (currentStep > 0) {
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentStep(prev => prev - 1);
+        setIsAnimating(false);
+      }, 300);
+    }
+  };
+
   // 캐릭터와 말풍선의 flex 방향 결정
   const getFlexDirection = () => {
     switch (step.bubblePosition) {
@@ -262,6 +272,16 @@ export function TutorialGuideOverlay({ onComplete, onSkip }: TutorialGuideOverla
           >
             건너뛰기
           </Button>
+          {currentStep > 0 && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handlePrev}
+              className="bg-white/10 border-white/30 text-white hover:bg-white/20"
+            >
+              이전
+            </Button>
+          )}
           <Button
             size="sm"
             onClick={handleNext}
