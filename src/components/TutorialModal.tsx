@@ -636,10 +636,20 @@ export function TutorialModal({
     setStep(backMap[step] || "greeting");
   };
   return <Dialog open={open}>
-      <DialogContent className="sm:max-w-2xl w-[95vw] h-[480px] overflow-hidden p-0 border-none bg-gradient-to-b from-sky-50 via-sky-100/50 to-white" aria-describedby={undefined} overlayClassName="bg-black/40">
+      <DialogContent
+        className="relative sm:max-w-2xl w-[95vw] overflow-hidden p-0 border-none bg-gradient-to-b from-sky-50 via-sky-100/50 to-white"
+        style={{
+          // 작은 화면에서 모달이 뷰포트를 넘어가며 겹치지 않도록 안전장치
+          height: "min(560px, calc(100vh - 2rem))",
+        }}
+        aria-describedby={undefined}
+        overlayClassName="bg-black/40"
+      >
         <VisuallyHidden>
           <DialogTitle>이수 GPT 튜토리얼</DialogTitle>
         </VisuallyHidden>
+
+        <div className="relative flex h-full flex-col">
         
         {/* 뒤로가기 버튼 */}
         {canGoBack && <button onClick={handleGoBack} className="absolute top-4 left-4 z-10 flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/80 hover:bg-white text-gray-500 hover:text-gray-700 text-sm font-medium transition-all shadow-sm hover:shadow">
@@ -653,28 +663,55 @@ export function TutorialModal({
           <X className="w-4 h-4" />
         </button>
         
-        {/* 메인 콘텐츠 영역 - 고정 높이 */}
-        <div ref={contentRef} className="h-full overflow-y-auto px-6 py-4 flex flex-col">
-          {renderStepContent()}
-        </div>
-        
-        {/* 목차 네비게이션 */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-sm">
-          {stepPhases.map((phase, idx) => {
-          const currentPhaseIndex = getPhaseIndex(step);
-          const isActive = idx === currentPhaseIndex;
-          const isPast = idx < currentPhaseIndex;
-          const isClickable = idx <= currentPhaseIndex; // 이전 단계만 클릭 가능
+          {/* 메인 콘텐츠 영역 */}
+          <div
+            ref={contentRef}
+            className={cn(
+              "min-h-0 flex-1 overflow-y-auto px-6 py-4 flex flex-col",
+              // 상단 absolute 버튼들과 겹치지 않도록 여유
+              "pt-14",
+            )}
+          >
+            {renderStepContent()}
+          </div>
 
-          return <button key={phase.id} onClick={() => {
-            if (isClickable && !isActive) {
-              setStep(getPhaseFirstStep(idx));
-            }
-          }} disabled={!isClickable} className={cn("flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium transition-all duration-300", isActive && "bg-primary text-white", isPast && "text-primary hover:bg-primary/10 cursor-pointer", !isClickable && "text-gray-300 cursor-not-allowed")}>
-                <span className={cn("w-1.5 h-1.5 rounded-full", isActive ? "bg-white" : isPast ? "bg-primary" : "bg-gray-300")} />
-                {phase.label}
-              </button>;
-        })}
+          {/* 목차 네비게이션 (footer로 분리: 스크롤 영역과 겹치지 않게) */}
+          <div className="shrink-0 pb-4">
+            <div className="mx-auto w-fit flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-sm">
+              {stepPhases.map((phase, idx) => {
+                const currentPhaseIndex = getPhaseIndex(step);
+                const isActive = idx === currentPhaseIndex;
+                const isPast = idx < currentPhaseIndex;
+                const isClickable = idx <= currentPhaseIndex; // 이전 단계만 클릭 가능
+
+                return (
+                  <button
+                    key={phase.id}
+                    onClick={() => {
+                      if (isClickable && !isActive) {
+                        setStep(getPhaseFirstStep(idx));
+                      }
+                    }}
+                    disabled={!isClickable}
+                    className={cn(
+                      "flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium transition-all duration-300",
+                      isActive && "bg-primary text-white",
+                      isPast && "text-primary hover:bg-primary/10 cursor-pointer",
+                      !isClickable && "text-gray-300 cursor-not-allowed",
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "w-1.5 h-1.5 rounded-full",
+                        isActive ? "bg-white" : isPast ? "bg-primary" : "bg-gray-300",
+                      )}
+                    />
+                    {phase.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </DialogContent>
     </Dialog>;
