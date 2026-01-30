@@ -305,9 +305,10 @@ const ChatbotsPage = () => {
         />
 
         {/* 메인 콘텐츠 */}
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto">
+          <div className="max-w-3xl mx-auto px-4 py-8">
           {/* 필터 + 검색 */}
-        <div className="flex items-center justify-between gap-4 mb-6">
+          <div className="flex items-center justify-between gap-4 mb-6">
           {/* 필터 버튼들 */}
           <div className="flex gap-2">
             {filters.map((filter) => (
@@ -360,7 +361,8 @@ const ChatbotsPage = () => {
           ) : (
             filteredChatbots.map((chatbot) => renderChatbotItem(chatbot))
           )}
-        </div>
+          </div>
+          </div>
         </main>
       </div>
 
