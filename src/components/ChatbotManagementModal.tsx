@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Plus, Star, MoreHorizontal, Pencil, Trash2, Users, User } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Plus, Star, MoreHorizontal, Pencil, Trash2, Users, User, Search } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,7 +21,7 @@ export interface Chatbot {
   isOwner: boolean;
 }
 
-type FilterType = "all" | "group" | "personal" | "favorites";
+type FilterType = "group" | "personal" | "favorites";
 
 interface ChatbotManagementModalProps {
   open: boolean;
@@ -41,27 +42,44 @@ export const ChatbotManagementModal = ({
   onDelete,
   onEdit,
 }: ChatbotManagementModalProps) => {
-  const [activeFilter, setActiveFilter] = useState<FilterType>("all");
+  const [activeFilter, setActiveFilter] = useState<FilterType>("group");
+  const [searchQuery, setSearchQuery] = useState("");
 
   // 필터별 챗봇 목록
   const getFilteredChatbots = () => {
+    let filtered: Chatbot[];
+    
     switch (activeFilter) {
       case "group":
-        return chatbots.filter((c) => c.visibility !== "personal" && !c.isOwner);
+        filtered = chatbots.filter((c) => c.visibility !== "personal" && !c.isOwner);
+        break;
       case "personal":
-        return chatbots.filter((c) => c.isOwner);
+        filtered = chatbots.filter((c) => c.isOwner);
+        break;
       case "favorites":
-        return chatbots.filter((c) => c.isFavorite);
+        filtered = chatbots.filter((c) => c.isFavorite);
+        break;
       default:
-        return chatbots;
+        filtered = chatbots;
     }
+
+    // 검색어 필터링
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (c) =>
+          c.name.toLowerCase().includes(query) ||
+          c.description.toLowerCase().includes(query)
+      );
+    }
+
+    return filtered;
   };
 
   const filteredChatbots = getFilteredChatbots();
 
   // 각 필터별 개수
   const counts = {
-    all: chatbots.length,
     group: chatbots.filter((c) => c.visibility !== "personal" && !c.isOwner).length,
     personal: chatbots.filter((c) => c.isOwner).length,
     favorites: chatbots.filter((c) => c.isFavorite).length,
@@ -77,8 +95,7 @@ export const ChatbotManagementModal = ({
     toast.success("챗봇이 삭제되었습니다");
   };
 
-  const filters: { key: FilterType; label: string; icon?: React.ReactNode }[] = [
-    { key: "all", label: "전체" },
+  const filters: { key: FilterType; label: string; icon: React.ReactNode }[] = [
     { key: "group", label: "그룹", icon: <Users className="w-3.5 h-3.5" /> },
     { key: "personal", label: "개인", icon: <User className="w-3.5 h-3.5" /> },
     { key: "favorites", label: "즐겨찾기", icon: <Star className="w-3.5 h-3.5" /> },
@@ -157,6 +174,14 @@ export const ChatbotManagementModal = ({
   };
 
   const getEmptyMessage = () => {
+    if (searchQuery.trim()) {
+      return {
+        icon: <Search className="w-12 h-12 mx-auto mb-3 opacity-50" />,
+        title: `'${searchQuery}' 검색 결과가 없습니다`,
+        desc: "다른 검색어로 시도해보세요",
+      };
+    }
+    
     switch (activeFilter) {
       case "group":
         return {
@@ -196,33 +221,47 @@ export const ChatbotManagementModal = ({
           </Button>
         </DialogHeader>
 
-        {/* 필터 버튼들 */}
-        <div className="flex gap-2 flex-wrap">
-          {filters.map((filter) => (
-            <button
-              key={filter.key}
-              onClick={() => setActiveFilter(filter.key)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                activeFilter === filter.key
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-muted hover:bg-muted/80 text-muted-foreground"
-              }`}
-            >
-              {filter.icon}
-              {filter.label}
-              {counts[filter.key] > 0 && (
-                <span
-                  className={`text-xs px-1.5 py-0.5 rounded-full ${
-                    activeFilter === filter.key
-                      ? "bg-primary-foreground/20"
-                      : "bg-background"
-                  }`}
-                >
-                  {counts[filter.key]}
-                </span>
-              )}
-            </button>
-          ))}
+        {/* 검색 + 필터 */}
+        <div className="space-y-3">
+          {/* 검색창 */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="챗봇 이름 또는 설명으로 검색..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+          
+          {/* 필터 버튼들 */}
+          <div className="flex gap-2 flex-wrap">
+            {filters.map((filter) => (
+              <button
+                key={filter.key}
+                onClick={() => setActiveFilter(filter.key)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                  activeFilter === filter.key
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted hover:bg-muted/80 text-muted-foreground"
+                }`}
+              >
+                {filter.icon}
+                {filter.label}
+                {counts[filter.key] > 0 && (
+                  <span
+                    className={`text-xs px-1.5 py-0.5 rounded-full ${
+                      activeFilter === filter.key
+                        ? "bg-primary-foreground/20"
+                        : "bg-background"
+                    }`}
+                  >
+                    {counts[filter.key]}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* 챗봇 목록 */}
