@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { Source } from "@/components/ChatMessage";
 import { TutorialModal, TutorialStep } from "@/components/TutorialModal";
 import { TutorialGuideOverlay } from "@/components/TutorialGuideOverlay";
+import { SettingsModal } from "@/components/SettingsModal";
 
 interface Message {
   id: string;
@@ -60,6 +61,7 @@ const Index = () => {
   const [showSetupModal, setShowSetupModal] = useState(true);
   const [showGuideOverlay, setShowGuideOverlay] = useState(false);
   const [tutorialStep, setTutorialStep] = useState<TutorialStep | undefined>(undefined);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [userSettings, setUserSettings] = useState<UserSettings | null>(() => {
     const saved = localStorage.getItem("userSettings");
     return saved ? JSON.parse(saved) : null;
@@ -89,6 +91,12 @@ const Index = () => {
 
   const handleSetupSkip = () => {
     setShowSetupModal(false);
+  };
+
+  // 개인화 설정 저장 핸들러
+  const handleSettingsSave = (settings: UserSettings) => {
+    setUserSettings(settings);
+    localStorage.setItem("userSettings", JSON.stringify(settings));
   };
 
   const handleSendMessage = (content: string) => {
@@ -289,6 +297,14 @@ const Index = () => {
       />
     )}
     
+    {/* 개인화 설정 모달 */}
+    <SettingsModal
+      open={showSettingsModal}
+      onClose={() => setShowSettingsModal(false)}
+      settings={userSettings}
+      onSave={handleSettingsSave}
+    />
+    
     <div className="min-h-screen bg-background flex flex-col">
       {/* Top Header Area - spans full width */}
       <div className="flex items-center">
@@ -369,7 +385,7 @@ const Index = () => {
       {/* Main Area - Sidebar + Content */}
       <div className="flex flex-1">
         {/* Sidebar Body (without header) */}
-        <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(false)} chatHistory={chatHistory} currentChatId={currentChatId} onSelectChat={handleSelectChat} onNewChat={handleNewChat} onRenameChat={handleRenameChat} onShareChat={handleShareChat} onPinChat={handlePin} onArchiveChat={handleArchive} onDeleteChat={handleDelete} hideHeader onOpenSettings={() => setShowSetupModal(true)} />
+        <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(false)} chatHistory={chatHistory} currentChatId={currentChatId} onSelectChat={handleSelectChat} onNewChat={handleNewChat} onRenameChat={handleRenameChat} onShareChat={handleShareChat} onPinChat={handlePin} onArchiveChat={handleArchive} onDeleteChat={handleDelete} hideHeader onOpenSettings={() => setShowSettingsModal(true)} />
         
         {/* Sidebar Trigger when closed */}
         {!sidebarOpen && <SidebarTrigger onClick={() => setSidebarOpen(true)} />}

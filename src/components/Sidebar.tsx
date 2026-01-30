@@ -282,7 +282,7 @@ const Sidebar = ({
             className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted rounded-xl transition-colors"
           >
             <Settings className="w-4 h-4" />
-            대화 설정
+            개인화 설정
           </button>
         </div>
       </div>
