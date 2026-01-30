@@ -50,17 +50,17 @@ const guideSteps: GuideStep[] = [
   },
   {
     id: "favorite-chatbots",
-    position: { x: "calc(50% + 128px)", y: "510px" },
+    position: { x: "calc(50% + 128px)", y: "480px" },
     bubblePosition: "top",
     message: "⭐ 즐겨찾는 챗봇들이에요!\n나만의 챗봇을 만들거나\n자주 쓰는 챗봇을 추가해보세요.",
-    highlightArea: { top: "475px", left: "280px", width: "calc(100% - 320px)", height: "65px" },
+    highlightArea: { top: "460px", left: "280px", width: "calc(100% - 320px)", height: "60px" },
   },
   {
     id: "chat-input",
-    position: { x: "calc(50% + 128px)", y: "calc(100% - 100px)" },
+    position: { x: "calc(50% + 128px)", y: "590px" },
     bubblePosition: "top",
     message: "💬 여기에 질문을 입력하세요!\nAI 모델을 선택하고\n답변 길이도 조절할 수 있어요.",
-    highlightArea: { top: "calc(100% - 180px)", left: "280px", width: "calc(100% - 320px)", height: "140px" },
+    highlightArea: { top: "535px", left: "280px", width: "calc(100% - 320px)", height: "150px" },
   },
 ];
 
