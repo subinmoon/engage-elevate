@@ -1,36 +1,28 @@
-import { FileText, Calendar, Users, Plane, Building2, UserCircle, UtensilsCrossed, Mail } from "lucide-react";
+import { FileText, Calendar, Plane, Building2, UtensilsCrossed, Mail } from "lucide-react";
 const helpItems = [{
-  label: "결재",
+  label: "결재 도와줘",
   icon: FileText,
   color: "bg-purple-100 text-purple-600"
 }, {
-  label: "회의실",
+  label: "회의 준비할래",
   icon: Calendar,
   color: "bg-blue-100 text-blue-600"
 }, {
-  label: "동료일정",
-  icon: Users,
-  color: "bg-green-100 text-green-600"
-}, {
-  label: "휴가",
+  label: "휴가 물어보기",
   icon: Plane,
   color: "bg-orange-100 text-orange-600"
 }, {
-  label: "조직도",
+  label: "누구 찾을까",
   icon: Building2,
   color: "bg-pink-100 text-pink-600"
 }, {
-  label: "직원검색",
-  icon: UserCircle,
-  color: "bg-cyan-100 text-cyan-600"
-}, {
-  label: "식단",
-  icon: UtensilsCrossed,
-  color: "bg-amber-100 text-amber-600"
-}, {
-  label: "메일전송",
+  label: "메일 써볼까",
   icon: Mail,
   color: "bg-indigo-100 text-indigo-600"
+}, {
+  label: "오늘 뭐 먹지",
+  icon: UtensilsCrossed,
+  color: "bg-amber-100 text-amber-600"
 }];
 const HRHelper = () => {
   return <div className="bg-card rounded-2xl p-5 shadow-soft border border-border">
@@ -39,7 +31,7 @@ const HRHelper = () => {
         ​나만의 
 커넥터 
       </h2>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-3 gap-2">
         {helpItems.map((item, index) => {
         const Icon = item.icon;
         return <button key={index} className="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-muted/60 transition-all group">
