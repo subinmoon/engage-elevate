@@ -637,7 +637,7 @@ export function TutorialModal({
   };
   return <Dialog open={open}>
       <DialogContent
-        className="relative sm:max-w-2xl w-[95vw] overflow-hidden p-0 border-none bg-gradient-to-b from-sky-50 via-sky-100/50 to-white"
+        className="sm:max-w-2xl w-[95vw] overflow-hidden p-0 border-none bg-gradient-to-b from-sky-50 via-sky-100/50 to-white"
         style={{
           // 작은 화면에서 모달이 뷰포트를 넘어가며 겹치지 않도록 안전장치
           height: "min(560px, calc(100vh - 2rem))",
