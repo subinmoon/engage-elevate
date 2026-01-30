@@ -42,7 +42,7 @@ export const ChatbotManagementModal = ({
   onDelete,
   onEdit,
 }: ChatbotManagementModalProps) => {
-  const [activeFilter, setActiveFilter] = useState<FilterType>("group");
+  const [activeFilter, setActiveFilter] = useState<FilterType>("favorites");
   const [searchQuery, setSearchQuery] = useState("");
 
   // 필터별 챗봇 목록
@@ -96,9 +96,9 @@ export const ChatbotManagementModal = ({
   };
 
   const filters: { key: FilterType; label: string; icon: React.ReactNode }[] = [
+    { key: "favorites", label: "즐겨찾기", icon: <Star className="w-3.5 h-3.5" /> },
     { key: "group", label: "그룹", icon: <Users className="w-3.5 h-3.5" /> },
     { key: "personal", label: "개인", icon: <User className="w-3.5 h-3.5" /> },
-    { key: "favorites", label: "즐겨찾기", icon: <Star className="w-3.5 h-3.5" /> },
   ];
 
   const renderChatbotItem = (chatbot: Chatbot) => {
