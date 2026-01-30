@@ -474,7 +474,7 @@ const Index = () => {
       {/* Main Area - Sidebar + Content */}
       <div className="flex flex-1">
         {/* Sidebar Body (without header) */}
-        <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(false)} chatHistory={chatHistory} currentChatId={currentChatId} onSelectChat={handleSelectChat} onNewChat={handleNewChat} onRenameChat={handleRenameChat} onShareChat={handleShareChat} onPinChat={handlePin} onArchiveChat={handleArchive} onDeleteChat={handleDelete} hideHeader onOpenSettings={() => setShowSettingsModal(true)} onOpenChatbotManagement={() => setShowChatbotManagement(true)} />
+        <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(false)} chatHistory={chatHistory} currentChatId={currentChatId} onSelectChat={handleSelectChat} onNewChat={handleNewChat} onRenameChat={handleRenameChat} onShareChat={handleShareChat} onPinChat={handlePin} onArchiveChat={handleArchive} onDeleteChat={handleDelete} hideHeader onOpenSettings={() => setShowSettingsModal(true)} />
         
         {/* Sidebar Trigger when closed */}
         {!sidebarOpen && <SidebarTrigger onClick={() => setSidebarOpen(true)} />}
