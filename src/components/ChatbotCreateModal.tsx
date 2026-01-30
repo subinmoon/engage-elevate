@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Upload, Users, Globe, Lock, Sparkles, Loader2, ArrowLeft } from "lucide-react";
+import { Upload, Users, Globe, Lock, Sparkles, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import type { Chatbot } from "./ChatbotManagementModal";
 
@@ -180,16 +180,8 @@ export const ChatbotCreateModal = ({
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
-        {/* 상단 헤더: 뒤로 / 제목 / X(기본) 한 줄 */}
-        <DialogHeader className="flex flex-row items-center gap-3 pr-8">
-          <button
-            onClick={handleClose}
-            className="shrink-0 flex items-center gap-1 px-2 py-1 rounded-full bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground text-sm font-medium transition-all"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            뒤로
-          </button>
-          <DialogTitle className="text-lg font-bold flex-1 text-center">
+        <DialogHeader>
+          <DialogTitle className="text-lg font-bold text-center">
             {editingChatbot ? "✏️ 챗봇 수정" : "✨ 새 챗봇 만들기"}
           </DialogTitle>
         </DialogHeader>
