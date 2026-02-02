@@ -115,13 +115,14 @@ export function SettingsModal({ open, onClose, settings, onSave }: SettingsModal
                     key={option.id}
                     onClick={() => setSearchMode(option.id)}
                     className={cn(
-                      "flex-1 py-2 px-2 rounded-lg border text-center transition-all",
+                      "flex-1 py-1.5 px-2 rounded-lg border text-center transition-all",
                       searchMode === option.id
                         ? "border-primary bg-primary/10 text-primary"
                         : "border-border hover:border-primary/30 text-muted-foreground"
                     )}
                   >
-                    <span className="text-base">{option.emoji}</span>
+                    <span className="text-sm">{option.emoji}</span>
+                    <span className="text-xs block">{option.label}</span>
                   </button>
                 ))}
               </div>
@@ -135,13 +136,14 @@ export function SettingsModal({ open, onClose, settings, onSave }: SettingsModal
                     key={option.id}
                     onClick={() => setToneStyle(option.id)}
                     className={cn(
-                      "flex-1 py-2 px-2 rounded-lg border text-center transition-all",
+                      "flex-1 py-1.5 px-2 rounded-lg border text-center transition-all",
                       toneStyle === option.id
                         ? "border-primary bg-primary/10 text-primary"
                         : "border-border hover:border-primary/30 text-muted-foreground"
                     )}
                   >
-                    <span className="text-base">{option.emoji}</span>
+                    <span className="text-sm">{option.emoji}</span>
+                    <span className="text-xs block">{option.label}</span>
                   </button>
                 ))}
               </div>
