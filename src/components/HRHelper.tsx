@@ -1,34 +1,34 @@
 import { FileText, Calendar, Users, Plane, Building2, UserCircle, UtensilsCrossed, Mail } from "lucide-react";
 const helpItems = [{
-  label: "결재",
+  label: "결재 목록 보여줘",
   icon: FileText,
   color: "bg-purple-100 text-purple-600"
 }, {
-  label: "회의실",
+  label: "회의실 잡아줘",
   icon: Calendar,
   color: "bg-blue-100 text-blue-600"
 }, {
-  label: "동료일정",
+  label: "동료 일정 확인해줘",
   icon: Users,
   color: "bg-green-100 text-green-600"
 }, {
-  label: "휴가",
+  label: "휴가 확인할래",
   icon: Plane,
   color: "bg-orange-100 text-orange-600"
 }, {
-  label: "조직도",
+  label: "조직도 보여줘",
   icon: Building2,
   color: "bg-pink-100 text-pink-600"
 }, {
-  label: "직원검색",
+  label: "직원 찾아줘",
   icon: UserCircle,
   color: "bg-cyan-100 text-cyan-600"
 }, {
-  label: "식단",
+  label: "오늘 메뉴 뭐 나와?",
   icon: UtensilsCrossed,
   color: "bg-amber-100 text-amber-600"
 }, {
-  label: "메일전송",
+  label: "메일 써줘",
   icon: Mail,
   color: "bg-indigo-100 text-indigo-600"
 }];
