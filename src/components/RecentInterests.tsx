@@ -52,11 +52,11 @@ const RecentInterests = ({ hasHistory = false, onQuestionClick }: RecentInterest
 
   return (
     <div className="bg-white rounded-2xl p-4 shadow-soft h-full">
-      <div className="flex items-center gap-2 mb-3">
+      <div className="flex items-center gap-2 mb-4">
         <div className="w-7 h-7 rounded-lg bg-lavender-light flex items-center justify-center">
           {icon}
         </div>
-        <h2 className="text-sm font-bold text-foreground">{title}</h2>
+        <h2 className="text-base font-bold text-foreground">{title}</h2>
       </div>
       <div className="space-y-2">
         {displayItems.map((item) => {
