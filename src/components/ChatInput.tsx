@@ -155,9 +155,10 @@ const ChatInput = ({
           <Button
             variant="ghost"
             size="sm"
-            className="rounded-full h-8 w-8 p-0 hover:bg-muted"
+            className="rounded-full gap-1.5 hover:bg-muted text-muted-foreground h-8 px-3 text-xs"
           >
-            <Paperclip className="w-4 h-4 text-muted-foreground" />
+            <Paperclip className="w-4 h-4" />
+            <span>파일첨부</span>
           </Button>
           <Button
             variant="ghost"
