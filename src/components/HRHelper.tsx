@@ -38,8 +38,8 @@ const HRHelper = () => {
   return (
     <div className="bg-white rounded-2xl p-5 shadow-soft h-full">
       <h2 className="text-base font-bold text-foreground mb-4 flex items-center gap-2">
-        <span>🏢</span>
-        나만의 커넥터
+        <span>💬</span>
+        대화 도우미
       </h2>
       <div className="grid grid-cols-4 gap-2">
         {helpItems.map((item, index) => {
