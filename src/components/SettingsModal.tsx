@@ -17,6 +17,7 @@ export interface UserSettings {
   assistantName: string;
   toneStyle: string;
   answerLength: string;
+  searchMode: string;
   allowWebSearch: boolean;
   allowFollowUpQuestions: boolean;
 }
@@ -27,6 +28,12 @@ interface SettingsModalProps {
   settings: UserSettings | null;
   onSave: (settings: UserSettings) => void;
 }
+
+const searchModeOptions = [
+  { id: "general", label: "일반", emoji: "🌐" },
+  { id: "web", label: "웹 검색", emoji: "🔍" },
+  { id: "internal", label: "사내 규칙", emoji: "🏢" },
+];
 
 const toneOptions = [
   { id: "professional", label: "전문적인", emoji: "👔" },
@@ -45,6 +52,7 @@ export function SettingsModal({ open, onClose, settings, onSave }: SettingsModal
   const [assistantName, setAssistantName] = useState(settings?.assistantName || "이수 GPT");
   const [toneStyle, setToneStyle] = useState(settings?.toneStyle || "warm");
   const [answerLength, setAnswerLength] = useState(settings?.answerLength || "default");
+  const [searchMode, setSearchMode] = useState(settings?.searchMode || "general");
   const [allowWebSearch, setAllowWebSearch] = useState(settings?.allowWebSearch ?? true);
   const [allowFollowUpQuestions, setAllowFollowUpQuestions] = useState(settings?.allowFollowUpQuestions ?? true);
 
@@ -55,6 +63,7 @@ export function SettingsModal({ open, onClose, settings, onSave }: SettingsModal
       setAssistantName(settings.assistantName || "이수 GPT");
       setToneStyle(settings.toneStyle || "warm");
       setAnswerLength(settings.answerLength || "default");
+      setSearchMode(settings.searchMode || "general");
       setAllowWebSearch(settings.allowWebSearch ?? true);
       setAllowFollowUpQuestions(settings.allowFollowUpQuestions ?? true);
     }
@@ -66,6 +75,7 @@ export function SettingsModal({ open, onClose, settings, onSave }: SettingsModal
       assistantName,
       toneStyle,
       answerLength,
+      searchMode,
       allowWebSearch,
       allowFollowUpQuestions,
     });
@@ -93,6 +103,28 @@ export function SettingsModal({ open, onClose, settings, onSave }: SettingsModal
               className="w-full"
             />
             <p className="text-xs text-muted-foreground">이수 GPT가 어떻게 불러드릴까요?</p>
+          </div>
+
+          {/* 검색 모드 */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">기본 검색 모드</Label>
+            <div className="flex gap-2">
+              {searchModeOptions.map((option) => (
+                <button
+                  key={option.id}
+                  onClick={() => setSearchMode(option.id)}
+                  className={cn(
+                    "flex-1 py-3 px-4 rounded-xl border-2 text-center transition-all",
+                    searchMode === option.id
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-gray-200 hover:border-gray-300 text-gray-600"
+                  )}
+                >
+                  <span className="text-xl block mb-1">{option.emoji}</span>
+                  <span className="text-sm font-medium">{option.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* 말투 스타일 */}
