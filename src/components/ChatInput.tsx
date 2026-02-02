@@ -155,7 +155,7 @@ const ChatInput = ({
           <Button
             variant="ghost"
             size="sm"
-            className="rounded-full gap-1.5 hover:bg-muted text-muted-foreground h-8 px-3 text-xs"
+            className="rounded-full gap-1.5 hover:bg-muted text-muted-foreground h-8 px-3 text-xs border border-border"
           >
             <Paperclip className="w-4 h-4" />
             <span>파일첨부</span>
@@ -163,7 +163,7 @@ const ChatInput = ({
           <Button
             variant="ghost"
             size="sm"
-            className="rounded-full gap-1.5 hover:bg-muted text-muted-foreground h-8 px-3 text-xs"
+            className="rounded-full gap-1.5 hover:bg-muted text-muted-foreground h-8 px-3 text-xs border border-border"
           >
             <span className="text-xs">🌐</span>
             Azure gpt 4o-2024-11-20
@@ -197,22 +197,31 @@ const ChatInput = ({
             </DropdownMenuContent>
           </DropdownMenu>
           
-          {/* Answer Length Buttons */}
-          <div className="flex items-center bg-muted rounded-full p-0.5">
-            {lengthOptions.map((option) => (
-              <button
-                key={option.id}
-                onClick={() => handleLengthSelect(option.id)}
-                className={`px-3 h-7 rounded-full text-xs font-medium transition-all duration-200 ${
-                  selectedLength === option.id
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
+          {/* Answer Length Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="rounded-full gap-1.5 hover:bg-muted text-muted-foreground h-8 px-3 text-xs border border-border"
               >
-                {option.label}
-              </button>
-            ))}
-          </div>
+                <span>📏</span>
+                <span className="hidden sm:inline">{lengthOptions.find(l => l.id === selectedLength)?.label}</span>
+                <ChevronDown className="w-3 h-3" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="bg-background border shadow-lg z-50">
+              {lengthOptions.map((option) => (
+                <DropdownMenuItem 
+                  key={option.id}
+                  onClick={() => handleLengthSelect(option.id)}
+                  className={`flex items-center gap-2 cursor-pointer ${selectedLength === option.id ? 'bg-primary/10 text-primary' : ''}`}
+                >
+                  <span>{option.label}</span>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         <Button
           size="icon"
