@@ -171,15 +171,6 @@ const ChatInput = ({
             <Paperclip className="w-4 h-4" />
             <span>파일첨부</span>
           </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="rounded-full gap-1.5 hover:bg-[hsl(var(--border))] text-muted-foreground h-8 px-3 text-xs border border-border"
-          >
-            <span className="text-xs">🌐</span>
-            Azure gpt 4o-2024-11-20
-            <ChevronDown className="w-3 h-3" />
-          </Button>
           
           {/* Tone Style Dropdown */}
           <DropdownMenu>
@@ -233,6 +224,17 @@ const ChatInput = ({
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+
+          {/* Model Selection Button */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="rounded-full gap-1.5 hover:bg-[hsl(var(--border))] text-muted-foreground h-8 px-3 text-xs border border-border"
+          >
+            <span className="text-xs">🌐</span>
+            Azure gpt 4o-2024-11-20
+            <ChevronDown className="w-3 h-3" />
+          </Button>
         </div>
         <Button
           size="icon"
