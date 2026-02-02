@@ -1,7 +1,7 @@
 import { FileText, Calendar, Users, Plane, Building2, UserCircle, UtensilsCrossed, Mail } from "lucide-react";
 
 const helpItems = [{
-  label: "결재 도와줘",
+  label: "내가 올린 전자결재 목록 보여줘!",
   icon: FileText,
   color: "bg-purple-100 text-purple-600"
 }, {
