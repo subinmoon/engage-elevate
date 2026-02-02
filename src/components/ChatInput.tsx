@@ -100,9 +100,20 @@ const ChatInput = ({
 
   const currentTone = toneOptions.find(t => t.id === selectedTone);
   const currentSearchMode = searchModeOptions.find(m => m.id === selectedSearchMode);
-  const placeholderText = userName 
-    ? `${userName}님, 무엇이든 물어보세요...` 
-    : "무엇이든 물어보세요...";
+  
+  const getPlaceholderText = () => {
+    const namePrefix = userName ? `${userName}님, ` : "";
+    switch (selectedSearchMode) {
+      case "web":
+        return `${namePrefix}웹에서 검색할 내용을 입력하세요...`;
+      case "internal":
+        return `${namePrefix}사내 규칙에 대해 물어보세요...`;
+      default:
+        return `${namePrefix}무엇이든 물어보세요...`;
+    }
+  };
+
+  const placeholderText = getPlaceholderText();
 
   return (
     <div className="chat-input-gradient bg-background shadow-lg">
