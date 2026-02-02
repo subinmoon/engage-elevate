@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 interface GuideStep {
   id: string;
   selector: string; // DOM 선택자
-  bubblePosition: "top" | "bottom" | "left" | "right";
+  bubblePosition: "top" | "bottom" | "left" | "right"; // 말풍선이 캐릭터 기준 어디에 위치
+  mascotPosition?: "top" | "bottom" | "left" | "right"; // 마스코트가 하이라이트 기준 어디에 위치 (없으면 bubblePosition 반대)
   message: string;
   padding?: number; // 하이라이트 패딩
 }
@@ -15,8 +16,10 @@ type Placement = "left" | "right" | "top" | "bottom";
 
 const clamp = (n: number, min: number, max: number) => Math.min(Math.max(n, min), max);
 
-const getPreferredPlacement = (bubblePosition: GuideStep["bubblePosition"]): Placement => {
-  switch (bubblePosition) {
+const getPreferredPlacement = (step: GuideStep): Placement => {
+  // mascotPosition이 명시되어 있으면 그 반대 방향 사용
+  const positionRef = step.mascotPosition ?? step.bubblePosition;
+  switch (positionRef) {
     case "left":
       return "right";
     case "right":
@@ -70,14 +73,16 @@ const guideSteps: GuideStep[] = [
   {
     id: "favorite-chatbots",
     selector: "[data-guide='favorite-chatbots']",
-    bubblePosition: "bottom",
+    bubblePosition: "right",
+    mascotPosition: "top",
     message: "⭐ 즐겨찾는 챗봇들이에요!\n나만의 챗봇을 만들거나\n자주 쓰는 챗봇을 추가해보세요.",
     padding: 8,
   },
   {
     id: "chat-input",
     selector: "[data-guide='chat-input']",
-    bubblePosition: "bottom",
+    bubblePosition: "right",
+    mascotPosition: "top",
     message: "💬 여기에 질문을 입력하세요!\nAI 모델을 선택하고\n답변 길이도 조절할 수 있어요.",
     padding: 8,
   },
@@ -206,7 +211,7 @@ export function TutorialGuideOverlay({ onComplete, onSkip }: TutorialGuideOverla
   // step이 없으면 렌더링하지 않음
   if (!step) return null;
 
-  const preferredPlacement = getPreferredPlacement(step.bubblePosition);
+  const preferredPlacement = getPreferredPlacement(step);
 
   // DOM 요소의 위치를 계산하는 함수
   const computeHighlightRect = useCallback(() => {
