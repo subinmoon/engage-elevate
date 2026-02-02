@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Plus, Globe, ChevronDown, Send, Paperclip, FileText } from "lucide-react";
+import { ChevronDown, Send, Paperclip } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -7,6 +7,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+const searchModeOptions = [
+  { id: "general", label: "일반", emoji: "🌐" },
+  { id: "web", label: "웹 검색", emoji: "🔍" },
+  { id: "internal", label: "사내 규칙", emoji: "🏢" },
+];
 
 const toneOptions = [
   { id: "professional", label: "전문적인", emoji: "👔" },
@@ -30,6 +36,8 @@ interface ChatInputProps {
   onToneChange?: (tone: string) => void;
   onLengthChange?: (length: string) => void;
   userName?: string;
+  searchMode?: string;
+  onSearchModeChange?: (mode: string) => void;
 }
 
 const ChatInput = ({ 
@@ -42,10 +50,13 @@ const ChatInput = ({
   onToneChange,
   onLengthChange,
   userName,
+  searchMode = "general",
+  onSearchModeChange,
 }: ChatInputProps) => {
   const [message, setMessage] = useState(initialMessage || "");
   const [selectedTone, setSelectedTone] = useState(toneStyle);
   const [selectedLength, setSelectedLength] = useState(answerLength);
+  const [selectedSearchMode, setSelectedSearchMode] = useState(searchMode);
 
   // Sync with props when they change
   useEffect(() => {
@@ -55,6 +66,10 @@ const ChatInput = ({
   useEffect(() => {
     setSelectedLength(answerLength);
   }, [answerLength]);
+
+  useEffect(() => {
+    setSelectedSearchMode(searchMode);
+  }, [searchMode]);
 
   // Sync with initialMessage when it changes externally
   useEffect(() => {
@@ -78,7 +93,13 @@ const ChatInput = ({
     onLengthChange?.(length);
   };
 
+  const handleSearchModeSelect = (mode: string) => {
+    setSelectedSearchMode(mode);
+    onSearchModeChange?.(mode);
+  };
+
   const currentTone = toneOptions.find(t => t.id === selectedTone);
+  const currentSearchMode = searchModeOptions.find(m => m.id === selectedSearchMode);
   const placeholderText = userName 
     ? `${userName}님, 무엇이든 물어보세요...` 
     : "무엇이든 물어보세요...";
@@ -105,25 +126,30 @@ const ChatInput = ({
       </div>
       <div className="flex items-center justify-between px-4 pb-4 pt-2">
         <div className="flex items-center gap-1.5 flex-wrap">
+          {/* Search Mode Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
                 size="sm"
-                className="rounded-full h-8 w-8 p-0 hover:bg-muted"
+                className="rounded-full gap-1.5 hover:bg-muted text-muted-foreground h-8 px-3 text-xs border border-border"
               >
-                <Plus className="w-4 h-4 text-muted-foreground" />
+                <span>{currentSearchMode?.emoji}</span>
+                <span>{currentSearchMode?.label}</span>
+                <ChevronDown className="w-3 h-3" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="bg-background border shadow-lg z-50">
-              <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
-                <Globe className="w-4 h-4" />
-                <span>Web Search</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
-                <FileText className="w-4 h-4" />
-                <span>사규</span>
-              </DropdownMenuItem>
+              {searchModeOptions.map((mode) => (
+                <DropdownMenuItem 
+                  key={mode.id}
+                  onClick={() => handleSearchModeSelect(mode.id)}
+                  className={`flex items-center gap-2 cursor-pointer ${selectedSearchMode === mode.id ? 'bg-primary/10 text-primary' : ''}`}
+                >
+                  <span>{mode.emoji}</span>
+                  <span>{mode.label}</span>
+                </DropdownMenuItem>
+              ))}
             </DropdownMenuContent>
           </DropdownMenu>
           <Button
