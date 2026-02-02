@@ -162,6 +162,23 @@ const Index = () => {
     localStorage.setItem("userSettings", JSON.stringify(settings));
   };
 
+  // 입력창에서 설정 변경 핸들러
+  const handleToneChange = (tone: string) => {
+    if (userSettings) {
+      const newSettings = { ...userSettings, toneStyle: tone };
+      setUserSettings(newSettings);
+      localStorage.setItem("userSettings", JSON.stringify(newSettings));
+    }
+  };
+
+  const handleLengthChange = (length: string) => {
+    if (userSettings) {
+      const newSettings = { ...userSettings, answerLength: length };
+      setUserSettings(newSettings);
+      localStorage.setItem("userSettings", JSON.stringify(newSettings));
+    }
+  };
+
   const handleSendMessage = (content: string) => {
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -482,7 +499,18 @@ const Index = () => {
         {/* Main Content */}
         <main className="flex-1 bg-background">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 w-full">
-          {isChatMode ? <ChatView messages={messages} onSendMessage={handleSendMessage} isLoading={isLoading} onRegenerate={handleRegenerate} /> : <>
+          {isChatMode ? (
+            <ChatView 
+              messages={messages} 
+              onSendMessage={handleSendMessage} 
+              isLoading={isLoading} 
+              onRegenerate={handleRegenerate}
+              toneStyle={userSettings?.toneStyle}
+              answerLength={userSettings?.answerLength}
+              onToneChange={handleToneChange}
+              onLengthChange={handleLengthChange}
+            />
+          ) : <>
               {/* Header with Welcome & Quick Actions */}
               <div className="mb-4">
                 <WelcomeHeader userName="현민" onSelectAction={template => setPrefillMessage(template)} />
@@ -509,10 +537,18 @@ const Index = () => {
               
               {/* Chat Input - Bottom */}
               <div data-guide="chat-input">
-                <ChatInput onSendMessage={msg => {
-                handleSendMessage(msg);
-                setPrefillMessage("");
-              }} initialMessage={prefillMessage} onMessageChange={() => setPrefillMessage("")} />
+                <ChatInput 
+                  onSendMessage={msg => {
+                    handleSendMessage(msg);
+                    setPrefillMessage("");
+                  }} 
+                  initialMessage={prefillMessage} 
+                  onMessageChange={() => setPrefillMessage("")}
+                  toneStyle={userSettings?.toneStyle}
+                  answerLength={userSettings?.answerLength}
+                  onToneChange={handleToneChange}
+                  onLengthChange={handleLengthChange}
+                />
               </div>
             </>}
           </div>

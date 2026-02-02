@@ -8,10 +8,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const responseTypes = [
+const toneOptions = [
+  { id: "professional", label: "전문적인", emoji: "👔" },
+  { id: "warm", label: "따뜻한", emoji: "🤗" },
+  { id: "friendly", label: "친근한", emoji: "😊" },
+];
+
+const lengthOptions = [
   { id: "concise", label: "간결" },
-  { id: "detailed", label: "상세" },
-  { id: "default", label: "기본" },
+  { id: "default", label: "보통" },
+  { id: "detailed", label: "자세히" },
 ];
 
 interface ChatInputProps {
@@ -19,11 +25,34 @@ interface ChatInputProps {
   disabled?: boolean;
   initialMessage?: string;
   onMessageChange?: (message: string) => void;
+  toneStyle?: string;
+  answerLength?: string;
+  onToneChange?: (tone: string) => void;
+  onLengthChange?: (length: string) => void;
 }
 
-const ChatInput = ({ onSendMessage, disabled, initialMessage, onMessageChange }: ChatInputProps) => {
+const ChatInput = ({ 
+  onSendMessage, 
+  disabled, 
+  initialMessage, 
+  onMessageChange,
+  toneStyle = "warm",
+  answerLength = "default",
+  onToneChange,
+  onLengthChange,
+}: ChatInputProps) => {
   const [message, setMessage] = useState(initialMessage || "");
-  const [selectedType, setSelectedType] = useState("default");
+  const [selectedTone, setSelectedTone] = useState(toneStyle);
+  const [selectedLength, setSelectedLength] = useState(answerLength);
+
+  // Sync with props when they change
+  useEffect(() => {
+    setSelectedTone(toneStyle);
+  }, [toneStyle]);
+
+  useEffect(() => {
+    setSelectedLength(answerLength);
+  }, [answerLength]);
 
   // Sync with initialMessage when it changes externally
   useEffect(() => {
@@ -36,6 +65,18 @@ const ChatInput = ({ onSendMessage, disabled, initialMessage, onMessageChange }:
     setMessage(value);
     onMessageChange?.(value);
   };
+
+  const handleToneSelect = (tone: string) => {
+    setSelectedTone(tone);
+    onToneChange?.(tone);
+  };
+
+  const handleLengthSelect = (length: string) => {
+    setSelectedLength(length);
+    onLengthChange?.(length);
+  };
+
+  const currentTone = toneOptions.find(t => t.id === selectedTone);
 
   return (
     <div className="chat-input-gradient bg-background shadow-lg">
@@ -97,19 +138,46 @@ const ChatInput = ({ onSendMessage, disabled, initialMessage, onMessageChange }:
             <ChevronDown className="w-3 h-3" />
           </Button>
           
-          {/* Response Type Buttons */}
+          {/* Tone Style Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="rounded-full gap-1.5 hover:bg-muted text-muted-foreground h-8 px-3 text-xs border border-border"
+              >
+                <span>{currentTone?.emoji}</span>
+                <span className="hidden sm:inline">{currentTone?.label}</span>
+                <ChevronDown className="w-3 h-3" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="bg-background border shadow-lg z-50">
+              {toneOptions.map((tone) => (
+                <DropdownMenuItem 
+                  key={tone.id}
+                  onClick={() => handleToneSelect(tone.id)}
+                  className={`flex items-center gap-2 cursor-pointer ${selectedTone === tone.id ? 'bg-primary/10 text-primary' : ''}`}
+                >
+                  <span>{tone.emoji}</span>
+                  <span>{tone.label}</span>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          
+          {/* Answer Length Buttons */}
           <div className="flex items-center bg-muted rounded-full p-0.5">
-            {responseTypes.map((type) => (
+            {lengthOptions.map((option) => (
               <button
-                key={type.id}
-                onClick={() => setSelectedType(type.id)}
+                key={option.id}
+                onClick={() => handleLengthSelect(option.id)}
                 className={`px-3 h-7 rounded-full text-xs font-medium transition-all duration-200 ${
-                  selectedType === type.id
+                  selectedLength === option.id
                     ? "bg-primary text-primary-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                {type.label}
+                {option.label}
               </button>
             ))}
           </div>
