@@ -514,7 +514,7 @@ const Index = () => {
           ) : <>
               {/* Header with Welcome & Quick Actions */}
               <div className="mb-4">
-                <WelcomeHeader userName="현민" onSelectAction={template => setPrefillMessage(template)} />
+                <WelcomeHeader userName={userSettings?.userName || "사용자"} onSelectAction={template => setPrefillMessage(template)} />
               </div>
               
               {/* Main Content Grid */}
