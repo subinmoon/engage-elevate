@@ -70,14 +70,14 @@ const guideSteps: GuideStep[] = [
   {
     id: "favorite-chatbots",
     selector: "[data-guide='favorite-chatbots']",
-    bubblePosition: "top",
+    bubblePosition: "bottom",
     message: "⭐ 즐겨찾는 챗봇들이에요!\n나만의 챗봇을 만들거나\n자주 쓰는 챗봇을 추가해보세요.",
     padding: 8,
   },
   {
     id: "chat-input",
     selector: "[data-guide='chat-input']",
-    bubblePosition: "top",
+    bubblePosition: "bottom",
     message: "💬 여기에 질문을 입력하세요!\nAI 모델을 선택하고\n답변 길이도 조절할 수 있어요.",
     padding: 8,
   },
