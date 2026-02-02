@@ -132,7 +132,7 @@ const ChatInput = ({
               <Button
                 variant="ghost"
                 size="sm"
-                className="rounded-full gap-1.5 hover:bg-muted text-muted-foreground h-8 px-3 text-xs border border-border"
+                className="rounded-full gap-1.5 hover:bg-[hsl(var(--border))] text-muted-foreground h-8 px-3 text-xs border border-border"
               >
                 <span>{currentSearchMode?.emoji}</span>
                 <span>{currentSearchMode?.label}</span>
@@ -144,7 +144,7 @@ const ChatInput = ({
                 <DropdownMenuItem 
                   key={mode.id}
                   onClick={() => handleSearchModeSelect(mode.id)}
-                  className={`flex items-center gap-2 cursor-pointer ${selectedSearchMode === mode.id ? 'bg-primary/10 text-primary' : ''}`}
+                  className={`flex items-center gap-2 cursor-pointer hover:bg-[hsl(var(--border))] ${selectedSearchMode === mode.id ? 'bg-primary/10 text-primary' : ''}`}
                 >
                   <span>{mode.emoji}</span>
                   <span>{mode.label}</span>
@@ -155,7 +155,7 @@ const ChatInput = ({
           <Button
             variant="ghost"
             size="sm"
-            className="rounded-full gap-1.5 hover:bg-muted text-muted-foreground h-8 px-3 text-xs border border-border"
+            className="rounded-full gap-1.5 hover:bg-[hsl(var(--border))] text-muted-foreground h-8 px-3 text-xs border border-border"
           >
             <Paperclip className="w-4 h-4" />
             <span>파일첨부</span>
@@ -163,7 +163,7 @@ const ChatInput = ({
           <Button
             variant="ghost"
             size="sm"
-            className="rounded-full gap-1.5 hover:bg-muted text-muted-foreground h-8 px-3 text-xs border border-border"
+            className="rounded-full gap-1.5 hover:bg-[hsl(var(--border))] text-muted-foreground h-8 px-3 text-xs border border-border"
           >
             <span className="text-xs">🌐</span>
             Azure gpt 4o-2024-11-20
@@ -176,7 +176,7 @@ const ChatInput = ({
               <Button
                 variant="ghost"
                 size="sm"
-                className="rounded-full gap-1.5 hover:bg-muted text-muted-foreground h-8 px-3 text-xs border border-border"
+                className="rounded-full gap-1.5 hover:bg-[hsl(var(--border))] text-muted-foreground h-8 px-3 text-xs border border-border"
               >
                 <span>{currentTone?.emoji}</span>
                 <span className="hidden sm:inline">{currentTone?.label}</span>
@@ -188,7 +188,7 @@ const ChatInput = ({
                 <DropdownMenuItem 
                   key={tone.id}
                   onClick={() => handleToneSelect(tone.id)}
-                  className={`flex items-center gap-2 cursor-pointer ${selectedTone === tone.id ? 'bg-primary/10 text-primary' : ''}`}
+                  className={`flex items-center gap-2 cursor-pointer hover:bg-[hsl(var(--border))] ${selectedTone === tone.id ? 'bg-primary/10 text-primary' : ''}`}
                 >
                   <span>{tone.emoji}</span>
                   <span>{tone.label}</span>
@@ -203,7 +203,7 @@ const ChatInput = ({
               <Button
                 variant="ghost"
                 size="sm"
-                className="rounded-full gap-1.5 hover:bg-muted text-muted-foreground h-8 px-3 text-xs border border-border"
+                className="rounded-full gap-1.5 hover:bg-[hsl(var(--border))] text-muted-foreground h-8 px-3 text-xs border border-border"
               >
                 <span>📏</span>
                 <span className="hidden sm:inline">{lengthOptions.find(l => l.id === selectedLength)?.label}</span>
@@ -215,7 +215,7 @@ const ChatInput = ({
                 <DropdownMenuItem 
                   key={option.id}
                   onClick={() => handleLengthSelect(option.id)}
-                  className={`flex items-center gap-2 cursor-pointer ${selectedLength === option.id ? 'bg-primary/10 text-primary' : ''}`}
+                  className={`flex items-center gap-2 cursor-pointer hover:bg-[hsl(var(--border))] ${selectedLength === option.id ? 'bg-primary/10 text-primary' : ''}`}
                 >
                   <span>{option.label}</span>
                 </DropdownMenuItem>
