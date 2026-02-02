@@ -43,6 +43,7 @@ interface UserSettings {
   assistantName: string;
   toneStyle: string;
   answerLength: string;
+  searchMode: string;
   allowWebSearch: boolean;
   allowFollowUpQuestions: boolean;
 }
@@ -174,6 +175,14 @@ const Index = () => {
   const handleLengthChange = (length: string) => {
     if (userSettings) {
       const newSettings = { ...userSettings, answerLength: length };
+      setUserSettings(newSettings);
+      localStorage.setItem("userSettings", JSON.stringify(newSettings));
+    }
+  };
+
+  const handleSearchModeChange = (mode: string) => {
+    if (userSettings) {
+      const newSettings = { ...userSettings, searchMode: mode };
       setUserSettings(newSettings);
       localStorage.setItem("userSettings", JSON.stringify(newSettings));
     }
@@ -507,8 +516,10 @@ const Index = () => {
               onRegenerate={handleRegenerate}
               toneStyle={userSettings?.toneStyle}
               answerLength={userSettings?.answerLength}
+              searchMode={userSettings?.searchMode}
               onToneChange={handleToneChange}
               onLengthChange={handleLengthChange}
+              onSearchModeChange={handleSearchModeChange}
               userName={userSettings?.userName}
             />
           ) : <>
@@ -547,8 +558,10 @@ const Index = () => {
                   onMessageChange={() => setPrefillMessage("")}
                   toneStyle={userSettings?.toneStyle}
                   answerLength={userSettings?.answerLength}
+                  searchMode={userSettings?.searchMode}
                   onToneChange={handleToneChange}
                   onLengthChange={handleLengthChange}
+                  onSearchModeChange={handleSearchModeChange}
                   userName={userSettings?.userName}
                 />
               </div>

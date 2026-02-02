@@ -17,8 +17,10 @@ interface ChatViewProps {
   onRegenerate?: () => void;
   toneStyle?: string;
   answerLength?: string;
+  searchMode?: string;
   onToneChange?: (tone: string) => void;
   onLengthChange?: (length: string) => void;
+  onSearchModeChange?: (mode: string) => void;
   userName?: string;
 }
 
@@ -53,8 +55,10 @@ const ChatView = ({
   onRegenerate,
   toneStyle,
   answerLength,
+  searchMode,
   onToneChange,
   onLengthChange,
+  onSearchModeChange,
   userName,
 }: ChatViewProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -160,8 +164,10 @@ const ChatView = ({
           disabled={isLoading}
           toneStyle={toneStyle}
           answerLength={answerLength}
+          searchMode={searchMode}
           onToneChange={onToneChange}
           onLengthChange={onLengthChange}
+          onSearchModeChange={onSearchModeChange}
           userName={userName}
         />
       </div>
