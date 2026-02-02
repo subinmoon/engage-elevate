@@ -17,9 +17,12 @@ type Placement = "left" | "right" | "top" | "bottom";
 const clamp = (n: number, min: number, max: number) => Math.min(Math.max(n, min), max);
 
 const getPreferredPlacement = (step: GuideStep): Placement => {
-  // mascotPosition이 명시되어 있으면 그 반대 방향 사용
-  const positionRef = step.mascotPosition ?? step.bubblePosition;
-  switch (positionRef) {
+  // mascotPosition이 명시되어 있으면 그대로 사용 (마스코트가 하이라이트 기준 해당 위치에)
+  if (step.mascotPosition) {
+    return step.mascotPosition;
+  }
+  // 없으면 bubblePosition의 반대 방향 (기존 동작)
+  switch (step.bubblePosition) {
     case "left":
       return "right";
     case "right":
