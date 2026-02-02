@@ -19,6 +19,7 @@ interface ChatViewProps {
   answerLength?: string;
   onToneChange?: (tone: string) => void;
   onLengthChange?: (length: string) => void;
+  userName?: string;
 }
 
 const suggestionsMap: Record<string, string[]> = {
@@ -54,6 +55,7 @@ const ChatView = ({
   answerLength,
   onToneChange,
   onLengthChange,
+  userName,
 }: ChatViewProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isNearBottom, setIsNearBottom] = useState(true);
@@ -160,6 +162,7 @@ const ChatView = ({
           answerLength={answerLength}
           onToneChange={onToneChange}
           onLengthChange={onLengthChange}
+          userName={userName}
         />
       </div>
     </div>

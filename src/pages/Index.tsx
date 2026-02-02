@@ -509,6 +509,7 @@ const Index = () => {
               answerLength={userSettings?.answerLength}
               onToneChange={handleToneChange}
               onLengthChange={handleLengthChange}
+              userName={userSettings?.userName}
             />
           ) : <>
               {/* Header with Welcome & Quick Actions */}
@@ -548,6 +549,7 @@ const Index = () => {
                   answerLength={userSettings?.answerLength}
                   onToneChange={handleToneChange}
                   onLengthChange={handleLengthChange}
+                  userName={userSettings?.userName}
                 />
               </div>
             </>}

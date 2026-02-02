@@ -29,6 +29,7 @@ interface ChatInputProps {
   answerLength?: string;
   onToneChange?: (tone: string) => void;
   onLengthChange?: (length: string) => void;
+  userName?: string;
 }
 
 const ChatInput = ({ 
@@ -40,6 +41,7 @@ const ChatInput = ({
   answerLength = "default",
   onToneChange,
   onLengthChange,
+  userName,
 }: ChatInputProps) => {
   const [message, setMessage] = useState(initialMessage || "");
   const [selectedTone, setSelectedTone] = useState(toneStyle);
@@ -77,6 +79,9 @@ const ChatInput = ({
   };
 
   const currentTone = toneOptions.find(t => t.id === selectedTone);
+  const placeholderText = userName 
+    ? `${userName}님, 무엇이든 물어보세요...` 
+    : "무엇이든 물어보세요...";
 
   return (
     <div className="chat-input-gradient bg-background shadow-lg">
@@ -84,7 +89,7 @@ const ChatInput = ({
         <textarea
           value={message}
           onChange={(e) => handleMessageChange(e.target.value)}
-          placeholder="무엇이든 물어보세요..."
+          placeholder={placeholderText}
           className="w-full bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-base resize-none min-h-[24px] max-h-[200px]"
           rows={message.split('\n').length > 5 ? 5 : message.split('\n').length || 1}
           onKeyDown={(e) => {
