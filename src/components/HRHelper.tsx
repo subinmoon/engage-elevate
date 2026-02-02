@@ -38,8 +38,8 @@ const HRHelper = () => {
   return (
     <div className="bg-white rounded-2xl p-4 shadow-soft h-full">
       <h2 className="text-base font-bold text-foreground mb-4 flex items-center gap-2">
-        <div className="w-7 h-7 rounded-lg bg-sky-100 flex items-center justify-center">
-          <MessageCircle className="w-4 h-4 text-sky-500" />
+        <div className="w-7 h-7 rounded-lg bg-lavender-light flex items-center justify-center">
+          <MessageCircle className="w-4 h-4 text-primary" />
         </div>
         대화로 업무하기
       </h2>
