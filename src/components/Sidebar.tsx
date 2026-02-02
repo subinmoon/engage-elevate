@@ -80,6 +80,7 @@ const Sidebar = ({
   const navigate = useNavigate();
   const [historyOpen, setHistoryOpen] = useState(true);
   const [myChatbotOpen, setMyChatbotOpen] = useState(true);
+  const [favoriteChatbotOpen, setFavoriteChatbotOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [favoriteServices, setFavoriteServices] = useState<ChatbotService[]>([]);
@@ -280,31 +281,41 @@ const Sidebar = ({
             </button>
             {myChatbotOpen && (
               <div className="ml-4 mt-1 space-y-0.5">
-                {/* Favorite Chatbots */}
-                <div className="px-3 py-1.5 text-xs font-medium text-muted-foreground flex items-center gap-1.5">
-                  <Star className="w-3 h-3 text-yellow-500 fill-yellow-400" />
-                  즐겨찾는 챗봇
+                {/* Favorite Chatbots - Collapsible */}
+                <div>
+                  <button 
+                    onClick={() => setFavoriteChatbotOpen(!favoriteChatbotOpen)}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+                  >
+                    <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-400" />
+                    즐겨찾는 챗봇
+                    {favoriteChatbotOpen ? <ChevronDown className="w-3 h-3 ml-auto" /> : <ChevronRight className="w-3 h-3 ml-auto" />}
+                  </button>
+                  {favoriteChatbotOpen && (
+                    <div className="ml-4 mt-1 space-y-0.5">
+                      {favoriteServices.length > 0 ? (
+                        favoriteServices.map((service) => (
+                          <button 
+                            key={service.id}
+                            className="w-full flex items-center gap-2 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+                          >
+                            <span>{service.icon}</span>
+                            {service.name}
+                          </button>
+                        ))
+                      ) : (
+                        <div className="px-3 py-2 text-xs text-muted-foreground">
+                          즐겨찾기가 없습니다
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
-                {favoriteServices.length > 0 ? (
-                  favoriteServices.map((service) => (
-                    <button 
-                      key={service.id}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
-                    >
-                      <span>{service.icon}</span>
-                      {service.name}
-                    </button>
-                  ))
-                ) : (
-                  <div className="px-3 py-2 text-xs text-muted-foreground">
-                    즐겨찾기가 없습니다
-                  </div>
-                )}
                 
-                {/* Manage Chatbots */}
+                {/* Manage Chatbots - Same level */}
                 <button 
                   onClick={() => navigate("/chatbots")}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors mt-1"
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
                 >
                   <Sparkles className="w-3.5 h-3.5" />
                   나만의 챗봇 관리
