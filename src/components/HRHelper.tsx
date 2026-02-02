@@ -1,4 +1,4 @@
-import { FileText, Calendar, Users, Plane, Building2, UserCircle, UtensilsCrossed, Mail } from "lucide-react";
+import { FileText, Calendar, Users, Plane, Building2, UserCircle, UtensilsCrossed, Mail, MessageCircle } from "lucide-react";
 
 const helpItems = [{
   label: "결재 목록 보여줘",
@@ -36,9 +36,11 @@ const helpItems = [{
 
 const HRHelper = () => {
   return (
-    <div className="bg-sky-50 rounded-2xl p-4 shadow-soft h-full">
+    <div className="bg-white rounded-2xl p-4 shadow-soft h-full">
       <h2 className="text-base font-bold text-foreground mb-4 flex items-center gap-2">
-        <span>💬</span>
+        <div className="w-7 h-7 rounded-lg bg-sky-100 flex items-center justify-center">
+          <MessageCircle className="w-4 h-4 text-sky-500" />
+        </div>
         대화로 업무하기
       </h2>
       <div className="grid grid-cols-4 gap-2">
