@@ -15,6 +15,10 @@ interface ChatViewProps {
   onSendMessage: (message: string) => void;
   isLoading?: boolean;
   onRegenerate?: () => void;
+  toneStyle?: string;
+  answerLength?: string;
+  onToneChange?: (tone: string) => void;
+  onLengthChange?: (length: string) => void;
 }
 
 const suggestionsMap: Record<string, string[]> = {
@@ -41,7 +45,16 @@ const suggestionsMap: Record<string, string[]> = {
   ],
 };
 
-const ChatView = ({ messages, onSendMessage, isLoading, onRegenerate }: ChatViewProps) => {
+const ChatView = ({ 
+  messages, 
+  onSendMessage, 
+  isLoading, 
+  onRegenerate,
+  toneStyle,
+  answerLength,
+  onToneChange,
+  onLengthChange,
+}: ChatViewProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isNearBottom, setIsNearBottom] = useState(true);
   const prevMessagesLength = useRef(messages.length);
@@ -140,7 +153,14 @@ const ChatView = ({ messages, onSendMessage, isLoading, onRegenerate }: ChatView
 
       {/* Input */}
       <div className="mt-auto pt-4">
-        <ChatInput onSendMessage={onSendMessage} disabled={isLoading} />
+        <ChatInput 
+          onSendMessage={onSendMessage} 
+          disabled={isLoading}
+          toneStyle={toneStyle}
+          answerLength={answerLength}
+          onToneChange={onToneChange}
+          onLengthChange={onLengthChange}
+        />
       </div>
     </div>
   );
