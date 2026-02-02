@@ -529,13 +529,13 @@ const Index = () => {
               </div>
               
               {/* Main Content Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
-                <div className="lg:col-span-3" data-guide="popular-questions">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+                <div data-guide="popular-questions">
                   <RecentInterests hasHistory={chatHistory.length > 0} onQuestionClick={question => {
                   setPrefillMessage(question);
                 }} />
                 </div>
-                <div className="lg:col-span-2" data-guide="work-life-helper">
+                <div data-guide="work-life-helper">
                   <HRHelper />
                 </div>
               </div>
