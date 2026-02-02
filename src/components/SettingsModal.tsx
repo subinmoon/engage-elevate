@@ -105,47 +105,46 @@ export function SettingsModal({ open, onClose, settings, onSave }: SettingsModal
             <p className="text-xs text-muted-foreground">이수 GPT가 어떻게 불러드릴까요?</p>
           </div>
 
-          {/* 검색 모드 */}
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">기본 검색 모드</Label>
-            <div className="flex gap-2">
-              {searchModeOptions.map((option) => (
-                <button
-                  key={option.id}
-                  onClick={() => setSearchMode(option.id)}
-                  className={cn(
-                    "flex-1 py-3 px-4 rounded-xl border-2 text-center transition-all",
-                    searchMode === option.id
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-gray-200 hover:border-gray-300 text-gray-600"
-                  )}
-                >
-                  <span className="text-xl block mb-1">{option.emoji}</span>
-                  <span className="text-sm font-medium">{option.label}</span>
-                </button>
-              ))}
+          {/* 검색 모드 & 말투 스타일 - 한 줄로 */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">검색 모드</Label>
+              <div className="flex gap-1">
+                {searchModeOptions.map((option) => (
+                  <button
+                    key={option.id}
+                    onClick={() => setSearchMode(option.id)}
+                    className={cn(
+                      "flex-1 py-2 px-2 rounded-lg border text-center transition-all",
+                      searchMode === option.id
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border hover:border-primary/30 text-muted-foreground"
+                    )}
+                  >
+                    <span className="text-base">{option.emoji}</span>
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* 말투 스타일 */}
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">말투 스타일</Label>
-            <div className="flex gap-2">
-              {toneOptions.map((option) => (
-                <button
-                  key={option.id}
-                  onClick={() => setToneStyle(option.id)}
-                  className={cn(
-                    "flex-1 py-3 px-4 rounded-xl border-2 text-center transition-all",
-                    toneStyle === option.id
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-gray-200 hover:border-gray-300 text-gray-600"
-                  )}
-                >
-                  <span className="text-xl block mb-1">{option.emoji}</span>
-                  <span className="text-sm font-medium">{option.label}</span>
-                </button>
-              ))}
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">말투 스타일</Label>
+              <div className="flex gap-1">
+                {toneOptions.map((option) => (
+                  <button
+                    key={option.id}
+                    onClick={() => setToneStyle(option.id)}
+                    className={cn(
+                      "flex-1 py-2 px-2 rounded-lg border text-center transition-all",
+                      toneStyle === option.id
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border hover:border-primary/30 text-muted-foreground"
+                    )}
+                  >
+                    <span className="text-base">{option.emoji}</span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
