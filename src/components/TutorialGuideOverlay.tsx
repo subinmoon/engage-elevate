@@ -49,7 +49,7 @@ const guideSteps: GuideStep[] = [
     id: "header",
     selector: "[data-guide='header']",
     bubblePosition: "bottom",
-    message: "상단 헤더에서 홈으로 이동하거나\n즐겨찾기, 알림을 확인할 수 있어요! 🔔",
+    message: "🔔 상단 헤더에서 홈으로 이동하거나\n즐겨찾기, 알림을 확인할 수 있어요!",
     padding: 4,
   },
   {
