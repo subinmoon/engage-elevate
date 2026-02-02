@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Star, MoreHorizontal, Pencil, Trash2, Users, User, Search, PanelLeftClose, Sparkles } from "lucide-react";
+import { Plus, Star, MoreHorizontal, Pencil, Trash2, Users, User, Search, PanelLeftClose, Sparkles, ArrowLeft } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -320,10 +320,20 @@ const ChatbotsPage = () => {
           <div className="max-w-3xl mx-auto px-4 py-8">
             {/* 페이지 제목 + 생성 버튼 */}
             <div className="flex items-center justify-between mb-8">
-              <h1 className="text-2xl font-bold flex items-center gap-2">
-                <Sparkles className="w-6 h-6 text-primary" />
-                챗봇 서비스 관리
-              </h1>
+              <div className="flex items-center gap-3">
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  onClick={() => navigate("/")}
+                  className="shrink-0"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </Button>
+                <h1 className="text-2xl font-bold flex items-center gap-2">
+                  <Sparkles className="w-6 h-6 text-primary" />
+                  챗봇 서비스 관리
+                </h1>
+              </div>
               <Button onClick={() => setIsCreateModalOpen(true)} className="gap-2">
                 <Plus className="w-4 h-4" />
                 챗봇 생성
