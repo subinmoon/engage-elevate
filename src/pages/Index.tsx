@@ -571,8 +571,8 @@ const Index = () => {
                   </div>
                 </div>
                 
-                {/* Right: Today's Context */}
-                <div className="h-full" style={rightColumnStyle}>
+                {/* Right: Daily Briefing - height synced to left column */}
+                <div style={rightColumnStyle}>
                   <TodayContextCard 
                     onGetHelp={prompt => setPrefillMessage(prompt)} 
                     onNewsChat={prompt => setPrefillMessage(prompt)} 
