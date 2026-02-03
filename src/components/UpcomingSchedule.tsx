@@ -15,8 +15,18 @@ interface UpcomingScheduleProps {
 }
 
 const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingScheduleProps) => {
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(isExpanded ? 0 : null);
   const schedules = scheduleData;
+
+  // Reset expanded index when popover opens (expand first item)
+  const handleOpenChange = () => {
+    if (!isExpanded) {
+      setExpandedIndex(0);
+    } else {
+      setExpandedIndex(null);
+    }
+    onToggle?.();
+  };
 
   const getIcon = (type: ScheduleItem["type"]) => {
     switch (type) {
@@ -108,28 +118,37 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingS
   };
 
   return (
-    <Popover open={isExpanded} onOpenChange={() => { onToggle?.(); setExpandedIndex(null); }}>
-      <PopoverTrigger asChild>
-        <button
-          className="relative p-2 hover:bg-muted/50 rounded-lg transition-all cursor-pointer"
-          title="일정 보기"
+    <>
+      {/* Backdrop overlay when popover is open */}
+      {isExpanded && (
+        <div 
+          className="fixed inset-0 bg-black/30 z-40 transition-opacity"
+          onClick={handleOpenChange}
+        />
+      )}
+      
+      <Popover open={isExpanded} onOpenChange={handleOpenChange}>
+        <PopoverTrigger asChild>
+          <button
+            className="relative p-2 hover:bg-muted/50 rounded-lg transition-all cursor-pointer z-50"
+            title="일정 보기"
+          >
+            <Bell className="w-5 h-5 text-muted-foreground" />
+            {schedules.length > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center px-1">
+                {schedules.length}
+              </span>
+            )}
+          </button>
+        </PopoverTrigger>
+        <PopoverContent 
+          align="end" 
+          className="w-80 p-0 bg-card border border-border z-50"
+          sideOffset={8}
         >
-          <Bell className="w-5 h-5 text-muted-foreground" />
-          {schedules.length > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center px-1">
-              {schedules.length}
-            </span>
-          )}
-        </button>
-      </PopoverTrigger>
-      <PopoverContent 
-        align="end" 
-        className="w-80 p-0 bg-card border border-border z-50"
-        sideOffset={8}
-      >
-        {/* Header */}
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
-          <Calendar className="w-4 h-4 text-primary" />
+          {/* Header */}
+          <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
+            <Calendar className="w-4 h-4 text-primary" />
           <span className="text-sm font-semibold">다가오는 일정</span>
           <span className="ml-auto text-xs text-muted-foreground">{schedules.length}개</span>
         </div>
@@ -231,7 +250,9 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingS
         </div>
       </PopoverContent>
     </Popover>
+    </>
   );
 };
+
 
 export default UpcomingSchedule;
