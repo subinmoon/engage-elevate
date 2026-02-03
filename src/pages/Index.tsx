@@ -7,7 +7,6 @@ import UpcomingSchedule from "@/components/UpcomingSchedule";
 import RecentInterests from "@/components/RecentInterests";
 import HRHelper from "@/components/HRHelper";
 import UpcomingScheduleCard from "@/components/UpcomingScheduleCard";
-import InterestNews from "@/components/InterestNews";
 import ChatInput from "@/components/ChatInput";
 import ChatView from "@/components/ChatView";
 import { generateScheduleResponse } from "@/data/scheduleData";
@@ -529,15 +528,10 @@ const Index = () => {
                 <WelcomeHeader userName={userSettings?.userName || "사용자"} onSelectAction={template => setPrefillMessage(template)} />
               </div>
               
-              {/* Main Content Grid - 4 columns */}
-              <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-4">
-                {/* Left: Interest News */}
-                <div className="lg:col-span-1">
-                  <InterestNews />
-                </div>
-                
-                {/* Center: HRHelper + RecentInterests stacked */}
-                <div className="lg:col-span-2 space-y-4">
+              {/* Main Content Grid - 2 equal columns */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+                {/* Left: HRHelper + RecentInterests stacked */}
+                <div className="space-y-4">
                   <div data-guide="work-life-helper">
                     <HRHelper />
                   </div>
@@ -549,7 +543,7 @@ const Index = () => {
                 </div>
                 
                 {/* Right: Upcoming Schedule */}
-                <div className="lg:col-span-1">
+                <div>
                   <UpcomingScheduleCard onGetHelp={prompt => {
                     setPrefillMessage(prompt);
                   }} />
