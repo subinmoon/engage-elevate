@@ -34,6 +34,8 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingS
         return <Palmtree className="w-4 h-4 text-green-500" />;
       case "business":
         return <Plane className="w-4 h-4 text-blue-500" />;
+      case "anniversary":
+        return <Calendar className="w-4 h-4 text-pink-500" />;
       default:
         return <Calendar className="w-4 h-4 text-muted-foreground" />;
     }
@@ -46,6 +48,8 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingS
         return `bg-green-50 border-green-200 ${ring}`;
       case "business":
         return `bg-blue-50 border-blue-200 ${ring}`;
+      case "anniversary":
+        return `bg-pink-50 border-pink-200 ${ring}`;
       default:
         return `bg-muted border-border ${ring}`;
     }
@@ -65,6 +69,12 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingS
           text: "text-blue-700",
           icon: "✈️"
         };
+      case "anniversary":
+        return {
+          bar: "from-pink-500 to-pink-400",
+          text: "text-pink-700",
+          icon: "💕"
+        };
       default:
         return {
           bar: "from-primary to-lavender",
@@ -80,6 +90,8 @@ const UpcomingSchedule = ({ isExpanded = false, onToggle, onGetHelp }: UpcomingS
         return "휴가";
       case "business":
         return "출장";
+      case "anniversary":
+        return "기념일";
       default:
         return "일정";
     }

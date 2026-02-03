@@ -1,6 +1,6 @@
 // Shared schedule data for the application
 export interface ScheduleItem {
-  type: "vacation" | "business";
+  type: "vacation" | "business" | "anniversary";
   title: string;
   date: string;
   message?: string;
@@ -31,6 +31,16 @@ export const scheduleData: ScheduleItem[] = [
       duration: "1/27 (월) ~ 1/28 (화)",
       location: "부산 해운대",
       notes: "고객사 미팅",
+    },
+  },
+  {
+    type: "anniversary",
+    title: "결혼 기념일",
+    date: "2/14 (금)",
+    message: "행복한 결혼 기념일 되세요! 💕",
+    details: {
+      duration: "2/14 (금)",
+      notes: "5주년 기념일",
     },
   },
 ];
