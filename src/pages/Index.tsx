@@ -451,7 +451,7 @@ const Index = () => {
     
     <div className="h-screen bg-background flex flex-col overflow-hidden">
       {/* Top Header Area - spans full width */}
-      <div className="flex items-center" data-guide="header">
+      <div className="flex items-center shrink-0" data-guide="header">
         {/* Logo area - matches sidebar background, hidden when sidebar closed */}
         {sidebarOpen && <div className="flex items-center gap-2 shrink-0 px-4 py-2 w-64 bg-card">
             <img src={logoIcon} alt="Logo" className="w-8 h-8" />
@@ -527,7 +527,7 @@ const Index = () => {
       </div>
       
       {/* Main Area - Sidebar + Content */}
-      <div className="flex flex-1">
+      <div className="flex flex-1 min-h-0">
         {/* Sidebar Body (without header) */}
         <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(false)} chatHistory={chatHistory} currentChatId={currentChatId} onSelectChat={handleSelectChat} onNewChat={handleNewChat} onRenameChat={handleRenameChat} onShareChat={handleShareChat} onPinChat={handlePin} onArchiveChat={handleArchive} onDeleteChat={handleDelete} hideHeader onOpenSettings={() => setShowSettingsModal(true)} />
         
