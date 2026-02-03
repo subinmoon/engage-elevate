@@ -17,6 +17,8 @@ const UpcomingScheduleCard = ({ onGetHelp }: UpcomingScheduleCardProps) => {
         return <Palmtree className="w-4 h-4 text-green-500" />;
       case "business":
         return <Plane className="w-4 h-4 text-blue-500" />;
+      case "anniversary":
+        return <Calendar className="w-4 h-4 text-pink-500" />;
       default:
         return <Calendar className="w-4 h-4 text-muted-foreground" />;
     }
@@ -29,6 +31,8 @@ const UpcomingScheduleCard = ({ onGetHelp }: UpcomingScheduleCardProps) => {
         return `bg-green-50 border-green-200 ${ring}`;
       case "business":
         return `bg-blue-50 border-blue-200 ${ring}`;
+      case "anniversary":
+        return `bg-pink-50 border-pink-200 ${ring}`;
       default:
         return `bg-muted border-border ${ring}`;
     }
@@ -48,6 +52,12 @@ const UpcomingScheduleCard = ({ onGetHelp }: UpcomingScheduleCardProps) => {
           text: "text-blue-700",
           icon: "✈️"
         };
+      case "anniversary":
+        return {
+          bar: "from-pink-500 to-pink-400",
+          text: "text-pink-700",
+          icon: "💕"
+        };
       default:
         return {
           bar: "from-primary to-lavender",
@@ -63,6 +73,8 @@ const UpcomingScheduleCard = ({ onGetHelp }: UpcomingScheduleCardProps) => {
         return "휴가";
       case "business":
         return "출장";
+      case "anniversary":
+        return "기념일";
       default:
         return "일정";
     }
@@ -120,7 +132,7 @@ const UpcomingScheduleCard = ({ onGetHelp }: UpcomingScheduleCardProps) => {
         <span className="ml-auto text-xs text-muted-foreground">{schedules.length}개</span>
       </div>
 
-      <div className="flex-1 space-y-1.5 overflow-auto">
+      <div className="flex-1 space-y-1.5 overflow-auto max-h-64">
         {schedules.map((schedule, index) => (
           <div
             key={index}
