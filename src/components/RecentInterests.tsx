@@ -51,14 +51,14 @@ const RecentInterests = ({ hasHistory = false, onQuestionClick }: RecentInterest
   const icon = hasHistory ? <Star className="w-3.5 h-3.5 text-primary" /> : <TrendingUp className="w-3.5 h-3.5 text-primary" />;
 
   return (
-    <div className="bg-white rounded-2xl p-3 shadow-soft h-full">
-      <div className="flex items-center gap-2 mb-2">
-        <div className="w-6 h-6 rounded-lg bg-lavender-light flex items-center justify-center">
+    <div className="bg-white rounded-2xl p-4 shadow-soft h-full">
+      <div className="flex items-center gap-2 mb-4">
+        <div className="w-7 h-7 rounded-lg bg-lavender-light flex items-center justify-center">
           {icon}
         </div>
-        <h2 className="text-sm font-bold text-foreground">{title}</h2>
+        <h2 className="text-base font-bold text-foreground">{title}</h2>
       </div>
-      <div className="space-y-1.5">
+      <div className="space-y-2">
         {displayItems.map((item) => {
           const formatDate = (dateStr?: string) => {
             if (!dateStr) return null;
@@ -71,28 +71,28 @@ const RecentInterests = ({ hasHistory = false, onQuestionClick }: RecentInterest
           return (
             <div 
               key={item.id} 
-              className="bg-blue-light rounded-lg p-2 transition-shadow hover:shadow-md"
+              className="bg-blue-light rounded-xl p-3 transition-shadow hover:shadow-md"
             >
               <div className="flex items-center justify-between gap-2">
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1.5">
-                    <h3 className="font-semibold text-xs text-foreground">{item.title}</h3>
+                  <div className="flex items-center gap-1.5 mb-0.5">
+                    <h3 className="font-semibold text-sm text-foreground">{item.title}</h3>
                     {item.date && (
-                      <span className="inline-flex items-center gap-0.5 text-[9px] text-muted-foreground bg-white/60 px-1 py-0.5 rounded-full">
-                        <Calendar className="w-2 h-2" />
+                      <span className="inline-flex items-center gap-0.5 text-[10px] text-muted-foreground bg-white/60 px-1.5 py-0.5 rounded-full">
+                        <Calendar className="w-2.5 h-2.5" />
                         {formatDate(item.date)}
                       </span>
                     )}
                   </div>
-                  <p className="text-[10px] text-muted-foreground truncate">{item.description}</p>
+                  <p className="text-xs text-muted-foreground truncate">{item.description}</p>
                 </div>
                 <Button
                   size="sm"
-                  className="shrink-0 bg-primary hover:bg-lavender-dark text-primary-foreground gap-0.5 rounded-full px-2 h-6 text-[10px]"
+                  className="shrink-0 bg-primary hover:bg-lavender-dark text-primary-foreground gap-0.5 rounded-full px-3 h-7 text-[11px]"
                   onClick={() => onQuestionClick?.(item.title)}
                 >
                   질문하기
-                  <ArrowRight className="w-2.5 h-2.5" />
+                  <ArrowRight className="w-3 h-3" />
                 </Button>
               </div>
             </div>

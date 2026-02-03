@@ -26,7 +26,7 @@ const HRHelper = () => {
     .slice(0, 8);
 
   return (
-    <div className="bg-white rounded-2xl p-3 shadow-soft h-full">
+    <div className="bg-white rounded-2xl p-4 shadow-soft h-full">
       <WorkItemSettingsModal
         open={showSettings}
         onClose={() => setShowSettings(false)}
@@ -34,39 +34,39 @@ const HRHelper = () => {
         onFavoriteIdsChange={setFavoriteIds}
       />
 
-      <div className="flex items-center gap-2 mb-2">
-        <div className="w-6 h-6 rounded-lg bg-lavender-light flex items-center justify-center">
-          <MessageCircle className="w-3.5 h-3.5 text-primary" />
+      <div className="flex items-center gap-2 mb-4">
+        <div className="w-7 h-7 rounded-lg bg-lavender-light flex items-center justify-center">
+          <MessageCircle className="w-4 h-4 text-primary" />
         </div>
-        <h2 className="text-sm font-bold text-foreground flex-1">
+        <h2 className="text-base font-bold text-foreground flex-1">
           대화로 업무 시작하기
         </h2>
         <button
           onClick={() => setShowSettings(true)}
-          className="p-1 rounded-lg hover:bg-muted transition-colors"
+          className="p-1.5 rounded-lg hover:bg-muted transition-colors"
           title="업무 바로가기 설정"
         >
-          <Settings className="w-3.5 h-3.5 text-muted-foreground" />
+          <Settings className="w-4 h-4 text-muted-foreground" />
         </button>
       </div>
 
-      <div className="grid grid-cols-4 gap-1">
+      <div className="grid grid-cols-4 gap-2">
         {displayItems.map((item) => {
           const Icon = item.icon;
           const isFavorite = favoriteIds.includes(item.id);
           return (
             <button 
               key={item.id} 
-              className="flex flex-col items-center gap-1 p-1 rounded-xl hover:bg-muted/60 transition-all group relative"
+              className="flex flex-col items-center gap-1.5 p-1.5 rounded-xl hover:bg-muted/60 transition-all group relative"
             >
               {/* Favorite star indicator */}
               {isFavorite && (
-                <Star className="absolute top-0 right-0 w-2.5 h-2.5 fill-yellow-400 text-yellow-400" />
+                <Star className="absolute top-0.5 right-0.5 w-3 h-3 fill-yellow-400 text-yellow-400" />
               )}
-              <div className={`w-8 h-8 rounded-lg ${item.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                <Icon className="w-3.5 h-3.5" />
+              <div className={`w-9 h-9 rounded-xl ${item.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                <Icon className="w-4 h-4" />
               </div>
-              <span className="text-[9px] font-medium text-muted-foreground group-hover:text-foreground transition-colors text-center whitespace-nowrap leading-tight">
+              <span className="text-[10px] font-medium text-muted-foreground group-hover:text-foreground transition-colors text-center whitespace-nowrap leading-tight">
                 {item.label}
               </span>
             </button>
