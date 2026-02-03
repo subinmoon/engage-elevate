@@ -449,7 +449,7 @@ const Index = () => {
       editingChatbot={editingChatbot}
     />
     
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="h-screen bg-background flex flex-col overflow-hidden">
       {/* Top Header Area - spans full width */}
       <div className="flex items-center" data-guide="header">
         {/* Logo area - matches sidebar background, hidden when sidebar closed */}
@@ -535,8 +535,8 @@ const Index = () => {
         {!sidebarOpen && <SidebarTrigger onClick={() => setSidebarOpen(true)} />}
 
         {/* Main Content */}
-        <main className="flex-1 bg-background">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 w-full">
+        <main className="flex-1 bg-background overflow-hidden">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 w-full h-full flex flex-col">
           {isChatMode ? (
             <ChatView 
               messages={messages} 
@@ -551,16 +551,16 @@ const Index = () => {
               onSearchModeChange={handleSearchModeChange}
               userName={userSettings?.userName}
             />
-          ) : <>
+          ) : <div className="flex flex-col h-full">
               {/* Header with Welcome & Quick Actions */}
-              <div className="mb-4">
+              <div className="mb-3 shrink-0">
                 <WelcomeHeader userName={userSettings?.userName || "사용자"} onSelectAction={template => setPrefillMessage(template)} />
               </div>
               
-              {/* Main Content Grid - 2 equal columns */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 items-stretch gap-4 mb-4">
+              {/* Main Content Grid - 2 equal columns, flex-1 to fill remaining space */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 items-stretch gap-4 mb-3 flex-1 min-h-0">
                 {/* Left: HRHelper + RecentInterests stacked - equal height */}
-                <div ref={leftColumnRef} className="flex flex-col gap-4">
+                <div ref={leftColumnRef} className="flex flex-col gap-3 min-h-0">
                   <div data-guide="work-life-helper" className="flex-1 min-h-0">
                     <HRHelper />
                   </div>
@@ -572,7 +572,7 @@ const Index = () => {
                 </div>
                 
                 {/* Right: Daily Briefing - height synced to left column */}
-                <div style={rightColumnStyle}>
+                <div style={rightColumnStyle} className="min-h-0">
                   <TodayContextCard 
                     onGetHelp={prompt => setPrefillMessage(prompt)} 
                     onNewsChat={prompt => setPrefillMessage(prompt)} 
@@ -581,7 +581,7 @@ const Index = () => {
               </div>
               
               {/* Chat Input - Bottom */}
-              <div data-guide="chat-input">
+              <div data-guide="chat-input" className="shrink-0">
                 <ChatInput 
                   onSendMessage={msg => {
                     handleSendMessage(msg);
@@ -598,7 +598,7 @@ const Index = () => {
                   userName={userSettings?.userName}
                 />
               </div>
-            </>}
+            </div>}
           </div>
         </main>
       </div>
