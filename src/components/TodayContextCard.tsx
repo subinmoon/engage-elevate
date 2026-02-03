@@ -138,11 +138,14 @@ const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
         >
           <Newspaper className="w-3.5 h-3.5" />
           관심 이야기
+          <span className="ml-1 px-1.5 py-0.5 bg-orange-100 text-orange-600 text-[10px] rounded-full">
+            {newsItems.length}
+          </span>
         </button>
       </div>
 
-      {/* Content Area */}
-      <div className="flex-1 min-h-0 overflow-auto">
+      {/* Content Area - Fixed height with scroll */}
+      <div className="flex-1 min-h-0 max-h-64 overflow-auto">
         {activeTab === "schedule" ? (
           schedules.length > 0 ? (
             <div className="space-y-1.5">
@@ -244,26 +247,36 @@ const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
           /* News Section */
           <div className="space-y-2">
             {newsItems.map((news) => (
-              <button
+              <div
                 key={news.id}
-                onClick={() => handleNewsChat(news)}
-                className="w-full flex gap-3 p-2.5 rounded-xl bg-gradient-to-br from-orange-50 to-amber-50 hover:from-orange-100 hover:to-amber-100 transition-all text-left group"
+                className="rounded-xl bg-gradient-to-br from-orange-50 to-amber-50 p-2.5 space-y-2"
               >
-                <img
-                  src={news.thumbnail}
-                  alt={news.title}
-                  className="w-14 h-14 rounded-lg object-cover shrink-0"
-                />
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-foreground leading-relaxed line-clamp-2 group-hover:text-primary transition-colors">
-                    📰 {news.title}
-                  </p>
-                  <div className="flex items-center gap-1.5 mt-1.5">
-                    <span className="text-[10px] text-muted-foreground">{news.source}</span>
-                    <MessageCircle className="w-3 h-3 text-orange-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <button
+                  onClick={() => handleNewsChat(news)}
+                  className="w-full flex gap-3 text-left group"
+                >
+                  <img
+                    src={news.thumbnail}
+                    alt={news.title}
+                    className="w-14 h-14 rounded-lg object-cover shrink-0"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-medium text-foreground leading-relaxed line-clamp-2 group-hover:text-primary transition-colors">
+                      📰 {news.title}
+                    </p>
+                    <span className="text-[10px] text-muted-foreground mt-1 block">{news.source}</span>
                   </div>
-                </div>
-              </button>
+                </button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full gap-1.5 h-7 text-xs bg-white hover:bg-orange-50 border-orange-200"
+                  onClick={() => handleNewsChat(news)}
+                >
+                  <MessageCircle className="w-3 h-3 text-orange-600" />
+                  <span className="text-orange-700 font-medium">이 뉴스에 대해 얘기해볼까요?</span>
+                </Button>
+              </div>
             ))}
           </div>
         )}
