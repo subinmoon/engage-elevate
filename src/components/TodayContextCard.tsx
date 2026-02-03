@@ -101,7 +101,7 @@ const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
   };
 
   return (
-    <div className="bg-card rounded-2xl p-4 shadow-soft h-full flex flex-col">
+    <div className="bg-card rounded-2xl p-4 pb-2 shadow-soft h-full flex flex-col">
       {/* Header */}
       <div className="flex items-center gap-2 mb-3">
         <div className="w-7 h-7 rounded-lg bg-lavender-light flex items-center justify-center">
