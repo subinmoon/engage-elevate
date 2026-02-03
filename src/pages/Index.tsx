@@ -6,7 +6,7 @@ import WelcomeHeader from "@/components/WelcomeHeader";
 import UpcomingSchedule from "@/components/UpcomingSchedule";
 import RecentInterests from "@/components/RecentInterests";
 import HRHelper from "@/components/HRHelper";
-import FavoriteChatbots from "@/components/FavoriteChatbots";
+import UpcomingScheduleCard from "@/components/UpcomingScheduleCard";
 import ChatInput from "@/components/ChatInput";
 import ChatView from "@/components/ChatView";
 import { generateScheduleResponse } from "@/data/scheduleData";
@@ -528,23 +528,26 @@ const Index = () => {
                 <WelcomeHeader userName={userSettings?.userName || "사용자"} onSelectAction={template => setPrefillMessage(template)} />
               </div>
               
-              {/* Main Content Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-                <div data-guide="popular-questions">
-                  <RecentInterests hasHistory={chatHistory.length > 0} onQuestionClick={question => {
-                  setPrefillMessage(question);
-                }} />
+              {/* Main Content Grid - 3 columns */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+                {/* Left side: HRHelper + RecentInterests stacked */}
+                <div className="lg:col-span-2 space-y-4">
+                  <div data-guide="work-life-helper">
+                    <HRHelper />
+                  </div>
+                  <div data-guide="popular-questions">
+                    <RecentInterests hasHistory={chatHistory.length > 0} onQuestionClick={question => {
+                      setPrefillMessage(question);
+                    }} />
+                  </div>
                 </div>
-                <div data-guide="work-life-helper">
-                  <HRHelper />
+                
+                {/* Right side: Upcoming Schedule Card */}
+                <div className="lg:col-span-1">
+                  <UpcomingScheduleCard onGetHelp={prompt => {
+                    setPrefillMessage(prompt);
+                  }} />
                 </div>
-              </div>
-              
-              {/* Favorite Chatbots */}
-              <div className="mb-6" data-guide="favorite-chatbots">
-                <FavoriteChatbots hasHistory={chatHistory.length > 0} onSelectChatbot={chatbot => {
-                setPrefillMessage(`${chatbot.name}에게 질문하기: `);
-              }} />
               </div>
               
               {/* Chat Input - Bottom */}
