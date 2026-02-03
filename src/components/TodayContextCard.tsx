@@ -103,11 +103,11 @@ const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
   return (
     <div className="bg-card rounded-2xl p-4 shadow-soft h-full flex flex-col">
       {/* Header */}
-      <div className="flex items-center gap-2 mb-3">
+      <div className="flex items-center gap-2 mb-3 shrink-0">
         <div className="w-7 h-7 rounded-lg bg-lavender-light flex items-center justify-center">
-          <span className="text-sm">☀️</span>
+          <span className="text-sm">📋</span>
         </div>
-        <h2 className="text-base font-bold text-foreground">나의 하루</h2>
+        <h2 className="text-base font-bold text-foreground">데일리 브리핑</h2>
       </div>
 
       {/* Tab Toggle */}
