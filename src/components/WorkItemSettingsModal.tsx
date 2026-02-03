@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Star, GripVertical } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Star, Search } from "lucide-react";
 import { 
   FileText, Calendar, Users, Plane, Building2, UserCircle, 
   UtensilsCrossed, Mail, Briefcase, Clock, HelpCircle, 
@@ -49,10 +50,12 @@ export const WorkItemSettingsModal = ({
   onFavoriteIdsChange,
 }: WorkItemSettingsModalProps) => {
   const [localFavorites, setLocalFavorites] = useState<string[]>(favoriteIds);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     if (open) {
       setLocalFavorites(favoriteIds);
+      setSearchQuery("");
     }
   }, [open, favoriteIds]);
 
@@ -67,12 +70,18 @@ export const WorkItemSettingsModal = ({
     onClose();
   };
 
-  // Sort: favorites first
-  const sortedItems = [...allWorkItems].sort((a, b) => {
-    const aFav = localFavorites.includes(a.id) ? 0 : 1;
-    const bFav = localFavorites.includes(b.id) ? 0 : 1;
-    return aFav - bFav;
-  });
+  // Filter by search and sort: favorites first
+  const sortedItems = useMemo(() => {
+    return [...allWorkItems]
+      .filter((item) => 
+        item.label.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+      .sort((a, b) => {
+        const aFav = localFavorites.includes(a.id) ? 0 : 1;
+        const bFav = localFavorites.includes(b.id) ? 0 : 1;
+        return aFav - bFav;
+      });
+  }, [localFavorites, searchQuery]);
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
@@ -87,6 +96,17 @@ export const WorkItemSettingsModal = ({
         <p className="text-xs text-muted-foreground">
           즐겨찾기한 업무가 먼저 표시됩니다. (최대 8개 표시)
         </p>
+
+        {/* Search */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            placeholder="업무 검색..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9 h-9 text-sm"
+          />
+        </div>
 
         <div className="flex-1 overflow-auto py-2">
           <div className="space-y-1">

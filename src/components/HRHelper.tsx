@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { MessageCircle, Settings } from "lucide-react";
+import { MessageCircle, Settings, Star } from "lucide-react";
 import { WorkItemSettingsModal, allWorkItems } from "./WorkItemSettingsModal";
 
 const HRHelper = () => {
@@ -59,6 +59,10 @@ const HRHelper = () => {
               key={item.id} 
               className="flex flex-col items-center gap-1.5 p-1.5 rounded-xl hover:bg-muted/60 transition-all group relative"
             >
+              {/* Favorite star indicator */}
+              {isFavorite && (
+                <Star className="absolute top-0.5 right-0.5 w-3 h-3 fill-yellow-400 text-yellow-400" />
+              )}
               <div className={`w-9 h-9 rounded-xl ${item.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
                 <Icon className="w-4 h-4" />
               </div>
