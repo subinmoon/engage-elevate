@@ -559,12 +559,12 @@ const Index = () => {
               
               {/* Main Content Grid - 2 equal columns */}
               <div className="grid grid-cols-1 lg:grid-cols-2 items-stretch gap-4 mb-4">
-                {/* Left: HRHelper + RecentInterests stacked */}
-                <div ref={leftColumnRef} className="space-y-4">
-                  <div data-guide="work-life-helper">
+                {/* Left: HRHelper + RecentInterests stacked - equal height */}
+                <div ref={leftColumnRef} className="flex flex-col gap-4">
+                  <div data-guide="work-life-helper" className="flex-1 min-h-0">
                     <HRHelper />
                   </div>
-                  <div data-guide="popular-questions">
+                  <div data-guide="popular-questions" className="flex-1 min-h-0">
                     <RecentInterests hasHistory={chatHistory.length > 0} onQuestionClick={question => {
                       setPrefillMessage(question);
                     }} />
