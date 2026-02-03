@@ -248,13 +248,34 @@ const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
               ))}
             </div>
           ) : (
-            <div className="bg-muted/30 rounded-xl p-4 text-center">
-              <p className="text-sm text-foreground font-medium">
-                오늘은 예정된 일정이 없어요 🙂
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                집중하기 좋은 하루네요.
-              </p>
+            <div className="space-y-3">
+              <div className="text-center py-2">
+                <p className="text-sm text-foreground font-medium">
+                  오늘은 예정된 일정이 없어요 🙂
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  지금 여유 있을 때 이런 건 어때요?
+                </p>
+              </div>
+              
+              <div className="space-y-2">
+                {[
+                  { emoji: "💬", text: "이번 주 할 일 정리해볼까?" },
+                  { emoji: "✉️", text: "밀린 메일 초안 도와줄게요" },
+                  { emoji: "🧠", text: "요즘 관심 있는 주제 얘기해볼까요?" },
+                ].map((item, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => onGetHelp?.(item.text)}
+                    className="w-full text-left px-3 py-2.5 rounded-lg bg-muted/40 hover:bg-primary/10 transition-colors group"
+                  >
+                    <span className="text-xs text-foreground group-hover:text-primary transition-colors">
+                      <span className="mr-2">{item.emoji}</span>
+                      "{item.text}"
+                    </span>
+                  </button>
+                ))}
+              </div>
             </div>
           )
         ) : (
