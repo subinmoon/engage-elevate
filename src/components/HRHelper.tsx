@@ -41,7 +41,7 @@ const HRHelper = () => {
         <div className="w-7 h-7 rounded-lg bg-lavender-light flex items-center justify-center">
           <MessageCircle className="w-4 h-4 text-primary" />
         </div>
-        대화로 업무하기
+        대화로 업무 시작하기
       </h2>
       <div className="grid grid-cols-4 gap-2">
         {helpItems.map((item, index) => {
