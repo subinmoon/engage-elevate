@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Sparkles, MessageCircle, ChevronDown, ChevronUp, Plane, Palmtree, Calendar, Newspaper } from "lucide-react";
+import { Sparkles, MessageCircle, ChevronDown, ChevronUp, Plane, Palmtree, Calendar, Newspaper, ExternalLink } from "lucide-react";
 import { scheduleData, ScheduleItem } from "@/data/scheduleData";
 import { Button } from "@/components/ui/button";
 
@@ -216,18 +216,32 @@ const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
                         )}
                       </div>
 
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-full gap-1.5 h-7 text-xs"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleScheduleHelp(schedule);
-                        }}
-                      >
-                        <Sparkles className="w-3 h-3" />
-                        AI에게 물어보기
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 gap-1.5 h-7 text-xs"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleScheduleHelp(schedule);
+                          }}
+                        >
+                          <Sparkles className="w-3 h-3" />
+                          AI에게 물어보기
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 gap-1.5 h-7 text-xs"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            window.open(`#/schedule/${schedule.title}`, '_blank');
+                          }}
+                        >
+                          <ExternalLink className="w-3 h-3" />
+                          상세 사이트
+                        </Button>
+                      </div>
                     </div>
                   )}
                 </div>
