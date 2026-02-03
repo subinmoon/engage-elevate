@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Sparkles, MessageCircle, ChevronDown, ChevronUp, Plane, Palmtree, Calendar, Newspaper, ExternalLink } from "lucide-react";
+import { Sparkles, MessageCircle, ChevronDown, ChevronUp, Plane, Palmtree, Calendar, Newspaper, ExternalLink, Settings } from "lucide-react";
 import { scheduleData, ScheduleItem } from "@/data/scheduleData";
 import { Button } from "@/components/ui/button";
+import { DailyBriefingSettingsModal } from "./DailyBriefingSettingsModal";
 
 interface TodayContextCardProps {
   onGetHelp?: (prompt: string) => void;
@@ -35,6 +36,9 @@ type TabType = "schedule" | "news";
 const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
   const [activeTab, setActiveTab] = useState<TabType>("schedule");
   const [expandedIndex, setExpandedIndex] = useState<number | null>(0);
+  const [showSettings, setShowSettings] = useState(false);
+  const [scheduleFilters, setScheduleFilters] = useState<string[]>(["vacation", "business", "anniversary"]);
+  const [interestTopics, setInterestTopics] = useState<string[]>(["ai", "dev"]);
   const schedules = scheduleData;
 
   const getIcon = (type: ScheduleItem["type"]) => {
@@ -102,16 +106,33 @@ const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
 
   return (
     <div className="bg-card rounded-2xl p-4 shadow-soft h-full flex flex-col">
+      {/* Settings Modal */}
+      <DailyBriefingSettingsModal
+        open={showSettings}
+        onClose={() => setShowSettings(false)}
+        scheduleFilters={scheduleFilters}
+        onScheduleFiltersChange={setScheduleFilters}
+        interestTopics={interestTopics}
+        onInterestTopicsChange={setInterestTopics}
+      />
+
       {/* Header */}
       <div className="flex items-center gap-2 mb-3 shrink-0">
         <div className="w-7 h-7 rounded-lg bg-lavender-light flex items-center justify-center">
           <span className="text-sm">📋</span>
         </div>
-        <h2 className="text-base font-bold text-foreground">데일리 브리핑</h2>
+        <h2 className="text-base font-bold text-foreground flex-1">데일리 브리핑</h2>
+        <button
+          onClick={() => setShowSettings(true)}
+          className="p-1.5 rounded-lg hover:bg-muted transition-colors"
+          title="브리핑 설정"
+        >
+          <Settings className="w-4 h-4 text-muted-foreground" />
+        </button>
       </div>
 
       {/* Tab Toggle */}
-      <div className="flex gap-1 p-1 bg-muted/50 rounded-lg mb-3">
+      <div className="flex gap-1 p-1 bg-muted/50 rounded-lg mb-3 shrink-0">
         <button
           onClick={() => setActiveTab("schedule")}
           className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-md text-xs font-medium transition-all ${
