@@ -529,12 +529,21 @@ const Index = () => {
                 <WelcomeHeader userName={userSettings?.userName || "사용자"} onSelectAction={template => setPrefillMessage(template)} />
               </div>
               
-              {/* Main Content Grid - 2 rows */}
-              {/* Row 1: HRHelper + UpcomingSchedule + InterestNews */}
+              {/* Main Content Grid - 4 columns */}
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-4">
-                <div className="lg:col-span-2" data-guide="work-life-helper">
-                  <HRHelper />
+                {/* Left side: HRHelper + RecentInterests stacked */}
+                <div className="lg:col-span-2 space-y-4">
+                  <div data-guide="work-life-helper">
+                    <HRHelper />
+                  </div>
+                  <div data-guide="popular-questions">
+                    <RecentInterests hasHistory={chatHistory.length > 0} onQuestionClick={question => {
+                      setPrefillMessage(question);
+                    }} />
+                  </div>
                 </div>
+                
+                {/* Right side: UpcomingSchedule + InterestNews side by side */}
                 <div className="lg:col-span-1">
                   <UpcomingScheduleCard onGetHelp={prompt => {
                     setPrefillMessage(prompt);
@@ -543,13 +552,6 @@ const Index = () => {
                 <div className="lg:col-span-1">
                   <InterestNews />
                 </div>
-              </div>
-              
-              {/* Row 2: RecentInterests full width */}
-              <div className="mb-4" data-guide="popular-questions">
-                <RecentInterests hasHistory={chatHistory.length > 0} onQuestionClick={question => {
-                  setPrefillMessage(question);
-                }} />
               </div>
               
               {/* Chat Input - Bottom */}
