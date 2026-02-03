@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import Sidebar from "@/components/Sidebar";
 import SidebarTrigger from "@/components/SidebarTrigger";
 import HeaderNav from "@/components/HeaderNav";
@@ -21,6 +21,7 @@ import { TutorialGuideOverlay } from "@/components/TutorialGuideOverlay";
 import { SettingsModal } from "@/components/SettingsModal";
 import { ChatbotManagementModal, Chatbot } from "@/components/ChatbotManagementModal";
 import { ChatbotCreateModal } from "@/components/ChatbotCreateModal";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface Message {
   id: string;
@@ -48,6 +49,7 @@ interface UserSettings {
   allowFollowUpQuestions: boolean;
 }
 const Index = () => {
+  const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isChatMode, setIsChatMode] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -59,6 +61,33 @@ const Index = () => {
   const [scheduleExpanded, setScheduleExpanded] = useState(false);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [editTitleValue, setEditTitleValue] = useState("");
+
+  // Keep the right column height fixed to the left column height,
+  // so expanding schedule items doesn't push the chat input off-screen.
+  const leftColumnRef = useRef<HTMLDivElement | null>(null);
+  const [leftColumnHeight, setLeftColumnHeight] = useState<number | null>(null);
+
+  useLayoutEffect(() => {
+    if (isMobile) {
+      setLeftColumnHeight(null);
+      return;
+    }
+
+    const el = leftColumnRef.current;
+    if (!el) return;
+
+    const update = () => setLeftColumnHeight(el.getBoundingClientRect().height);
+    update();
+
+    const ro = new ResizeObserver(() => update());
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [isMobile]);
+
+  const rightColumnStyle = useMemo(() => {
+    if (isMobile || !leftColumnHeight) return undefined;
+    return { height: leftColumnHeight } as const;
+  }, [isMobile, leftColumnHeight]);
   
   // Tutorial state
   const [showSetupModal, setShowSetupModal] = useState(true);
@@ -531,7 +560,7 @@ const Index = () => {
               {/* Main Content Grid - 2 equal columns */}
               <div className="grid grid-cols-1 lg:grid-cols-2 items-stretch gap-4 mb-4">
                 {/* Left: HRHelper + RecentInterests stacked */}
-                <div className="space-y-4">
+                <div ref={leftColumnRef} className="space-y-4">
                   <div data-guide="work-life-helper">
                     <HRHelper />
                   </div>
@@ -543,7 +572,7 @@ const Index = () => {
                 </div>
                 
                 {/* Right: Today's Context */}
-                <div className="h-full">
+                <div className="h-full" style={rightColumnStyle}>
                   <TodayContextCard 
                     onGetHelp={prompt => setPrefillMessage(prompt)} 
                     onNewsChat={prompt => setPrefillMessage(prompt)} 
