@@ -132,7 +132,7 @@ const UpcomingScheduleCard = ({ onGetHelp }: UpcomingScheduleCardProps) => {
         <span className="ml-auto text-xs text-muted-foreground">{schedules.length}개</span>
       </div>
 
-      <div className="flex-1 space-y-1.5 overflow-auto min-h-0">
+      <div className="flex-1 space-y-1.5 overflow-auto min-h-0 max-h-80">
         {schedules.map((schedule, index) => (
           <div
             key={index}
