@@ -7,27 +7,15 @@ interface TodayContextCardProps {
   onNewsChat?: (prompt: string) => void;
 }
 
-// Mock news - single item only
+// Mock news - single item with thumbnail
 const todayNews = {
   title: "생성형 AI, 사내 업무에 이렇게 쓰이고 있어요",
-  emoji: "📰",
+  thumbnail: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=200&h=120&fit=crop",
+  source: "테크뉴스",
 };
 
 const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
   const nextSchedule = scheduleData[0]; // Get the first upcoming schedule
-
-  const getIcon = (type: ScheduleItem["type"]) => {
-    switch (type) {
-      case "vacation":
-        return <Palmtree className="w-4 h-4 text-green-500" />;
-      case "business":
-        return <Plane className="w-4 h-4 text-blue-500" />;
-      case "anniversary":
-        return <Calendar className="w-4 h-4 text-pink-500" />;
-      default:
-        return <Calendar className="w-4 h-4 text-muted-foreground" />;
-    }
-  };
 
   const getEmoji = (type: ScheduleItem["type"]) => {
     switch (type) {
@@ -39,6 +27,19 @@ const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
         return "💕";
       default:
         return "📌";
+    }
+  };
+
+  const getTypeLabel = (type: ScheduleItem["type"]) => {
+    switch (type) {
+      case "vacation":
+        return "휴가";
+      case "business":
+        return "출장";
+      case "anniversary":
+        return "기념일";
+      default:
+        return "일정";
     }
   };
 
@@ -69,6 +70,7 @@ const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
         
         {nextSchedule ? (
           <div className="bg-muted/30 rounded-xl p-4 space-y-3">
+            {/* Schedule Header */}
             <div className="flex items-start gap-3">
               <span className="text-xl">{getEmoji(nextSchedule.type)}</span>
               <div className="flex-1 min-w-0">
@@ -82,6 +84,33 @@ const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
                 )}
               </div>
             </div>
+
+            {/* Schedule Details */}
+            <div className="bg-white/60 rounded-lg p-2.5 space-y-1.5 text-[11px]">
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">유형</span>
+                <span className="font-medium text-foreground">{getTypeLabel(nextSchedule.type)}</span>
+              </div>
+              {nextSchedule.details?.duration && (
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">기간</span>
+                  <span className="font-medium text-foreground">{nextSchedule.details.duration}</span>
+                </div>
+              )}
+              {nextSchedule.details?.location && (
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">장소</span>
+                  <span className="font-medium text-foreground">{nextSchedule.details.location}</span>
+                </div>
+              )}
+              {nextSchedule.details?.notes && (
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">메모</span>
+                  <span className="font-medium text-foreground">{nextSchedule.details.notes}</span>
+                </div>
+              )}
+            </div>
+
             <Button
               variant="outline"
               size="sm"
@@ -112,12 +141,21 @@ const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
         <p className="text-[11px] text-muted-foreground mb-2 font-medium">[요즘 관심 있는 이야기]</p>
         
         <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl p-4 space-y-3">
-          <div className="flex items-start gap-3">
-            <span className="text-xl">{todayNews.emoji}</span>
-            <p className="text-sm font-medium text-foreground leading-relaxed flex-1">
-              {todayNews.title}
-            </p>
+          {/* News with Thumbnail */}
+          <div className="flex gap-3">
+            <img
+              src={todayNews.thumbnail}
+              alt={todayNews.title}
+              className="w-16 h-16 rounded-lg object-cover shrink-0"
+            />
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-medium text-foreground leading-relaxed line-clamp-2">
+                📰 {todayNews.title}
+              </p>
+              <p className="text-[10px] text-muted-foreground mt-1">{todayNews.source}</p>
+            </div>
           </div>
+          
           <Button
             variant="outline"
             size="sm"
