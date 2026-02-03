@@ -6,7 +6,7 @@ import WelcomeHeader from "@/components/WelcomeHeader";
 import UpcomingSchedule from "@/components/UpcomingSchedule";
 import RecentInterests from "@/components/RecentInterests";
 import HRHelper from "@/components/HRHelper";
-import UpcomingScheduleCard from "@/components/UpcomingScheduleCard";
+import TodayContextCard from "@/components/TodayContextCard";
 import ChatInput from "@/components/ChatInput";
 import ChatView from "@/components/ChatView";
 import { generateScheduleResponse } from "@/data/scheduleData";
@@ -542,11 +542,12 @@ const Index = () => {
                   </div>
                 </div>
                 
-                {/* Right: Upcoming Schedule */}
+                {/* Right: Today's Context */}
                 <div>
-                  <UpcomingScheduleCard onGetHelp={prompt => {
-                    setPrefillMessage(prompt);
-                  }} />
+                  <TodayContextCard 
+                    onGetHelp={prompt => setPrefillMessage(prompt)} 
+                    onNewsChat={prompt => setPrefillMessage(prompt)} 
+                  />
                 </div>
               </div>
               
