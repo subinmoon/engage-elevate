@@ -529,7 +529,7 @@ const Index = () => {
               </div>
               
               {/* Main Content Grid - 2 equal columns */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 items-stretch gap-4 mb-4">
                 {/* Left: HRHelper + RecentInterests stacked */}
                 <div className="space-y-4">
                   <div data-guide="work-life-helper">
@@ -542,8 +542,8 @@ const Index = () => {
                   </div>
                 </div>
                 
-                {/* Right: Today's Context - fixed height */}
-                <div>
+                {/* Right: Today's Context */}
+                <div className="h-full">
                   <TodayContextCard 
                     onGetHelp={prompt => setPrefillMessage(prompt)} 
                     onNewsChat={prompt => setPrefillMessage(prompt)} 
