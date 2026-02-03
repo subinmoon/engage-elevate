@@ -101,7 +101,7 @@ const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
   };
 
   return (
-    <div className="bg-card rounded-2xl p-4 shadow-soft flex flex-col">
+    <div className="bg-card rounded-2xl p-4 shadow-soft h-full flex flex-col">
       {/* Header */}
       <div className="flex items-center gap-2 mb-3">
         <div className="w-7 h-7 rounded-lg bg-lavender-light flex items-center justify-center">
@@ -144,8 +144,8 @@ const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
         </button>
       </div>
 
-      {/* Content Area */}
-      <div className="max-h-60 overflow-auto">
+      {/* Content Area - fills remaining space */}
+      <div className="flex-1 min-h-0 overflow-auto">
         {activeTab === "schedule" ? (
           schedules.length > 0 ? (
             <div className="space-y-1">
