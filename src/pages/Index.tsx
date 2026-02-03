@@ -7,6 +7,7 @@ import UpcomingSchedule from "@/components/UpcomingSchedule";
 import RecentInterests from "@/components/RecentInterests";
 import HRHelper from "@/components/HRHelper";
 import UpcomingScheduleCard from "@/components/UpcomingScheduleCard";
+import InterestNews from "@/components/InterestNews";
 import ChatInput from "@/components/ChatInput";
 import ChatView from "@/components/ChatView";
 import { generateScheduleResponse } from "@/data/scheduleData";
@@ -542,11 +543,12 @@ const Index = () => {
                   </div>
                 </div>
                 
-                {/* Right side: Upcoming Schedule Card */}
-                <div className="lg:col-span-1">
+                {/* Right side: Upcoming Schedule + Interest News stacked */}
+                <div className="lg:col-span-1 space-y-4">
                   <UpcomingScheduleCard onGetHelp={prompt => {
                     setPrefillMessage(prompt);
                   }} />
+                  <InterestNews />
                 </div>
               </div>
               
