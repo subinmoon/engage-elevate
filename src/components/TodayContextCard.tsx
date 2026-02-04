@@ -143,7 +143,7 @@ const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
           }`}
         >
           <Calendar className="w-3.5 h-3.5" />
-          다음 일정
+          다가오는 내 일정
           {schedules.length > 0 && (
             <span className="ml-1 px-1.5 py-0.5 bg-primary/10 text-primary text-[10px] rounded-full">
               {schedules.length}
