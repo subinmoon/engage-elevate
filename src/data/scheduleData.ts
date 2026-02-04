@@ -3,6 +3,7 @@ export interface ScheduleItem {
   type: "vacation" | "business" | "anniversary";
   title: string;
   date: string;
+  startDate: string; // ISO format for D-day calculation
   message?: string;
   details?: {
     duration: string;
@@ -15,20 +16,22 @@ export const scheduleData: ScheduleItem[] = [
   {
     type: "vacation",
     title: "연차 휴가",
-    date: "1/20 (월)",
+    date: "2/10 (월)",
+    startDate: "2026-02-10",
     message: "아이와 좋은 시간 보내고 오세요~",
     details: {
-      duration: "1/20 (월) ~ 1/21 (화)",
+      duration: "2/10 (월) ~ 2/11 (화)",
       notes: "가족 여행",
     },
   },
   {
     type: "business",
     title: "출장",
-    date: "1/27 (월)",
+    date: "2/17 (월)",
+    startDate: "2026-02-17",
     message: "좋은 성과 있길 바랍니다!",
     details: {
-      duration: "1/27 (월) ~ 1/28 (화)",
+      duration: "2/17 (월) ~ 2/18 (화)",
       location: "부산 해운대",
       notes: "고객사 미팅",
     },
@@ -37,6 +40,7 @@ export const scheduleData: ScheduleItem[] = [
     type: "anniversary",
     title: "결혼 기념일",
     date: "2/14 (금)",
+    startDate: "2026-02-14",
     message: "행복한 결혼 기념일 되세요! 💕",
     details: {
       duration: "2/14 (금)",
@@ -44,6 +48,46 @@ export const scheduleData: ScheduleItem[] = [
     },
   },
 ];
+
+// Calculate D-day from today
+export const calculateDday = (startDate: string): number => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const target = new Date(startDate);
+  target.setHours(0, 0, 0, 0);
+  const diffTime = target.getTime() - today.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
+};
+
+// Get D-day display text
+export const getDdayText = (dday: number): string => {
+  if (dday === 0) return "D-DAY";
+  if (dday > 0) return `D-${dday}`;
+  return `D+${Math.abs(dday)}`;
+};
+
+// Get D-day badge color based on urgency
+export const getDdayColor = (dday: number): { bg: string; text: string; border: string } => {
+  if (dday <= 0) {
+    // D-day or past
+    return { bg: "bg-red-100", text: "text-red-700", border: "border-red-300" };
+  }
+  if (dday <= 3) {
+    // Very urgent: D-1 to D-3
+    return { bg: "bg-red-100", text: "text-red-600", border: "border-red-200" };
+  }
+  if (dday <= 7) {
+    // Warning: D-4 to D-7
+    return { bg: "bg-orange-100", text: "text-orange-600", border: "border-orange-200" };
+  }
+  if (dday <= 14) {
+    // Caution: D-8 to D-14
+    return { bg: "bg-yellow-100", text: "text-yellow-700", border: "border-yellow-200" };
+  }
+  // Neutral: D-15+
+  return { bg: "bg-slate-100", text: "text-slate-600", border: "border-slate-200" };
+};
 
 // Helper function to generate AI response about schedules
 export const generateScheduleResponse = (query: string): string | null => {

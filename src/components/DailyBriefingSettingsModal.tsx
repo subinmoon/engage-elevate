@@ -64,7 +64,7 @@ export const DailyBriefingSettingsModal = ({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-base">
             <span>⚙️</span>
-            데일리 브리핑 설정
+            AI 데일리 체크 설정
           </DialogTitle>
         </DialogHeader>
 
