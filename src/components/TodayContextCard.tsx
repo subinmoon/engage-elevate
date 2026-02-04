@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Sparkles, MessageCircle, ChevronDown, ChevronUp, Plane, Palmtree, Calendar, Newspaper, ExternalLink, Settings } from "lucide-react";
-import { scheduleData, ScheduleItem } from "@/data/scheduleData";
+import { scheduleData, ScheduleItem, calculateDday, getDdayText, getDdayColor } from "@/data/scheduleData";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { DailyBriefingSettingsModal } from "./DailyBriefingSettingsModal";
 
 interface TodayContextCardProps {
@@ -118,14 +119,14 @@ const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
 
       {/* Header */}
       <div className="flex items-center gap-2 mb-3 shrink-0">
-        <div className="w-7 h-7 rounded-lg bg-lavender-light flex items-center justify-center">
-          <span className="text-sm">📋</span>
+        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary/20 to-lavender-light flex items-center justify-center">
+          <Sparkles className="w-4 h-4 text-primary" />
         </div>
-        <h2 className="text-base font-bold text-foreground flex-1">데일리 브리핑</h2>
+        <h2 className="text-base font-bold text-foreground flex-1">AI 데일리 체크</h2>
         <button
           onClick={() => setShowSettings(true)}
           className="p-1.5 rounded-lg hover:bg-muted transition-colors"
-          title="브리핑 설정"
+          title="설정"
         >
           <Settings className="w-4 h-4 text-muted-foreground" />
         </button>
@@ -185,9 +186,18 @@ const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
                       <span className="text-xs font-medium text-foreground flex-1 truncate">
                         {schedule.title}
                       </span>
-                      <span className="text-[10px] text-muted-foreground whitespace-nowrap">
-                        {schedule.date}
-                      </span>
+                      {(() => {
+                        const dday = calculateDday(schedule.startDate);
+                        const ddayColor = getDdayColor(dday);
+                        return (
+                          <Badge 
+                            variant="outline" 
+                            className={`text-[10px] font-bold px-1.5 py-0 h-5 ${ddayColor.bg} ${ddayColor.text} ${ddayColor.border}`}
+                          >
+                            {getDdayText(dday)}
+                          </Badge>
+                        );
+                      })()}
                       {expandedIndex === index ? (
                         <ChevronUp className="w-3.5 h-3.5 text-muted-foreground" />
                       ) : (
