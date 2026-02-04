@@ -10,27 +10,36 @@ interface TodayContextCardProps {
   onNewsChat?: (prompt: string) => void;
 }
 
-// Mock news - 3 items with thumbnails
+// Mock news - 3 items with thumbnails and links
 const newsItems = [
   {
     id: "1",
     title: "생성형 AI, 사내 업무에 이렇게 쓰이고 있어요",
     thumbnail: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=200&h=120&fit=crop",
     source: "테크뉴스",
+    url: "https://example.com/news/1",
   },
   {
     id: "2",
     title: "클라우드 보안 강화를 위한 5가지 전략",
     thumbnail: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=200&h=120&fit=crop",
     source: "IT조선",
+    url: "https://example.com/news/2",
   },
   {
     id: "3",
     title: "리액트 19 새로운 기능 미리보기",
     thumbnail: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=200&h=120&fit=crop",
     source: "개발자뉴스",
+    url: "https://example.com/news/3",
   },
 ];
+
+// AI messages for each tab
+const aiMessages = {
+  schedule: "다가오는 일정을 미리 챙겨봤어요! 준비할 건 없는지 확인해보세요 ✨",
+  news: "오늘의 관심 이야기를 모아봤어요! 클릭해서 읽어보세요 📖",
+};
 
 type TabType = "schedule" | "news";
 
@@ -164,6 +173,14 @@ const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
             {newsItems.length}
           </span>
         </button>
+      </div>
+
+      {/* AI Message */}
+      <div className="mb-3 p-2.5 bg-gradient-to-r from-primary/5 to-lavender-light/50 rounded-lg border border-primary/10 shrink-0">
+        <p className="text-xs text-foreground flex items-center gap-2">
+          <Sparkles className="w-3.5 h-3.5 text-primary shrink-0" />
+          <span>{activeTab === "schedule" ? aiMessages.schedule : aiMessages.news}</span>
+        </p>
       </div>
 
       {/* Content Area - fills remaining space */}
@@ -313,14 +330,14 @@ const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
           /* News Section */
           <div className="space-y-2">
             {newsItems.map((news) => (
-              <div
+              <a
                 key={news.id}
-                className="rounded-xl bg-gradient-to-br from-orange-50 to-amber-50 p-2.5 space-y-2"
+                href={news.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block rounded-xl bg-gradient-to-br from-orange-50 to-amber-50 p-2.5 hover:shadow-md transition-all group"
               >
-                <button
-                  onClick={() => handleNewsChat(news)}
-                  className="w-full flex gap-3 text-left group"
-                >
+                <div className="flex gap-3">
                   <img
                     src={news.thumbnail}
                     alt={news.title}
@@ -330,19 +347,13 @@ const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
                     <p className="text-xs font-medium text-foreground leading-relaxed line-clamp-2 group-hover:text-primary transition-colors">
                       📰 {news.title}
                     </p>
-                    <span className="text-[10px] text-muted-foreground mt-1 block">{news.source}</span>
+                    <div className="flex items-center gap-1.5 mt-1.5">
+                      <span className="text-[10px] text-muted-foreground">{news.source}</span>
+                      <ExternalLink className="w-3 h-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
                   </div>
-                </button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full gap-1.5 h-7 text-xs bg-white hover:bg-orange-50 border-orange-200"
-                  onClick={() => handleNewsChat(news)}
-                >
-                  <MessageCircle className="w-3 h-3 text-orange-600" />
-                  <span className="text-orange-700 font-medium">이 뉴스에 대해 얘기해볼까요?</span>
-                </Button>
-              </div>
+                </div>
+              </a>
             ))}
           </div>
         )}
