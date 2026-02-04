@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Sparkles, MessageCircle, ChevronDown, ChevronUp, Plane, Palmtree, Calendar, Newspaper, ExternalLink, Settings } from "lucide-react";
 import { scheduleData, ScheduleItem, calculateDday, getDdayText, getDdayColor } from "@/data/scheduleData";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,6 @@ import { DailyBriefingSettingsModal } from "./DailyBriefingSettingsModal";
 interface TodayContextCardProps {
   onGetHelp?: (prompt: string) => void;
   onNewsChat?: (prompt: string) => void;
-  hasNewUpdate?: boolean; // 새로운 일정/뉴스가 있을 때 하이라이트
 }
 
 // Mock news - 3 items with thumbnails and links
@@ -44,23 +43,13 @@ const aiMessages = {
 
 type TabType = "schedule" | "news";
 
-const TodayContextCard = ({ onGetHelp, onNewsChat, hasNewUpdate = true }: TodayContextCardProps) => {
+const TodayContextCard = ({ onGetHelp, onNewsChat }: TodayContextCardProps) => {
   const [activeTab, setActiveTab] = useState<TabType>("schedule");
   const [expandedIndex, setExpandedIndex] = useState<number | null>(0);
   const [showSettings, setShowSettings] = useState(false);
   const [scheduleFilters, setScheduleFilters] = useState<string[]>(["vacation", "business", "anniversary"]);
   const [interestTopics, setInterestTopics] = useState<string[]>(["ai", "dev"]);
-  const [isHighlighted, setIsHighlighted] = useState(false);
   const schedules = scheduleData;
-
-  // 새로운 업데이트가 있을 때 하이라이트 애니메이션 트리거
-  useEffect(() => {
-    if (hasNewUpdate) {
-      setIsHighlighted(true);
-      const timer = setTimeout(() => setIsHighlighted(false), 3000); // 3초 후 애니메이션 종료
-      return () => clearTimeout(timer);
-    }
-  }, [hasNewUpdate]);
 
   const getIcon = (type: ScheduleItem["type"]) => {
     switch (type) {
@@ -126,9 +115,7 @@ const TodayContextCard = ({ onGetHelp, onNewsChat, hasNewUpdate = true }: TodayC
   };
 
   return (
-    <div className={`bg-card rounded-2xl p-4 shadow-soft h-full flex flex-col transition-all duration-300 ${
-      isHighlighted ? "animate-highlight-pulse ring-2 ring-primary/50" : ""
-    }`}>
+    <div className="bg-card rounded-2xl p-4 shadow-soft h-full flex flex-col">
       {/* Settings Modal */}
       <DailyBriefingSettingsModal
         open={showSettings}

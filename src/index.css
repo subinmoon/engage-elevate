@@ -166,31 +166,3 @@
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
 }
-
-/* AI 데일리 체크 하이라이트 애니메이션 */
-@keyframes highlight-pulse {
-  0% { 
-    box-shadow: 0 0 0 0 hsl(262 60% 55% / 0.4);
-    background-color: hsl(var(--card));
-  }
-  25% { 
-    box-shadow: 0 0 20px 4px hsl(262 60% 55% / 0.3);
-    background-color: hsl(262 60% 55% / 0.05);
-  }
-  50% { 
-    box-shadow: 0 0 0 0 hsl(262 60% 55% / 0.2);
-    background-color: hsl(var(--card));
-  }
-  75% { 
-    box-shadow: 0 0 15px 3px hsl(262 60% 55% / 0.25);
-    background-color: hsl(262 60% 55% / 0.03);
-  }
-  100% { 
-    box-shadow: 0 0 0 0 transparent;
-    background-color: hsl(var(--card));
-  }
-}
-
-.animate-highlight-pulse {
-  animation: highlight-pulse 1.5s ease-in-out 2;
-}
