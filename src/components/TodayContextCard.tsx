@@ -38,7 +38,7 @@ const newsItems = [
 // AI messages for each tab
 const aiMessages = {
   schedule: "다가오는 일정을 미리 챙겨봤어요! 준비할 건 없는지 확인해보세요 ✨",
-  news: "오늘의 관심 이야기를 모아봤어요! 클릭해서 읽어보세요 📖",
+  news: "업무에 도움 될 만한 이야기들을 모아봤어요! 클릭해서 읽어보세요 📖",
 };
 
 type TabType = "schedule" | "news";
